@@ -1,6 +1,7 @@
 package com.luaforge.studio.build
 
 import android.content.Context
+import com.luaforge.studio.build.maven.*
 import com.luaforge.studio.utils.ConsoleUtil
 import com.luaforge.studio.utils.LogCatcher
 import com.luajava.LuaState
@@ -14,6 +15,7 @@ import java.util.zip.*
 // ECJ 和 D8 依赖
 import org.eclipse.jdt.internal.compiler.batch.Main as EcjMain
 import com.android.tools.r8.D8
+import kotlinx.coroutines.runBlocking
 
 class ApkBuilder {
 
@@ -100,6 +102,7 @@ class ApkBuilder {
             LogCatcher.i("ApkBuilder", "targetSdkVersion: $targetSdkVersion")
             LogCatcher.i("ApkBuilder", "调试模式: $isDebug")
             LogCatcher.i("ApkBuilder", "权限数量: ${permissions?.size ?: 0}")
+            LogCatcher.i("ApkBuilder", "Maven依赖数量: ${mavenDependencies.size}")
 
             var unsignedApkPath: String? = null
 
@@ -143,30 +146,34 @@ class ApkBuilder {
                     return "error: 修改AndroidManifest.xml失败"
                 }
 
-                // 4. 生成未签名APK的临时路径
+                // 4. 下载 Maven JAR 依赖
+                val mavenJars = processMavenJarDependencies(context, mavenDependencies)
+
+                // 5. 生成未签名APK的临时路径
                 val unsignedApkFile = File(outputDir, "unsigned_${System.currentTimeMillis()}.apk")
                 unsignedApkPath = unsignedApkFile.absolutePath
 
-                // 5. 复制项目文件到临时APK（生成未签名APK）
+                // 6. 复制项目文件到临时APK（生成未签名APK）
                 unsignedApkPath = addProjectFilesToApk(
                     context,
                     tempApkPath,
                     projectPath,
-                    unsignedApkPath
+                    unsignedApkPath,
+                    mavenJars
                 )
 
                 if (unsignedApkPath == null) {
                     return "error: 添加项目文件到APK失败"
                 }
 
-                // 6. 清理临时文件
+                // 7. 清理临时文件
                 File(tempApkPath).delete()
                 File(coreApkPath).delete()
 
-                // 7. 对未签名APK进行签名
+                // 8. 对未签名APK进行签名
                 val signedApkPath = signApkWithDefaultKey(context, unsignedApkPath, outputPath)
 
-                // 8. 清理临时文件
+                // 9. 清理临时文件
                 File(unsignedApkPath).delete()
 
                 if (signedApkPath == null) {
@@ -188,6 +195,119 @@ class ApkBuilder {
                 cleanupSharedLuaState()
                 System.gc()
             }
+        }
+
+        /**
+         * 处理 Maven JAR 依赖
+         * @return 下载的 JAR 文件列表
+         */
+        private fun processMavenJarDependencies(
+            context: Context,
+            mavenDependencies: List<String>
+        ): List<File> {
+            if (mavenDependencies.isEmpty()) {
+                return emptyList()
+            }
+            
+            LogCatcher.i("ApkBuilder", "开始处理 Maven JAR 依赖，共 ${mavenDependencies.size} 个")
+            
+            // 解析依赖字符串
+            val parsedDependencies = mavenDependencies.mapNotNull { MavenDependency.parse(it) }
+            if (parsedDependencies.isEmpty()) {
+                LogCatcher.w("ApkBuilder", "没有有效的 Maven 依赖")
+                return emptyList()
+            }
+            
+            val downloadedJars = mutableListOf<File>()
+            val downloader = MavenDownloader(context)
+            val repositories = MavenRepository.getDefaultRepositories()
+            
+            for ((index, dep) in parsedDependencies.withIndex()) {
+                LogCatcher.i("ApkBuilder", "处理依赖 [${index + 1}/${parsedDependencies.size}]: ${dep.getCoordinates()}")
+                
+                // 同步下载
+                val result = runBlocking {
+                    downloader.downloadDependency(dep, repositories, null)
+                }
+                
+                when (result) {
+                    is MavenDownloader.DownloadResult.Success -> {
+                        // 查找 JAR 文件
+                        val jarFile = result.files.find { it.extension == "jar" }
+                        if (jarFile != null && jarFile.exists()) {
+                            downloadedJars.add(jarFile)
+                            LogCatcher.i("ApkBuilder", "  - 下载成功: ${jarFile.name} (${jarFile.length() / 1024} KB)")
+                        } else {
+                            LogCatcher.w("ApkBuilder", "  - 未找到 JAR 文件，可能不是 JAR 类型")
+                        }
+                    }
+                    is MavenDownloader.DownloadResult.Failure -> {
+                        LogCatcher.w("ApkBuilder", "  - 下载失败: ${result.reason}")
+                    }
+                }
+            }
+            
+            LogCatcher.i("ApkBuilder", "Maven JAR 依赖处理完成，成功下载 ${downloadedJars.size} 个 JAR")
+            return downloadedJars
+        }
+
+        /**
+         * 将 Maven JAR 依赖添加到 DEX 编译流程
+         */
+        private fun addMavenJarsToDexCompilation(
+            context: Context,
+            jarFiles: List<File>,
+            workDir: File,
+            androidJarPath: String?
+        ) {
+            if (jarFiles.isEmpty()) return
+            
+            LogCatcher.i("ApkBuilder", "将 ${jarFiles.size} 个 JAR 添加到 DEX 编译")
+            
+            try {
+                val dexOutputDir = File(workDir, "maven_dex_output")
+                dexOutputDir.mkdirs()
+                
+                val d8Args = mutableListOf<String>()
+                d8Args.add("--lib")
+                d8Args.add(androidJarPath ?: extractAndroidJarToCache(context)!!)
+                d8Args.add("--output")
+                d8Args.add(dexOutputDir.absolutePath)
+                
+                // 添加所有 JAR 文件
+                jarFiles.forEach { jar ->
+                    d8Args.add(jar.absolutePath)
+                }
+                
+                d8Args.add("--min-api")
+                d8Args.add("21")
+                
+                LogCatcher.i("ApkBuilder", "执行 D8 转换 Maven JAR")
+                D8.main(d8Args.toTypedArray())
+                
+                // 将生成的 DEX 复制到 APK 工作目录
+                addDexFilesToApkWorkDir(dexOutputDir, workDir)
+                
+                // 清理临时目录
+                dexOutputDir.deleteRecursively()
+                
+                LogCatcher.i("ApkBuilder", "Maven JAR 转 DEX 完成")
+                
+            } catch (e: Exception) {
+                LogCatcher.e("ApkBuilder", "Maven JAR 转 DEX 失败", e)
+            }
+        }
+
+        /**
+         * 构建包含 Maven JAR 的 classpath 字符串
+         */
+        private fun buildClasspathWithMavenJars(
+            androidJarPath: String,
+            mavenJars: List<File>
+        ): String {
+            val classpathParts = mutableListOf(androidJarPath)
+            classpathParts.addAll(mavenJars.map { it.absolutePath })
+            return classpathParts.joinToString(File.pathSeparator)
         }
 
         // 使用默认签名密钥对APK进行签名
@@ -589,7 +709,8 @@ class ApkBuilder {
             context: Context,
             tempApkPath: String,
             projectPath: String,
-            outputPath: String
+            outputPath: String,
+            mavenJars: List<File> = emptyList()
         ): String? {
             val L = getSharedLuaState()
 
@@ -632,12 +753,18 @@ class ApkBuilder {
                 val androidJarPath = extractAndroidJarToCache(context)
 
                 if (androidJarPath != null) {
-                    // 编译 Java 并生成 DEX
+                    // 先处理 Maven JAR 转 DEX（如果没有 Java 源文件也要处理）
+                    if (mavenJars.isNotEmpty()) {
+                        addMavenJarsToDexCompilation(context, mavenJars, workDir, androidJarPath)
+                    }
+                    
+                    // 编译 Java 并生成 DEX（传入 Maven JAR）
                     compileJavaAndGenerateDexWithD8(
                         context,
                         projectPath,
                         workDir,
-                        androidJarPath
+                        androidJarPath,
+                        mavenJars
                     )
 
                     // 删除 assets 下的 java 源文件（避免打包进 APK）
@@ -1575,47 +1702,59 @@ class ApkBuilder {
             context: Context,
             projectPath: String,
             workDir: File,
-            androidJarPath: String
+            androidJarPath: String,
+            mavenJars: List<File> = emptyList()
         ) {
             // 1. 检查 java 目录
             val javaDir = File(projectPath, "java")
-            if (!javaDir.exists() || !javaDir.isDirectory) {
-                LogCatcher.i("ApkBuilder", "项目中没有 java 目录，跳过 Java 编译")
+            val hasJavaSource = javaDir.exists() && javaDir.isDirectory && javaDir.walk().any { it.isFile && it.name.endsWith(".java", ignoreCase = true) }
+            
+            // 2. 构建 classpath（包含 android.jar 和 Maven JAR）
+            val classpath = if (mavenJars.isNotEmpty()) {
+                buildClasspathWithMavenJars(androidJarPath, mavenJars)
+            } else {
+                androidJarPath
+            }
+            
+            // 3. 如果没有 Java 源文件，只处理 Maven JAR 转 DEX（已在前面处理，这里跳过）
+            if (!hasJavaSource) {
+                LogCatcher.i("ApkBuilder", "项目中没有 java 目录或 Java 文件，跳过 Java 编译")
                 return
             }
 
-            // 2. 收集所有 Java 文件
+            // 4. 收集所有 Java 文件
             val javaFiles = mutableListOf<File>()
             javaDir.walk().forEach { file ->
                 if (file.isFile && file.name.endsWith(".java", ignoreCase = true)) {
                     javaFiles.add(file)
                 }
             }
+            
             if (javaFiles.isEmpty()) {
                 LogCatcher.i("ApkBuilder", "java 目录下没有 Java 文件，跳过编译")
                 return
             }
 
-            // 3. 创建临时输出目录
+            LogCatcher.i("ApkBuilder", "开始编译 Java 文件，共 ${javaFiles.size} 个")
+            LogCatcher.i("ApkBuilder", "编译 classpath: $classpath")
+
+            // 5. 创建临时输出目录
             val classOutputDir = File(workDir, "java_build_classes")
             classOutputDir.mkdirs()
 
-            // 4. 构建 classpath（仅 android.jar）
-            val classpath = androidJarPath
-
-            // 5. 使用 ECJ 编译 Java 源文件（使用实例方式）
-            LogCatcher.i("ApkBuilder", "开始编译 Java 文件，共 ${javaFiles.size} 个")
+            // 6. 使用 ECJ 编译 Java 源文件
             val outputStream = ByteArrayOutputStream()
             val errorStream = ByteArrayOutputStream()
             val outWriter = PrintWriter(outputStream)
             val errWriter = PrintWriter(errorStream)
             val ecj = EcjMain(outWriter, errWriter, false, null, null)
+            
             val args = mutableListOf<String>()
             args.add("-d")
             args.add(classOutputDir.absolutePath)
             args.add("-cp")
             args.add(classpath)
-            args.add("-1.8") // 目标版本
+            args.add("-1.8")
             javaFiles.forEach { file -> args.add(file.absolutePath) }
 
             try {
@@ -1624,6 +1763,7 @@ class ApkBuilder {
                 errWriter.flush()
                 val output = outputStream.toString()
                 val error = errorStream.toString()
+                
                 if (!success) {
                     LogCatcher.e("ApkBuilder", "Java 编译失败，输出: $output, 错误: $error")
                     throw RuntimeException("Java 编译失败，返回码: $success\n$error")
@@ -1634,35 +1774,42 @@ class ApkBuilder {
                 throw RuntimeException("Java 编译失败: ${e.message}", e)
             }
 
-            // 6. 将 class 文件打包为 JAR
-            val jarFile = File(workDir, "java_classes.jar")
+            // 7. 将编译后的 class 文件打包为 JAR
+            val jarFile = File(workDir, "project_classes.jar")
             createJarFromDirectory(classOutputDir, jarFile)
 
-            // 7. 使用 D8 生成 DEX
-            LogCatcher.i("ApkBuilder", "开始使用 D8 生成 DEX")
+            // 8. 收集所有需要转 DEX 的输入
+            val dexInputs = mutableListOf<File>()
+            dexInputs.add(jarFile)
+            dexInputs.addAll(mavenJars)
+
+            // 9. 使用 D8 生成 DEX
+            LogCatcher.i("ApkBuilder", "开始使用 D8 生成 DEX，输入: ${dexInputs.size} 个")
             try {
                 val dexOutputDir = File(workDir, "java_build_dex")
                 dexOutputDir.mkdirs()
 
-                // D8 命令行参数
                 val d8Args = mutableListOf<String>()
                 d8Args.add("--lib")
-                d8Args.add(androidJarPath)               // Android 库
+                d8Args.add(androidJarPath)
                 d8Args.add("--output")
-                d8Args.add(dexOutputDir.absolutePath)    // 输出目录
-                d8Args.add(jarFile.absolutePath)         // 输入的 JAR
+                d8Args.add(dexOutputDir.absolutePath)
+                dexInputs.forEach { input ->
+                    d8Args.add(input.absolutePath)
+                }
                 d8Args.add("--min-api")
-                d8Args.add("21")  // 默认最低 API 21，可根据需要从项目中获取
+                d8Args.add("21")
 
                 D8.main(d8Args.toTypedArray())
 
-                // 8. 将生成的 dex 文件复制到 APK 工作目录，自动重命名避免冲突
+                // 将生成的 dex 文件复制到 APK 工作目录
                 addDexFilesToApkWorkDir(dexOutputDir, workDir)
 
-                // 9. 清理临时文件
+                // 清理临时文件
                 classOutputDir.deleteRecursively()
                 jarFile.delete()
                 dexOutputDir.deleteRecursively()
+                
             } catch (e: Exception) {
                 LogCatcher.e("ApkBuilder", "D8 DEX 生成失败", e)
                 throw RuntimeException("D8 DEX 生成失败: ${e.message}", e)
