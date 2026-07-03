@@ -15,8 +15,8 @@ android {
         applicationId = "com.luaforge.studio"
         minSdk = 24
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.5.0"
+        versionCode = 2
+        versionName = "1.6.0"
 
         vectorDrawables {
             useSupportLibrary = true
