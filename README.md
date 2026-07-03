@@ -1,5 +1,11 @@
 # 更新日志
 
+## 1.6.0
+- 新增 `libdecrypt.so`，支持 Lua 加密脚本自动解密加载
+  - 提供 `decrypt.loadfile()` / `decrypt.dofile()` / `decrypt.load()` 接口
+  - 兼容 `.luae` 加密格式及普通 `.lua` / `.luac` 文件
+  - 复用 `ldump.c` / `lundump.c` 保护配置，加解密算法一致
+
 ## 1.5.0
 - 支持 Maven 依赖自动下载与打包（JAR 类型）
 
@@ -8,10 +14,10 @@
 - 优化应用启动流程
 
 ## 1.3.0
-- 增加 com.luaforge.studio.widget.textfield.MaterialTextField 组件
+- 增加 `com.luaforge.studio.widget.textfield.MaterialTextField` 组件
 
 ## 1.2.1
-- 增加 onActivityReenter 回调函数
+- 增加 `onActivityReenter` 回调函数
 
 # Lua 扩展语法
 
