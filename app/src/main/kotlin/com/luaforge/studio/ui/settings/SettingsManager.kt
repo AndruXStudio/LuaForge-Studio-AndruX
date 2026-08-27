@@ -218,8 +218,8 @@ object SettingsManager {
 
         val editorWordWrap = preferences[PreferencesKeys.EDITOR_WORD_WRAP] ?: false
 
-        // 从 DataStore 加载语言设置
-        val languageTag = preferences[PreferencesKeys.LANGUAGE_TAG] ?: "zh"
+        // 从 DataStore 加载语言设置（未设置时跟随系统，避免强制切换语言）
+        val languageTag = preferences[PreferencesKeys.LANGUAGE_TAG] ?: ""
 
         // 【新增】加载十六进制颜色高亮开关
         val hexColorHighlightEnabled = preferences[PreferencesKeys.HEX_COLOR_HIGHLIGHT_ENABLED] ?: false

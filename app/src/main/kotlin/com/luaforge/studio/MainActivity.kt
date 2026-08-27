@@ -1540,8 +1540,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    enableEdgeToEdge()
-    WindowCompat.setDecorFitsSystemWindows(window, false)
+    // Android 10 (API 29) 及以下：跳过全屏沉浸(edge-to-edge/透明系统栏)，
+    // 规避系统首帧不绘制的bug（白屏卡住，需要切分屏/缩放窗口才能加载出来）
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        enableEdgeToEdge()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+    }
 
     val isVersionChanged = intent.getBooleanExtra("isVersionChanged", false)
     val newVersionName = intent.getStringExtra("newVersionName")
@@ -1600,6 +1604,12 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    // 旧系统首帧渲染兜底：强制触发一次重新布局+重绘
+    window.decorView.post {
+        window.decorView.requestLayout()
+        window.decorView.invalidate()
     }
 }
 
