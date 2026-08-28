@@ -40,8 +40,8 @@ import com.luaforge.studio.utils.IconManager
 import com.luaforge.studio.utils.LogCatcher
 import com.luajava.LuaFunction
 import com.luajava.LuaStateFactory
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
@@ -71,7 +71,14 @@ class SplashWelcome : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         CrashManager.install(this)
-        IconManager.initIconSetting(this)
+        // PackageManager Binder 调用较慢，避免阻塞主线程启动
+        Thread {
+            try {
+                IconManager.initIconSetting(this)
+            } catch (_: Exception) {
+                // 忽略图标初始化失败
+            }
+        }.start()
         LogCatcher.init(this)
 
         app = application as LuaApplication
@@ -87,19 +94,32 @@ class SplashWelcome : ComponentActivity() {
      * Handles splash screen logic including settings loading and resource extraction
      */
     private suspend fun handleSplashLogic() {
-        SettingsManager.loadSavedSettings(this@SplashWelcome)
+        try {
+            SettingsManager.loadSavedSettings(this@SplashWelcome)
+        } catch (e: Exception) {
+            LogCatcher.e("SplashWelcome", "加载设置失败", e)
+        }
 
-        val savedLanguageTag = SettingsManager.currentSettings.languageTag
-        val currentLanguageTag = getCurrentAppLanguageTag()
-        if (savedLanguageTag != currentLanguageTag) {
-            SettingsManager.setAppLanguage(this@SplashWelcome, savedLanguageTag)
-            return
+        // 语言处理：仅在已持久化用户设置语言时应用；不匹配时不阻塞启动流程
+        // （旧版本Android上此处曾因直接return导致从未调用setupSplashUI而白屏卡住）
+        try {
+            val savedLanguageTag = SettingsManager.currentSettings.languageTag
+            val currentLanguageTag = getCurrentAppLanguageTag()
+            if (savedLanguageTag.isNotBlank() && savedLanguageTag != currentLanguageTag) {
+                SettingsManager.setAppLanguage(this@SplashWelcome, savedLanguageTag)
+            }
+        } catch (e: Exception) {
+            LogCatcher.e("SplashWelcome", "应用语言设置失败", e)
         }
 
         val shouldUpdate = checkInfo()
 
-        coroutineScope {
-            launch(Dispatchers.IO) {
+        // 立即显示 UI，避免后台初始化阻塞导致白屏
+        setupSplashUI(shouldUpdate)
+
+        // 后台初始化（不阻塞 UI；独立作用域，不随 Activity 销毁被取消）
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
                 // 根据版本是否变更，决定是强制重新加载还是普通初始化
                 if (isVersionChanged) {
                     CompletionDataManager.reload(this@SplashWelcome)
@@ -108,10 +128,10 @@ class SplashWelcome : ComponentActivity() {
                 }
                 EditorStateUtil.cleanupExpiredStateFiles(this@SplashWelcome)
                 EditorStateUtil.cleanupAllNonExistentFiles(this@SplashWelcome)
+            } catch (e: Exception) {
+                LogCatcher.e("SplashWelcome", "后台初始化失败", e)
             }
         }
-
-        setupSplashUI(shouldUpdate)
     }
 
     /**
@@ -188,6 +208,7 @@ class SplashWelcome : ComponentActivity() {
     private fun setupSplashUI(shouldUpdate: Boolean) {
         enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             AppThemeWithObserver {
                 SplashScreen(
@@ -201,6 +222,12 @@ class SplashWelcome : ComponentActivity() {
                     }
                 )
             }
+        }
+
+        // 首帧渲染兜底：强制触发一次重新布局+重绘（防御性，成本极低）
+        window.decorView.post {
+            window.decorView.requestLayout()
+            window.decorView.invalidate()
         }
     }
 

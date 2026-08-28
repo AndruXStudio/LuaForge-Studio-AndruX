@@ -1601,6 +1601,12 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    // 旧系统首帧渲染兜底：强制触发一次重新布局+重绘
+    window.decorView.post {
+        window.decorView.requestLayout()
+        window.decorView.invalidate()
+    }
 }
 
     override fun onDestroy() {
