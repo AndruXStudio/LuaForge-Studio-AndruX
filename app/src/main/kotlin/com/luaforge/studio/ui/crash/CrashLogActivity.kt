@@ -52,11 +52,8 @@ class CrashLogActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Android 10 (API 29) 及以下：跳过全屏沉浸，规避系统首帧不绘制的bug（白屏卡住）
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            enableEdgeToEdge()
-            WindowCompat.setDecorFitsSystemWindows(window, false)
-        }
+        enableEdgeToEdge()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             var isSettingsLoaded by remember { mutableStateOf(false) }

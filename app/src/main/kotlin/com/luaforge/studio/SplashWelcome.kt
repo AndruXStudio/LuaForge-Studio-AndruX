@@ -4,7 +4,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -207,12 +206,8 @@ class SplashWelcome : ComponentActivity() {
     }
 
     private fun setupSplashUI(shouldUpdate: Boolean) {
-        // Android 10 (API 29) 及以下：跳过全屏沉浸(edge-to-edge/透明系统栏)，
-        // 规避系统首帧不绘制的bug（白屏卡住，需要切分屏/缩放窗口才能加载出来）
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            enableEdgeToEdge()
-            WindowCompat.setDecorFitsSystemWindows(window, false)
-        }
+        enableEdgeToEdge()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             AppThemeWithObserver {
@@ -229,7 +224,7 @@ class SplashWelcome : ComponentActivity() {
             }
         }
 
-        // 旧系统首帧渲染兜底：强制触发一次重新布局+重绘
+        // 首帧渲染兜底：强制触发一次重新布局+重绘（防御性，成本极低）
         window.decorView.post {
             window.decorView.requestLayout()
             window.decorView.invalidate()

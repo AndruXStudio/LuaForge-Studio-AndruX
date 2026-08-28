@@ -76,11 +76,8 @@ fun TransparentSystemBars() {
     DisposableEffect(Unit) {
         val window = (view.context as Activity).window
 
-        // Android 10 (API 29) 及以下：不设为透明系统栏，规避系统首帧不绘制的bug（白屏卡住）
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.statusBarColor = android.graphics.Color.TRANSPARENT
-            window.navigationBarColor = android.graphics.Color.TRANSPARENT
-        }
+        window.statusBarColor = android.graphics.Color.TRANSPARENT
+        window.navigationBarColor = android.graphics.Color.TRANSPARENT
 
         val isDarkMode = context.resources.configuration.uiMode and
                 Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
