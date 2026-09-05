@@ -391,7 +391,7 @@ object SettingsManager {
 }
 
 data class SettingsData(
-    val themeType: ThemeType = ThemeType.GREEN,
+    val themeType: ThemeType = ThemeType.CARMINE,
     val darkMode: DarkMode = DarkMode.FOLLOW_SYSTEM,
     val projectStoragePath: String = "/storage/emulated/0/LuaForge-Studio/project/",
     val fontSizeScale: Float = 1.0f,
