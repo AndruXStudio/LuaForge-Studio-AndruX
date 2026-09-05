@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- 通用 -->
-    <string name="app_name">LuaForge Studio</string>
+    <string name="app_name">LuaForge Studio · AndruX</string>
     <string name="accsibility_service_description">辅助功能</string>
     <string name="open_drawer">打开侧滑</string>
     <string name="close_drawer">关闭侧滑</string>
@@ -88,7 +88,7 @@
     <string name="error_check_failed">检查文件失败: %s</string>
     <string name="unknown_error">未知错误</string>
     <string name="file_label">文件: %s</string>
-    <string name="author_note">LuaForge Studio 致力于为 Lua 开发者提供最佳的移动端开发体验，支持完整的 Lua 5.5 标准库和常用扩展。</string>
+    <string name="author_note">LuaForge Studio（AndruX 二改版）由 AndruX developer-Studio 维护，开发者 Gaster。基于上游开源项目二次创作，Material 3 卡莫纳色主题，面向本地 Lua 开发。</string>
     <string name="build_time_label">构建时间: %s</string>
     <string name="close">关闭</string>
     <string name="copy">复制</string>
@@ -96,8 +96,8 @@
     <string name="license_label">许可证</string>
 
     <!-- 开发人员信息 -->
-    <string name="dev_w_name">W.</string>
-    <string name="dev_w_role">Developer</string>
+    <string name="dev_w_name">Gaster</string>
+    <string name="dev_w_role">开发者 · AndruX developer-Studio</string>
     <string name="dev_kotlin_name">Kotlin</string>
     <string name="dev_kotlin_role">Language</string>
     <string name="dev_lua_name">Lua 5.5</string>
@@ -106,9 +106,13 @@
     <string name="dev_android_role">Platform</string>
     <string name="dev_compose_name">Jetpack Compose</string>
     <string name="dev_compose_role">UI Framework</string>
+    <string name="dev_andrux_name">AndruX developer-Studio</string>
+    <string name="dev_andrux_role">创作团队</string>
+    <string name="theme_carmine">卡莫纳</string>
+    <string name="feature_team_brand">创作团队</string>
 
     <!-- 版权和版本 -->
-    <string name="copyright">© %s LuaForge Studio</string>
+    <string name="copyright">© %s AndruX developer-Studio · LuaForge Studio</string>
     <string name="version">版本 %s</string>
 
     <!-- 卡片标题 -->
