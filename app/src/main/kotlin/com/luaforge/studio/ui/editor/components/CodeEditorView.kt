@@ -85,6 +85,7 @@ fun CodeEditorView(
             ThemeType.GREEN -> androidx.compose.ui.graphics.Color(0xFF2E6A44)
             ThemeType.BLUE -> androidx.compose.ui.graphics.Color(0xFF36618E)
             ThemeType.PINK -> androidx.compose.ui.graphics.Color(0xFF8D4A5A)
+            ThemeType.CARMINE -> androidx.compose.ui.graphics.Color(0xFF9B1B30)
         }
     }
 
