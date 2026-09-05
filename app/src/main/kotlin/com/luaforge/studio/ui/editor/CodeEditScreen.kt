@@ -595,8 +595,9 @@ fun CodeEditScreen(
                             AiAssistantSheet(
                                 visible = showAiAssistant,
                                 onDismiss = { showAiAssistant = false },
-                                currentCode = viewModel.activeFileState?.content
-                                    ?: viewModel.current?.content
+                                currentCode = viewModel.openFiles
+                                    .getOrNull(viewModel.activeFileIndex)
+                                    ?.content
                                     ?: "",
                                 currentFileName = currentFileName,
                             )
