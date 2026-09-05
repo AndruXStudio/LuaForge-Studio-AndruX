@@ -142,6 +142,8 @@ function getCurr(v)
   fd_title.setText(tostring(v.Class.getSimpleName()))
   if luajava.instanceof(v, GridLayout) then
     _M.adapter(fd_list, fds_grid)
+   elseif isView(v, MATERIAL_COMPAT) then
+    _M.adapter(fd_list, fds_material)
    elseif isView(v, LINEARLAYOUT_COMPAT) then
     _M.adapter(fd_list, fds_linear)
    elseif isView(v, CAN_HAVE_CHILDREN) then
