@@ -62,7 +62,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import coil.compose.AsyncImage
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontFamily
@@ -91,7 +93,8 @@ data class Developer(
     val description: String,
     val color: Color,
     val iconResId: Int,
-    val url: String = ""
+    val url: String = "",
+    val avatarUrl: String = ""
 )
 
 data class LibraryLicense(
@@ -199,10 +202,19 @@ fun AboutScreen(onBack: () -> Unit) {
             Developer(
                 nameResId = R.string.dev_w_name,
                 roleResId = R.string.dev_w_role,
-                description = "",
-                color = Color(0xFF8D4A5A),
+                description = "AndruX developer-Studio",
+                color = Color(0xFF9B1B30),
                 iconResId = R.drawable.ic_w,
-                url = "https://github.com/wisyh"
+                url = "https://github.com/AndruXStudio",
+                avatarUrl = "https://thirdqq.qlogo.cn/g?b=qq&nk=511651251"
+            ),
+            Developer(
+                nameResId = R.string.dev_andrux_name,
+                roleResId = R.string.dev_andrux_role,
+                description = "",
+                color = Color(0xFFB3261E),
+                iconResId = R.drawable.ic_studio,
+                url = "https://github.com/AndruXStudio"
             ),
             Developer(
                 nameResId = R.string.dev_kotlin_name,
@@ -865,10 +877,19 @@ fun DeveloperChip(
                     .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.Center
             ) {
-                if (actualIconResId != 0) {
+                if (dev.avatarUrl.isNotEmpty()) {
+                    AsyncImage(
+                        model = dev.avatarUrl,
+                        contentDescription = context.getString(dev.nameResId),
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                } else if (actualIconResId != 0) {
                     Icon(
                         painter = painterResource(id = actualIconResId),
-                        contentDescription = "${context.getString(dev.nameResId)}",
+                        contentDescription = context.getString(dev.nameResId),
                         modifier = Modifier.size(16.dp),
                         tint = Color.Unspecified
                     )
