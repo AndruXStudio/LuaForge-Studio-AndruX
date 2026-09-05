@@ -3,7 +3,7 @@ relative = {
 }
 
 fds_grid = {
-  "添加", "删除", "父控件", "子控件",
+  "添加", "删除", "复制", "上移", "下移", "父控件", "子控件",
   "id", "orientation",
   "columnCount", "rowCount",
   "layout_width", "layout_height", "layout_gravity",
@@ -12,10 +12,11 @@ fds_grid = {
   "layout_margin", "layout_marginLeft", "layout_marginTop", "layout_marginRight", "layout_marginBottom",
   "padding", "paddingLeft", "paddingTop", "paddingRight", "paddingBottom",
   "Rotation", "RotationX", "RotationY",
+  "elevation", "alpha", "visibility", "enabled", "clickable", "focusable",
 }
 
 fds_linear = {
-  "添加", "删除", "父控件", "子控件",
+  "添加", "删除", "复制", "上移", "下移", "父控件", "子控件",
   "id", "orientation", "layout_width", "layout_height", "layout_gravity",
   "onClick", "onLongClick",
   "fitsSystemWindows",
@@ -23,10 +24,12 @@ fds_linear = {
   "layout_margin", "layout_marginLeft", "layout_marginTop", "layout_marginRight", "layout_marginBottom",
   "padding", "paddingLeft", "paddingTop", "paddingRight", "paddingBottom",
   "Rotation", "RotationX", "RotationY",
+  "elevation", "alpha", "visibility", "enabled", "clickable", "focusable",
+  "weightSum", "divider", "showDividers",
 }
 
 fds_group = {
-  "添加", "删除", "父控件", "子控件",
+  "添加", "删除", "复制", "上移", "下移", "父控件", "子控件",
   "id", "layout_width", "layout_height", "layout_gravity",
   "onClick", "onLongClick",
   "fitsSystemWindows",
@@ -34,11 +37,12 @@ fds_group = {
   "layout_margin", "layout_marginLeft", "layout_marginTop", "layout_marginRight", "layout_marginBottom",
   "padding", "paddingLeft", "paddingTop", "paddingRight", "paddingBottom",
   "Rotation", "RotationX", "RotationY",
-  "CardElevation", "radius"
+  "CardElevation", "radius", "strokeWidth", "strokeColor",
+  "elevation", "alpha", "visibility", "enabled", "clickable", "focusable",
 }
 
 fds_text = {
-  "删除", "父控件",
+  "删除", "复制", "上移", "下移", "父控件",
   "id", "layout_width", "layout_height", "layout_gravity",
   "onClick", "onLongClick",
   "background", "backgroundColor", "text", "ellipsize",
@@ -46,30 +50,57 @@ fds_text = {
   "layout_margin", "layout_marginLeft", "layout_marginTop", "layout_marginRight", "layout_marginBottom",
   "padding", "paddingLeft", "paddingTop", "paddingRight", "paddingBottom",
   "Rotation", "RotationX", "RotationY",
-  "CardElevation", "radius"
+  "CardElevation", "radius",
+  "elevation", "alpha", "visibility", "enabled", "clickable", "focusable",
+  "textStyle", "typeface", "letterSpacing", "lineSpacingExtra", "includeFontPadding",
+  "inputType", "imeOptions", "maxLength",
 }
 
 fds_image = {
-  "删除", "父控件",
+  "删除", "复制", "上移", "下移", "父控件",
   "id", "layout_width", "layout_height", "layout_gravity",
   "onClick", "onLongClick",
-  "background", "backgroundColor", "src", "scaleType", "gravity",
+  "background", "backgroundColor", "src", "scaleType", "adjustViewBounds", "tint",
   "layout_margin", "layout_marginLeft", "layout_marginTop", "layout_marginRight", "layout_marginBottom",
   "padding", "paddingLeft", "paddingTop", "paddingRight", "paddingBottom",
-  "Rotation", "RotationX", "RotationY", "ColorFilter",
-  "CardElevation", "radius"
+  "Rotation", "RotationX", "RotationY",
+  "elevation", "alpha", "visibility", "enabled", "clickable", "focusable",
 }
 
-fds_view = {
-  "删除", "父控件",
+fds_progress = {
+  "删除", "复制", "上移", "下移", "父控件",
   "id", "layout_width", "layout_height", "layout_gravity",
-  "onClick", "onLongClick",
-  "fitsSystemWindows",
-  "background", "gravity",
+  "background", "backgroundColor",
+  "progress", "max", "indeterminate", "progressTint", "indeterminateTint",
   "layout_margin", "layout_marginLeft", "layout_marginTop", "layout_marginRight", "layout_marginBottom",
   "padding", "paddingLeft", "paddingTop", "paddingRight", "paddingBottom",
-  "Rotation", "RotationX", "RotationY", "StrokeWidth", "StrokeColor",
-  "CardElevation", "radius"
+  "elevation", "alpha", "visibility", "enabled",
+}
+
+fds_material = {
+  "添加", "删除", "复制", "上移", "下移", "父控件", "子控件",
+  "id", "layout_width", "layout_height", "layout_gravity",
+  "onClick", "onLongClick",
+  "background", "backgroundColor", "text", "hint", "textColor", "hintTextColor", "textSize",
+  "icon", "iconGravity", "iconPadding", "iconTint", "src", "tint",
+  "strokeWidth", "strokeColor", "radius", "CardElevation", "elevation",
+  "checked", "checkable", "enabled", "clickable", "focusable",
+  "valueFrom", "valueTo", "value", "stepSize",
+  "boxBackgroundMode", "endIconMode", "startIconDrawable", "helperText", "error", "counterEnabled", "counterMaxLength",
+  "layout_margin", "layout_marginLeft", "layout_marginTop", "layout_marginRight", "layout_marginBottom",
+  "padding", "paddingLeft", "paddingTop", "paddingRight", "paddingBottom",
+  "alpha", "visibility", "gravity", "orientation",
+  "title", "subtitle", "menu",
+}
+
+fds_abs = {
+  "删除", "复制", "上移", "下移", "父控件",
+  "id", "layout_width", "layout_height", "layout_gravity",
+  "onClick", "onLongClick",
+  "background", "backgroundColor",
+  "layout_margin", "layout_marginLeft", "layout_marginTop", "layout_marginRight", "layout_marginBottom",
+  "padding", "paddingLeft", "paddingTop", "paddingRight", "paddingBottom",
+  "elevation", "alpha", "visibility", "enabled", "clickable", "focusable",
 }
 
 ns = {
@@ -79,6 +110,8 @@ ns = {
   "Data Input & Display Controls",
   "Layout Containers",
   "Material Components",
+  "Material Navigation",
+  "Material Feedback",
   "Navigation & Action Controls",
   "Progress & Indicators",
   "Special Views",
@@ -141,6 +174,7 @@ wds = {
     "SearchView",
     "TextInputLayout",
     "TextInputEditText",
+    "MaterialAutoCompleteTextView",
     "NumberProgressBar",
     "MultiAutoCompleteTextView",
     "TextClock",
@@ -165,27 +199,57 @@ wds = {
     "SlidingPaneLayout",
     "ViewAnimator",
     "ViewFlipper",
-    "ViewSwitcher"
+    "ViewSwitcher",
+    "DrawerLayout"
   },
   {
-    "AppBarLayout",
-    "BottomAppBar",
-    "BottomNavigationView",
-    "Chip",
-    "ChipGroup",
-    "FloatingActionButton",
-    "ExtendedFloatingActionButton",
-    "TabLayout",
-    "NavigationView",
-    "MaterialCardView",
-    "Slider",
-    "MaterialDivider",
-    "CollapsingToolbarLayout",
-    "MaterialToolbar",
     "MaterialButton",
     "MaterialTextView",
     "MaterialTextField",
-    "RangeSlider"
+    "MaterialCardView",
+    "MaterialToolbar",
+    "TextInputLayout",
+    "TextInputEditText",
+    "MaterialAutoCompleteTextView",
+    "Chip",
+    "ChipGroup",
+    "MaterialSwitch",
+    "SwitchMaterial",
+    "MaterialCheckBox",
+    "MaterialRadioButton",
+    "MaterialButtonToggleGroup",
+    "MaterialButtonGroup",
+    "Slider",
+    "RangeSlider",
+    "MaterialDivider",
+    "ShapeableImageView",
+    "FloatingActionButton",
+    "ExtendedFloatingActionButton",
+    "SearchBar",
+    "MaterialSearchView",
+    "LoadingIndicator",
+    "FloatingToolbarLayout"
+  },
+  {
+    "AppBarLayout",
+    "CollapsingToolbarLayout",
+    "MaterialToolbar",
+    "BottomAppBar",
+    "BottomNavigationView",
+    "NavigationView",
+    "NavigationRailView",
+    "TabLayout",
+    "TabItem",
+    "SearchBar",
+    "MaterialSearchView"
+  },
+  {
+    "LinearProgressIndicator",
+    "CircularProgressIndicator",
+    "LoadingIndicator",
+    "Slider",
+    "RangeSlider",
+    "MaterialDivider"
   },
   {
     "Toolbar",
@@ -193,6 +257,7 @@ wds = {
     "SearchBar",
     "BottomNavigationView",
     "NavigationView",
+    "NavigationRailView",
     "TabHost",
     "TabWidget",
     "ZoomButton",
@@ -203,7 +268,8 @@ wds = {
     "LinearProgressIndicator",
     "CircularProgressIndicator",
     "SeekBar",
-    "NumberProgressBar"
+    "NumberProgressBar",
+    "LoadingIndicator"
   },
   {
     "VideoView",
@@ -218,40 +284,27 @@ wds = {
   }
 }
 
-ns2 = {
-  "基础控件",
-  "选择/开关控件",
-  "列表与分页控件",
-  "数据输入与展示控件",
-  "布局容器",
-  "Material 组件",
-  "导航与操作控件",
-  "进度与指示器",
-  "特殊视图",
-  "日期与时间控件"
-}
-
 wds2 = {
   {
     "兼容包按钮",
-    "兼容包编辑文本",
+    "兼容包编辑框",
     "兼容包文本视图",
     "兼容包图片视图",
     "兼容包图片按钮",
     "圆形图片视图",
     "文本视图",
-    "编辑文本",
+    "编辑框",
     "按钮",
     "图片按钮",
     "图片视图",
-    "带复选框的文本视图",
-    "空白占位视图"
+    "可选中文本",
+    "占位空白"
   },
   {
     "兼容包复选框",
     "兼容包单选按钮",
     "兼容包切换按钮",
-    "Material 开关",
+    "Material 开关(旧)",
     "Material 开关",
     "Material 复选框",
     "Material 单选按钮",
@@ -287,6 +340,7 @@ wds2 = {
     "搜索视图",
     "文本输入布局",
     "文本输入编辑文本",
+    "Material 自动完成输入",
     "数字进度条",
     "多自动完成文本视图",
     "文本时钟",
@@ -311,34 +365,65 @@ wds2 = {
     "滑动面板布局",
     "视图动画器",
     "视图翻转器",
-    "视图切换器"
+    "视图切换器",
+    "抽屉布局"
   },
   {
-    "应用栏布局",
-    "底部应用栏",
-    "底部导航视图",
-    "芯片",
-    "芯片组",
-    "悬浮操作按钮",
-    "扩展悬浮操作按钮",
-    "标签布局",
-    "导航视图",
-    "Material 卡片视图",
-    "滑块",
-    "Material 分割线",
-    "折叠工具栏布局",
-    "Material 工具栏",
     "Material 按钮",
     "Material 文本视图",
     "Material 文本输入框",
-    "范围滑块"
+    "Material 卡片",
+    "Material 工具栏",
+    "文本输入布局",
+    "文本输入编辑文本",
+    "Material 自动完成输入",
+    "芯片 Chip",
+    "芯片组 ChipGroup",
+    "Material 开关",
+    "Material 开关(旧)",
+    "Material 复选框",
+    "Material 单选按钮",
+    "按钮切换组",
+    "Material 按钮组",
+    "滑块 Slider",
+    "范围滑块",
+    "Material 分割线",
+    "可塑形图片",
+    "悬浮操作按钮 FAB",
+    "扩展 FAB",
+    "搜索栏 SearchBar",
+    "Material 搜索视图",
+    "加载指示器",
+    "悬浮工具栏布局"
+  },
+  {
+    "应用栏布局 AppBar",
+    "折叠工具栏布局",
+    "Material 工具栏",
+    "底部应用栏",
+    "底部导航栏",
+    "侧边导航视图",
+    "导航栏轨 NavigationRail",
+    "标签布局 TabLayout",
+    "标签项 TabItem",
+    "搜索栏 SearchBar",
+    "Material 搜索视图"
+  },
+  {
+    "线性进度指示器",
+    "圆形进度指示器",
+    "加载指示器",
+    "滑块 Slider",
+    "范围滑块",
+    "Material 分割线"
   },
   {
     "工具栏",
     "Material 工具栏",
     "搜索栏",
-    "底部导航视图",
-    "导航视图",
+    "底部导航栏",
+    "侧边导航视图",
+    "导航栏轨",
     "标签宿主",
     "标签组件",
     "缩放按钮",
@@ -349,7 +434,8 @@ wds2 = {
     "线性进度指示器",
     "圆形进度指示器",
     "拖动条",
-    "数字进度条"
+    "数字进度条",
+    "加载指示器"
   },
   {
     "视频视图",
@@ -362,6 +448,21 @@ wds2 = {
     "时间选择器",
     "日历视图"
   }
+}
+
+ns2 = {
+  "基础控件",
+  "选择/开关控件",
+  "列表与分页控件",
+  "数据输入与展示",
+  "布局容器",
+  "Material 组件",
+  "Material 导航",
+  "Material 反馈/进度",
+  "导航与操作",
+  "进度与指示器",
+  "特殊视图",
+  "日期与时间"
 }
 
 CAN_HAVE_CHILDREN = {
@@ -383,6 +484,7 @@ CAN_HAVE_CHILDREN = {
   ViewPager2,
   NestedScrollView,
   MaterialButtonToggleGroup,
+  MaterialButtonGroup,
   BottomAppBar,
   CardView,
   AbsoluteLayout,
@@ -404,6 +506,9 @@ CAN_HAVE_CHILDREN = {
   TabHost,
   PullingLayout,
   PageLayout,
+  NavigationView,
+  NavigationRailView,
+  FloatingToolbarLayout,
 }
 
 TEXTVIEW_COMPAT = {
@@ -411,6 +516,7 @@ TEXTVIEW_COMPAT = {
   MaterialTextView,
   AppCompatEditText,
   TextInputEditText,
+  MaterialAutoCompleteTextView,
   AppCompatAutoCompleteTextView,
   AppCompatMultiAutoCompleteTextView,
   AppCompatCheckedTextView,
@@ -435,6 +541,7 @@ TEXTVIEW_COMPAT = {
   CheckBox,
   ToggleButton,
   Switch,
+  Chip,
 }
 
 IMAGEVIEW_COMPAT = {
@@ -443,7 +550,10 @@ IMAGEVIEW_COMPAT = {
   ImageView,
   ImageButton,
   CircleImageView,
+  ShapeableImageView,
   QuickContactBadge,
+  FloatingActionButton,
+  ExtendedFloatingActionButton,
 }
 
 LINEARLAYOUT_COMPAT = {
@@ -453,7 +563,9 @@ LINEARLAYOUT_COMPAT = {
   TabHost,
   AppBarLayout,
   MaterialButtonToggleGroup,
+  MaterialButtonGroup,
   BottomAppBar,
   BottomNavigationView,
   ChipGroup,
+  NavigationRailView,
 }
