@@ -116,6 +116,7 @@ fds_abs = {
 }
 
 ns = {
+  "M3 Style",
   "Basic Controls",
   "Selection/Switch Controls",
   "List & Pagination Controls",
@@ -131,6 +132,28 @@ ns = {
 }
 
 wds = {
+  {
+    "MaterialSwitch",
+    "MaterialCardView",
+    "MaterialToolbar",
+    "MaterialButton",
+    "MaterialTextView",
+    "Chip",
+    "ChipGroup",
+    "Chip",
+    "FloatingActionButton",
+    "ExtendedFloatingActionButton",
+    "LinearProgressIndicator",
+    "CircularProgressIndicator",
+    "SearchBar",
+    "NavigationRailView",
+    "BottomNavigationView",
+    "MaterialDivider",
+    "Slider",
+    "RangeSlider",
+    "TextInputLayout",
+    "ShapeableImageView"
+  },
   {
     "AppCompatButton",
     "AppCompatEditText",
@@ -298,6 +321,28 @@ wds = {
 
 wds2 = {
   {
+    "SwitchBar 风格开关",
+    "SectionCard 风格卡片",
+    "TopAppBar 风格工具栏",
+    "Tonal/实心按钮",
+    "标题文本",
+    "FilterChip 芯片",
+    "Chip 组",
+    "FilterChip",
+    "FAB",
+    "扩展 FAB",
+    "线性进度",
+    "圆形进度",
+    "搜索栏",
+    "导航栏轨",
+    "底部导航",
+    "分割线",
+    "滑块",
+    "范围滑块",
+    "文本输入布局",
+    "可塑形图片"
+  },
+  {
     "兼容包按钮",
     "兼容包编辑框",
     "兼容包文本视图",
@@ -463,6 +508,7 @@ wds2 = {
 }
 
 ns2 = {
+  "M3 风格组件",
   "基础控件",
   "选择/开关控件",
   "列表与分页控件",
