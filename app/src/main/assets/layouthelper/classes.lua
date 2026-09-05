@@ -136,9 +136,22 @@ local classNames = {
   "com.google.android.material.floatingtoolbar.FloatingToolbarLayout",
   "com.google.android.material.button.MaterialButtonGroup",
   "com.google.android.material.search.SearchBar",
-  "com.luaforge.studio.widget.textfield.MaterialTextField"
+  "com.luaforge.studio.widget.textfield.MaterialTextField",
+  "com.google.android.material.imageview.ShapeableImageView"
+  "com.google.android.material.navigationrail.NavigationRailView",
+  "com.google.android.material.textfield.MaterialAutoCompleteTextView",
+  "com.google.android.material.search.SearchView",
+  "com.google.android.material.tabs.TabItem",
+  "androidx.appcompat.widget.SwitchCompat",
+  "android.webkit.WebView",
 }
 
 for _, v in ipairs(classNames) do
   importClass(v)
 end
+
+
+-- Alias for layout helper palette
+pcall(function()
+  MaterialSearchView = SearchView
+end)
