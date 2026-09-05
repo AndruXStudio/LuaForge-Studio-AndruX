@@ -2,6 +2,8 @@
 
 package com.luaforge.studio.ui.editor
 
+import com.luaforge.studio.ai.AiAssistantSheet
+
 import android.app.Activity
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
@@ -91,6 +93,7 @@ fun CodeEditScreen(
     val fileTreeDrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    var showAiAssistant by remember { mutableStateOf(false) }
     var isMoreMenuExpanded by remember { mutableStateOf(false) }
 
     val settingsManager = SettingsManager
