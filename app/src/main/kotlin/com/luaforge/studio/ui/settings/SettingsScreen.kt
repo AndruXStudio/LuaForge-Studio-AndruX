@@ -312,6 +312,17 @@ fun SettingsScreen(
                                     }
                                 )
                             }
+
+                            Box(modifier = Modifier.weight(1f)) {
+                                ThemeColorOption(
+                                    color = Color(0xFF9B1B30),
+                                    name = stringResource(R.string.settings_theme_carmine),
+                                    isSelected = currentSettingsState.themeType == ThemeType.CARMINE,
+                                    onClick = {
+                                        updateSettingsWithSave(currentSettingsState.copy(themeType = ThemeType.CARMINE))
+                                    }
+                                )
+                            }
                         }
                     }
 
