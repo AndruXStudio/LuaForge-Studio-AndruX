@@ -1,3 +1,14 @@
+# LuaForge Studio · AndruX 二改版
+
+> **创作团队**：AndruX developer-Studio  
+> **开发者**：Gaster  
+> **主题**：Material 3 · 卡莫纳色（Carmine）  
+> **上游**：[wisyh/LuaForge-Studio](https://github.com/wisyh/LuaForge-Studio)
+
+本仓库为上游开源项目的二创分支，保留原有 Lua 扩展语法 / 编辑器能力，界面默认采用更贴近 Google Material 3 的卡莫纳色调，并更新关于页署名与头像。
+
+---
+
 # 更新日志
 
 ## 1.6.0
