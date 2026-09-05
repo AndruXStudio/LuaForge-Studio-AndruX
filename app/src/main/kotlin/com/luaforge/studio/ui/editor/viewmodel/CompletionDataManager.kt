@@ -98,6 +98,25 @@ object CompletionDataManager {
                 LogCatcher.i("CompletionDataManager", "步骤2: 提取 androidClasses - 开始")
                 val androidClassesExtractTime = measureTimeMillis {
                     _androidClasses = extractAndroidClassNames(_completionClassMap)
+                    // Ensure Material / layout-helper short names highlight & resolve
+                    val extraWidgets = setOf(
+                        "MaterialButton", "MaterialTextView", "MaterialCardView", "MaterialToolbar",
+                        "MaterialSwitch", "MaterialCheckBox", "MaterialRadioButton", "MaterialDivider",
+                        "MaterialAutoCompleteTextView", "MaterialButtonToggleGroup", "MaterialButtonGroup",
+                        "MaterialTextField", "ShapeableImageView", "NavigationRailView",
+                        "FloatingActionButton", "ExtendedFloatingActionButton", "BottomAppBar",
+                        "LinearProgressIndicator", "CircularProgressIndicator", "LoadingIndicator",
+                        "SearchBar", "Chip", "ChipGroup", "Slider", "RangeSlider", "TabLayout", "TabItem",
+                        "BottomNavigationView", "NavigationView", "AppBarLayout", "CollapsingToolbarLayout",
+                        "TextInputLayout", "TextInputEditText", "SwitchMaterial", "CoordinatorLayout",
+                        "ConstraintLayout", "SwipeRefreshLayout", "NestedScrollView", "ViewPager2",
+                        "FloatingToolbarLayout", "MaterialSearchView"
+                    )
+                    if (_androidClasses == null) {
+                        _androidClasses = extraWidgets.toMutableSet()
+                    } else {
+                        _androidClasses!!.addAll(extraWidgets)
+                    }
                 }
                 LogCatcher.i("CompletionDataManager", "androidClasses 提取完成，大小: ${_androidClasses?.size}，耗时: ${androidClassesExtractTime}ms")
                 notifyProgress(0.5f)
