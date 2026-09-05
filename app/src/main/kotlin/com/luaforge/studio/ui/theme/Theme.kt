@@ -18,8 +18,72 @@ import com.luaforge.studio.ui.settings.DarkMode
 import com.luaforge.studio.ui.settings.SettingsManager
 
 enum class ThemeType {
-    GREEN, PINK, BLUE
+    GREEN, PINK, BLUE, CARMINE
 }
+
+// 卡莫纳色 / Carmine — Google Material 3 风格
+private val CarmineLightColorScheme = lightColorScheme(
+    primary = Color(0xFF9B1B30),
+    onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFFFFDAD8),
+    onPrimaryContainer = Color(0xFF410008),
+    secondary = Color(0xFF775654),
+    onSecondary = Color(0xFFFFFFFF),
+    secondaryContainer = Color(0xFFFFDAD7),
+    onSecondaryContainer = Color(0xFF2C1514),
+    tertiary = Color(0xFF725B2E),
+    onTertiary = Color(0xFFFFFFFF),
+    tertiaryContainer = Color(0xFFFEDEA6),
+    onTertiaryContainer = Color(0xFF261900),
+    error = Color(0xFFBA1A1A),
+    onError = Color(0xFFFFFFFF),
+    errorContainer = Color(0xFFFFDAD6),
+    onErrorContainer = Color(0xFF410002),
+    background = Color(0xFFFFFBFF),
+    onBackground = Color(0xFF201A1A),
+    surface = Color(0xFFFFFBFF),
+    onSurface = Color(0xFF201A1A),
+    surfaceVariant = Color(0xFFF4DDDB),
+    onSurfaceVariant = Color(0xFF534341),
+    outline = Color(0xFF857371),
+    outlineVariant = Color(0xFFD8C2BF),
+    scrim = Color(0xFF000000),
+    inverseSurface = Color(0xFF362F2E),
+    inverseOnSurface = Color(0xFFFBEDEC),
+    inversePrimary = Color(0xFFFFB3B1),
+)
+
+private val CarmineDarkColorScheme = darkColorScheme(
+    primary = Color(0xFFFFB3B1),
+    onPrimary = Color(0xFF680014),
+    primaryContainer = Color(0xFF8B0022),
+    onPrimaryContainer = Color(0xFFFFDAD8),
+    secondary = Color(0xFFE7BDBA),
+    onSecondary = Color(0xFF442928),
+    secondaryContainer = Color(0xFF5D3F3D),
+    onSecondaryContainer = Color(0xFFFFDAD7),
+    tertiary = Color(0xFFE1C28C),
+    onTertiary = Color(0xFF402D05),
+    tertiaryContainer = Color(0xFF594319),
+    onTertiaryContainer = Color(0xFFFEDEA6),
+    error = Color(0xFFFFB4AB),
+    onError = Color(0xFF690005),
+    errorContainer = Color(0xFF93000A),
+    onErrorContainer = Color(0xFFFFDAD6),
+    background = Color(0xFF201A1A),
+    onBackground = Color(0xFFEDE0DE),
+    surface = Color(0xFF201A1A),
+    onSurface = Color(0xFFEDE0DE),
+    surfaceVariant = Color(0xFF534341),
+    onSurfaceVariant = Color(0xFFD8C2BF),
+    outline = Color(0xFFA08C8A),
+    outlineVariant = Color(0xFF534341),
+    scrim = Color(0xFF000000),
+    inverseSurface = Color(0xFFEDE0DE),
+    inverseOnSurface = Color(0xFF362F2E),
+    inversePrimary = Color(0xFF9B1B30),
+)
+
 
 // 粉色主题色系
 private val PinkLightColorScheme = lightColorScheme(
@@ -295,12 +359,14 @@ fun AppThemeWithObserver(
             ThemeType.PINK -> PinkDarkColorScheme
             ThemeType.BLUE -> BlueDarkColorScheme
             ThemeType.GREEN -> GreenDarkColorScheme
+            ThemeType.CARMINE -> CarmineDarkColorScheme
         }
 
         else -> when (currentSettings.themeType) {
             ThemeType.PINK -> PinkLightColorScheme
             ThemeType.BLUE -> BlueLightColorScheme
             ThemeType.GREEN -> GreenLightColorScheme
+            ThemeType.CARMINE -> CarmineLightColorScheme
         }
     }
 
