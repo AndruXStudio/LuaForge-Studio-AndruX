@@ -679,6 +679,7 @@ class EditorViewModel : ViewModel(), CompletionDataManager.OnCompletionDataListe
                     com.luaforge.studio.ui.theme.ThemeType.GREEN -> Color(0xFF2E6A44)
                     com.luaforge.studio.ui.theme.ThemeType.BLUE -> Color(0xFF36618E)
                     com.luaforge.studio.ui.theme.ThemeType.PINK -> Color(0xFF8D4A5A)
+                    com.luaforge.studio.ui.theme.ThemeType.CARMINE -> Color(0xFF9B1B30)
                 },
                 isDark = when (settings.darkMode) {
                     com.luaforge.studio.ui.settings.DarkMode.FOLLOW_SYSTEM ->
