@@ -126,6 +126,7 @@
     <string name="settings_theme_color">主题颜色</string>
     <string name="settings_theme_green">绿色</string>
     <string name="settings_theme_blue">蓝色</string>
+    <string name="settings_theme_carmine">卡莫纳</string>
     <string name="settings_theme_pink">粉色</string>
     <string name="settings_theme_mode">主题模式</string>
     <string name="settings_theme_follow_system">跟随系统</string>
