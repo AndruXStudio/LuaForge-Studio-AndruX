@@ -87,6 +87,22 @@ checks.scaleType = {
   "centerCrop",
   "centerInside"
 }
+checks.visibility = { "visible", "invisible", "gone" }
+checks.enabled = { "true", "false" }
+checks.clickable = { "true", "false" }
+checks.focusable = { "true", "false" }
+checks.checked = { "true", "false" }
+checks.checkable = { "true", "false" }
+checks.indeterminate = { "true", "false" }
+checks.singleLine = { "true", "false" }
+checks.adjustViewBounds = { "true", "false" }
+checks.counterEnabled = { "true", "false" }
+checks.includeFontPadding = { "true", "false" }
+checks.boxBackgroundMode = { "none", "filled", "outline" }
+checks.endIconMode = { "none", "password_toggle", "clear_text", "custom", "dropdown_menu" }
+checks.iconGravity = { "textStart", "textEnd", "textTop", "start", "end" }
+checks.textStyle = { "normal", "bold", "italic", "bold|italic" }
+checks.inputType = { "text", "number", "phone", "textPassword", "textEmailAddress", "textMultiLine", "numberDecimal" }
 
 function addDir(out, dir, f)
   local ls = f.listFiles()
@@ -184,6 +200,89 @@ func["删除"] = function()
       break
     end
   end
+  method.showlayout(loadlayout2(layout_main, {}))
+end
+
+local function deepCopy(t)
+  if type(t) ~= "table" then
+    return t
+  end
+  local n = {}
+  for k, v in pairs(t) do
+    n[k] = deepCopy(v)
+  end
+  return n
+end
+
+func["复制"] = function()
+  local gp = currView.Parent.Tag
+  if gp == nil then
+    print("顶部控件无法复制")
+    return
+  end
+  local idx
+  for k, v in ipairs(gp) do
+    if v == curr then
+      idx = k
+      break
+    end
+  end
+  if not idx then
+    print("未找到当前控件")
+    return
+  end
+  local copy = deepCopy(curr)
+  table.insert(gp, idx + 1, copy)
+  local s, l = pcall(loadlayout2, layout_main, {})
+  if s then
+    method.showlayout(l)
+    print("已复制控件")
+  else
+    table.remove(gp, idx + 1)
+    print(l)
+    Error(l)
+  end
+end
+
+func["上移"] = function()
+  local gp = currView.Parent.Tag
+  if gp == nil then
+    print("顶部控件无法移动")
+    return
+  end
+  local idx
+  for k, v in ipairs(gp) do
+    if v == curr then
+      idx = k
+      break
+    end
+  end
+  if not idx or idx <= 1 then
+    print("已经是第一个")
+    return
+  end
+  gp[idx], gp[idx - 1] = gp[idx - 1], gp[idx]
+  method.showlayout(loadlayout2(layout_main, {}))
+end
+
+func["下移"] = function()
+  local gp = currView.Parent.Tag
+  if gp == nil then
+    print("顶部控件无法移动")
+    return
+  end
+  local idx
+  for k, v in ipairs(gp) do
+    if v == curr then
+      idx = k
+      break
+    end
+  end
+  if not idx or idx >= #gp then
+    print("已经是最后一个")
+    return
+  end
+  gp[idx], gp[idx + 1] = gp[idx + 1], gp[idx]
   method.showlayout(loadlayout2(layout_main, {}))
 end
 
