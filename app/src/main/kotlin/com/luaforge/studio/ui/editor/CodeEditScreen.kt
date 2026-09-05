@@ -592,6 +592,14 @@ fun CodeEditScreen(
                                 .fillMaxSize()
                                 .background(MaterialTheme.colorScheme.background)
                         ) {
+                            AiAssistantSheet(
+                                visible = showAiAssistant,
+                                onDismiss = { showAiAssistant = false },
+                                currentCode = viewModel.activeFileState?.content
+                                    ?: viewModel.current?.content
+                                    ?: "",
+                                currentFileName = currentFileName,
+                            )
                             Scaffold(
                                 topBar = {
                                     EditorTopBar(
@@ -621,7 +629,8 @@ fun CodeEditScreen(
                                                 )
                                             }
                                         },
-                                        onBuildProject = onBuildProjectAction
+                                        onBuildProject = onBuildProjectAction,
+                                        onOpenAiAssistant = { showAiAssistant = true }
                                     )
                                 },
                                 content = { innerPadding ->
