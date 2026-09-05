@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -66,7 +67,7 @@ fun SwitchBar(
                         Icon(
                             imageVector = Icons.Filled.Check,
                             contentDescription = null,
-                            modifier = Modifier.padding(2.dp),
+                            modifier = Modifier.size(SwitchDefaults.IconSize),
                         )
                     }
                 } else {
@@ -74,7 +75,7 @@ fun SwitchBar(
                         Icon(
                             imageVector = Icons.Filled.Close,
                             contentDescription = null,
-                            modifier = Modifier.padding(2.dp),
+                            modifier = Modifier.size(SwitchDefaults.IconSize),
                         )
                     }
                 },
