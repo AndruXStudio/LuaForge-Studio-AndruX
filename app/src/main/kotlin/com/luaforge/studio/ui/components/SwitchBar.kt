@@ -5,8 +5,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -19,32 +23,31 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 
 /**
- * Material Design 3 风格的开关条组件
- * 点击整个条区域均可切换开关状态，波纹完美限制在圆角内
+ * Material 3 SwitchBar — Google Settings style row.
  */
 @Composable
 fun SwitchBar(
+    text: String,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    text: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
     colors: SwitchBarColors = SwitchBarDefaults.colors(),
     contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
 ) {
-    // ✅ 核心修复：使用 Card 的 onClick 参数处理点击和波纹
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(containerColor = colors.containerColor),
-        shape = MaterialTheme.shapes.medium,
-        onClick = { onCheckedChange(!checked) }, // ✅ 自动处理带圆角的波纹
+        shape = MaterialTheme.shapes.extraLarge,
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        onClick = { if (enabled) onCheckedChange(!checked) },
         enabled = enabled,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(contentPadding), // 不再需要 clickable 和 clip
+                .padding(contentPadding),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
@@ -56,22 +59,39 @@ fun SwitchBar(
             )
             Switch(
                 checked = checked,
-                onCheckedChange = null, // 点击由 Card 处理
+                onCheckedChange = null,
                 enabled = enabled,
+                thumbContent = if (checked) {
+                    {
+                        Icon(
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = null,
+                            modifier = Modifier.padding(2.dp),
+                        )
+                    }
+                } else {
+                    {
+                        Icon(
+                            imageVector = Icons.Filled.Close,
+                            contentDescription = null,
+                            modifier = Modifier.padding(2.dp),
+                        )
+                    }
+                },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = colors.checkedThumbColor,
                     checkedTrackColor = colors.checkedTrackColor,
+                    checkedIconColor = colors.checkedTrackColor,
                     uncheckedThumbColor = colors.uncheckedThumbColor,
                     uncheckedTrackColor = colors.untrackedTrackColor,
+                    uncheckedBorderColor = MaterialTheme.colorScheme.outline,
+                    uncheckedIconColor = MaterialTheme.colorScheme.surfaceContainerHighest,
                 ),
             )
         }
     }
 }
 
-/**
- * 颜色配置类（保持不变）
- */
 data class SwitchBarColors(
     val containerColor: Color,
     val textColor: Color,
@@ -81,18 +101,15 @@ data class SwitchBarColors(
     val untrackedTrackColor: Color,
 )
 
-/**
- * 默认配置（保持不变）
- */
 object SwitchBarDefaults {
     @Composable
     fun colors(
-        containerColor: Color = MaterialTheme.colorScheme.surface,
+        containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHighest,
         textColor: Color = MaterialTheme.colorScheme.onSurface,
         checkedThumbColor: Color = MaterialTheme.colorScheme.onPrimary,
         checkedTrackColor: Color = MaterialTheme.colorScheme.primary,
         uncheckedThumbColor: Color = MaterialTheme.colorScheme.outline,
-        uncheckedTrackColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+        uncheckedTrackColor: Color = MaterialTheme.colorScheme.surfaceContainerHighest,
     ): SwitchBarColors = SwitchBarColors(
         containerColor = containerColor,
         textColor = textColor,
