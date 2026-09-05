@@ -150,8 +150,9 @@ for _, v in ipairs(classNames) do
   importClass(v)
 end
 
-
--- Alias for layout helper palette
+-- Palette aliases (safe if class missing)
 pcall(function()
-  MaterialSearchView = SearchView
+  if SearchView ~= nil and MaterialSearchView == nil then
+    MaterialSearchView = SearchView
+  end
 end)
