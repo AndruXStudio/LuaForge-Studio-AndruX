@@ -11,46 +11,48 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 
 /**
- * LuaForge Studio 形状系统
- * Material 3 形状规范
+ * Pure Material 3 shape scale (Google design tokens).
+ * Reference: https://m3.material.io/styles/shape/shape-scale-tokens
  */
+val Material3Shapes = Shapes(
+    extraSmall = RoundedCornerShape(4.dp),
+    small = RoundedCornerShape(8.dp),
+    medium = RoundedCornerShape(12.dp),
+    large = RoundedCornerShape(16.dp),
+    extraLarge = RoundedCornerShape(28.dp),
+)
 
 /**
- * 创建根据设置变化的Shapes（带动画）
+ * Animated shape scale driven by user setting (still maps to M3 ratios).
  */
 @Composable
 fun createDynamicShapes(shapeSizeIndex: Int): Shapes {
-    // 目标尺寸（dp值）
     val targetBaseSize = when (shapeSizeIndex) {
-        0 -> 4f  // 小
-        1 -> 8f  // 中小
-        2 -> 12f // 中（默认）
-        3 -> 16f // 大
+        0 -> 4f
+        1 -> 8f
+        2 -> 12f
+        3 -> 16f
         else -> 12f
     }
 
-    // 创建 Animatable 对象来驱动动画
     val animatedBaseSize = remember { Animatable(targetBaseSize) }
 
-    // 当目标尺寸变化时，启动动画
     LaunchedEffect(targetBaseSize) {
         animatedBaseSize.animateTo(
             targetValue = targetBaseSize,
             animationSpec = spring(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
-                stiffness = Spring.StiffnessLow
+                dampingRatio = Spring.DampingRatioNoBouncy,
+                stiffness = Spring.StiffnessMedium
             )
         )
     }
 
-    // 将动画值转换为dp
-    val baseSize = animatedBaseSize.value.dp
-
+    val base = animatedBaseSize.value.dp
     return Shapes(
-        extraSmall = RoundedCornerShape(baseSize * 0.33f),
-        small = RoundedCornerShape(baseSize * 0.67f),
-        medium = RoundedCornerShape(baseSize),
-        large = RoundedCornerShape(baseSize * 1.33f),
-        extraLarge = RoundedCornerShape(baseSize * 2.33f)
+        extraSmall = RoundedCornerShape(base * 0.33f),
+        small = RoundedCornerShape(base * 0.67f),
+        medium = RoundedCornerShape(base),
+        large = RoundedCornerShape(base * 1.33f),
+        extraLarge = RoundedCornerShape(base * 2.33f),
     )
 }
