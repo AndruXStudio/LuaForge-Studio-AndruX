@@ -93,6 +93,18 @@ fds_material = {
   "title", "subtitle", "menu",
 }
 
+
+fds_view = {
+  "删除", "复制", "上移", "下移", "父控件",
+  "id", "layout_width", "layout_height", "layout_gravity",
+  "onClick", "onLongClick",
+  "background", "backgroundColor",
+  "layout_margin", "layout_marginLeft", "layout_marginTop", "layout_marginRight", "layout_marginBottom",
+  "padding", "paddingLeft", "paddingTop", "paddingRight", "paddingBottom",
+  "Rotation", "RotationX", "RotationY",
+  "elevation", "alpha", "visibility", "enabled", "clickable", "focusable",
+}
+
 fds_abs = {
   "删除", "复制", "上移", "下移", "父控件",
   "id", "layout_width", "layout_height", "layout_gravity",
@@ -568,4 +580,42 @@ LINEARLAYOUT_COMPAT = {
   BottomNavigationView,
   ChipGroup,
   NavigationRailView,
+}
+
+
+MATERIAL_COMPAT = {
+  MaterialButton,
+  MaterialTextView,
+  MaterialTextField,
+  MaterialCardView,
+  MaterialToolbar,
+  MaterialSwitch,
+  SwitchMaterial,
+  MaterialCheckBox,
+  MaterialRadioButton,
+  MaterialButtonToggleGroup,
+  MaterialButtonGroup,
+  MaterialDivider,
+  MaterialAutoCompleteTextView,
+  Chip,
+  ChipGroup,
+  Slider,
+  RangeSlider,
+  ShapeableImageView,
+  FloatingActionButton,
+  ExtendedFloatingActionButton,
+  SearchBar,
+  LoadingIndicator,
+  LinearProgressIndicator,
+  CircularProgressIndicator,
+  FloatingToolbarLayout,
+  NavigationRailView,
+  BottomNavigationView,
+  NavigationView,
+  TabLayout,
+  AppBarLayout,
+  CollapsingToolbarLayout,
+  BottomAppBar,
+  TextInputLayout,
+  TextInputEditText,
 }
