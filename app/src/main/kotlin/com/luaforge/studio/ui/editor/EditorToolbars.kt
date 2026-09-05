@@ -66,7 +66,8 @@ fun EditorTopBar(
     onMoreMenuExpandedChange: (Boolean) -> Unit,
     isCompilingFile: Boolean,
     onCompileFile: () -> Unit,
-    onBuildProject: () -> Unit
+    onBuildProject: () -> Unit,
+    onOpenAiAssistant: () -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
 
@@ -129,6 +130,14 @@ fun EditorTopBar(
                 Icon(Icons.Filled.PlayArrow, stringResource(R.string.code_editor_run))
             }
 
+            IconButton(onClick = onOpenAiAssistant) {
+                Icon(
+                    painter = androidx.compose.ui.res.painterResource(R.drawable.ic_deepseek),
+                    contentDescription = "DeepSeek AI",
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
+
             Box {
                 IconButton(onClick = { onMoreMenuExpandedChange(true) }) {
                     Icon(Icons.Filled.MoreVert, stringResource(R.string.code_editor_more))
@@ -159,7 +168,8 @@ fun EditorMoreMenu(
     projectPath: String,
     isCompilingFile: Boolean,
     onCompileFile: () -> Unit,
-    onBuildProject: () -> Unit
+    onBuildProject: () -> Unit,
+    onOpenAiAssistant: () -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
     val settings = SettingsManager.currentSettings
