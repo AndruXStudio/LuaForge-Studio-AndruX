@@ -113,7 +113,7 @@ object SettingsManager {
      */
     private fun getFixedProjectStoragePath(): String {
         val baseDir = Environment.getExternalStorageDirectory()
-        return File(baseDir, "LuaForge-Studio/project").absolutePath
+        return File(baseDir, "Applua_X/project").absolutePath
     }
 
     // 注册设置变化监听器
@@ -393,7 +393,7 @@ object SettingsManager {
 data class SettingsData(
     val themeType: ThemeType = ThemeType.CARMINE,
     val darkMode: DarkMode = DarkMode.FOLLOW_SYSTEM,
-    val projectStoragePath: String = "/storage/emulated/0/LuaForge-Studio/project/",
+    val projectStoragePath: String = "/storage/emulated/0/Applua_X/project/",
     val fontSizeScale: Float = 1.0f,
     val shapeSizeIndex: Int = 2,
     val fontFamilyType: FontFamilyType = FontFamilyType.DEFAULT,
