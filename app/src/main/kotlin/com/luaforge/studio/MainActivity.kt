@@ -745,6 +745,7 @@ fun MainScreen(
                                 }
                             }
 
+                            MainContentType.CODE_MANUAL, MainContentType.PROFILE,
                             MainContentType.SETTINGS, MainContentType.ABOUT -> {
                             }
                         }
@@ -778,6 +779,7 @@ fun MainScreen(
                         )
                     }
 
+                    MainContentType.CODE_MANUAL, MainContentType.PROFILE,
                     MainContentType.SETTINGS, MainContentType.ABOUT -> {
                     }
                 }
