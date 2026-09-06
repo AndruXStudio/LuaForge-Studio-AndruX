@@ -196,8 +196,6 @@ fun SettingsScreen(
 ) {
     val settingsManager = SettingsManager
 
-    var appIconExpanded by remember { mutableStateOf(false) }
-
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
@@ -569,52 +567,6 @@ Column(
                                 }
                             }
                         }
-                    }
-                }
-            }
-
-            item {
-                SettingsCardGroup(
-                    title = stringResource(R.string.settings_app_icon),
-                    icon = Icons.Filled.Apps,
-                    initiallyExpanded = appIconExpanded,
-                    onExpandedChange = { appIconExpanded = it }
-                ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.settings_select_app_icon),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-
-                        val currentIcon = remember {
-                            IconManager.getCurrentIcon(context)
-                        }
-
-                        AppIconGrid(
-                            selectedIcon = currentIcon,
-                            onIconSelected = { newIcon: IconManager.AppIcon ->
-                                scope.launch {
-                                    try {
-                                        IconManager.switchAppIcon(context, newIcon)
-
-                                        val newSettings = currentSettings.copy(
-                                            selectedAppIcon = newIcon
-                                        )
-                                        SettingsManager.updateSettings(newSettings)
-                                        SettingsManager.saveSettings(context)
-                                        onSettingsChanged(newSettings)
-
-                                        toast.showToast(context.getString(R.string.settings_icon_restart_to_effect))
-                                    } catch (e: Exception) {
-                                        toast.showToast(context.getString(R.string.settings_icon_switch_failed, e.message ?: ""))
-                                    }
-                                }
-                            }
-                        )
                     }
                 }
             }
