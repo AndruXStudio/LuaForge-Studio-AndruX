@@ -963,7 +963,6 @@ fun MainScreen(
                 }
             }
         }
-    }
 
     if (showDeleteDialog) {
         AlertDialog(
@@ -1540,7 +1539,6 @@ class MainActivity : ComponentActivity() {
         window.decorView.requestLayout()
         window.decorView.invalidate()
     }
-}
 
     override fun onDestroy() {
         super.onDestroy()
