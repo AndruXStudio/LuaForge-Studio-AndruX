@@ -1,0 +1,5001 @@
+《《打开微信扫一扫》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+import "android.content.Context"
+import "android.content.Intent"
+import "android.content.ComponentName"
+--activity.setContentView(loadlayout("layout"))
+
+activity.finish()
+intent=Intent()
+intent.setComponent(ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI"))
+intent.putExtra("LauncherUI.From.Scaner.Shortcut", true)
+intent.setFlags(335544320)
+intent.setAction("android.intent.action.VIEW");
+activity.startActivity(intent);
+》》
+《《正则表达式》》
+《《--[[.(点): 与任何字符配对
+%a: 与任何字母配对
+%c: 与任何控制符配对(例如\n)
+%d: 与任何数字配对
+%l: 与任何小写字母配对
+%p: 与任何标点(punctuation)配对
+%s: 与空白字符配对
+%u: 与任何大写字母配对
+%w: 与任何字母/数字配对
+%x: 与任何十六进制数配对
+%z: 与任何代表0的字符配对
+%x(此处x是非字母非数字字符): 与字符x配对. 主要用来处理表达式中有功能的字符(^$()%.[]*+-?)的配对问题, 例如%%与%配对[数个字符类]: 与任何[]中包含的字符类配对. 例如[%w_]与任何字母/数字, 或下划线符号(_)配对[^数个字符类]: 与任何不包含在[]中的字符类配对. 例如[^%s]与任何非空白字符配对
+
+当上述的字符类用大写书写时, 表示与非此字符类的任何字符配对. 例如, %S表示与任何非空白字符配对.
+
+%a  星期简写
+%A  星期大写
+%b  月份简写
+%B  月份大写
+%c  日期时间
+%d  月份天数
+%H  小时[24进制]
+%I  小时[12进制]
+%j  年中第几天
+%m  月份
+%M 分钟
+%p  am或pm
+%S  秒数
+%w  星期
+%W  第几周
+%x  日期
+%X  时间
+%y  两位数的月份
+%Y 完整的月份
+%z  时区
+%% 百分号
+
+
+
+%c - 接受一个数字, 并将其转化为ASCII码表中对应的字符
+%d, %i - 接受一个数字并将其转化为有符号的整数格式
+%o - 接受一个数字并将其转化为八进制数格式
+%u - 接受一个数字并将其转化为无符号整数格式
+%x - 接受一个数字并将其转化为十六进制数格式, 使用小写字母
+%X - 接受一个数字并将其转化为十六进制数格式, 使用大写字母
+%e - 接受一个数字并将其转化为科学记数法格式, 使用小写字母e
+%E - 接受一个数字并将其转化为科学记数法格式, 使用大写字母E
+%f - 接受一个数字并将其转化为浮点数格式
+%g(%G) - 接受一个数字并将其转化为%e(%E, 对应%G)及%f中较短的一种格式
+%q - 接受一个字符串并将其转化为可安全被Lua编译器读入的格式
+%s - 接受一个字符串并按照给定的参数格式化该字符串
+为进一步细化格式, 可以在%号后添加参数. 参数将以如下的顺序读入:
+
+(1) 符号: 一个+号表示其后的数字转义符将让正数显示正号. 默认情况下只有负数显示符号.
+(2) 占位符: 一个0, 在后面指定了字串宽度时占位用. 不填时的默认占位符是空格.
+(3) 对齐标识: 在指定了字串宽度时, 默认为右对齐, 增加-号可以改为左对齐.
+(4) 宽度数值
+(5) 小数位数/字串裁切: 在宽度数值后增加的小数部分n, 若后接f(浮点数转义符, 如%6.3f)则设定该浮点数的小数只保留n位, 若后接s(字符串转义符, 如%5.3s)则设定该字符串只显示前n位.
+
+]]
+--实例
+string1 = "Lua"
+string2 = "Tutorial"
+number1 = 10
+number2 = 20
+-- 基本字符串格式化
+print(string.format("基本格式化 %s %s",string1,string2))
+-- 日期格式化
+date = 2; month = 1; year = 2014
+print(string.format("日期格式化 %02d/%02d/%03d", date, month, year))
+-- 十进制格式化
+print(string.format("%.4f",1/3))
+
+--[[
+以上代码执行结果为：
+
+基本格式化 Lua Tutorial
+日期格式化 02/01/2014
+0.3333
+]]
+
+--其他例子：
+
+string.format("%c", 83)                 -- 输出S
+string.format("%+d", 17.0)              -- 输出+17
+string.format("%05d", 17)               -- 输出00017
+string.format("%o", 17)                 -- 输出21
+string.format("%u", 3.14)               -- 输出3
+string.format("%x", 13)                 -- 输出d
+string.format("%X", 13)                 -- 输出D
+string.format("%e", 1000)               -- 输出1.000000e+03
+string.format("%E", 1000)               -- 输出1.000000E+03
+string.format("%6.3f", 13)              -- 输出13.000
+string.format("%q", "One\nTwo")         -- 输出"One\
+                                        -- 　　Two"
+string.format("%s", "monkey")           -- 输出monkey
+string.format("%10s", "monkey")         -- 输出    monkey
+string.format("%5.3s", "monkey")        -- 输出  mon》》
+《《获取充电状态(电量)》》
+《《import "android.content.Intent"
+import "android.os.BatteryManager"
+import "android.content.IntentFilter"
+filter =IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+intent =this.getContext().registerReceiver(nil,filter)
+当前电量= intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+充电状态 = intent.getIntExtra(BatteryManager.EXTRA_STATUS, BatteryManager.BATTERY_STATUS_UNKNOWN)
+--充电状态值=(1，未知状态)(2，充电中)(3，放电中)(4，未充电)(5，充满了)
+
+--java搬得代码(淡紫色)
+
+print(当前电量,充电状态)
+》》
+《《半圆时钟带刻度》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+layout={
+  LinearLayout;
+  layout_width="fill";
+  layout_height="fill";
+  orientation="vertical";
+  {
+    LinearLayout;
+    id="view";
+    layout_width="fill";
+    layout_height="fill";
+    orientation="vertical";
+  };
+};
+
+activity.setTheme(android.R.style.Theme_Material_Light)
+activity.setContentView(loadlayout(layout))
+
+--activity.ActionBar.hide()
+
+
+import "android.media.AudioManager"
+import "android.media.SoundPool"
+local ogg = {"s_00.ogg","s_01.ogg","s_02.ogg","s_03.ogg","s_04.ogg","s_05.ogg",
+  "s_06.ogg","s_07.ogg","s_08.ogg","s_09.ogg","s_10.ogg","s_11.ogg",
+  "s_12.ogg","s_13.ogg","s_14.ogg","s_15.ogg","s_16.ogg","s_17.ogg",
+  "s_18.ogg","s_19.ogg","s_20.ogg","s_21.ogg","s_22.ogg","s_23.ogg",}
+
+local soundPool = SoundPool(1,AudioManager.STREAM_MUSIC,0)
+local object = Object[#ogg+1]
+for i=1,#ogg do
+  object[i] = false
+  soundPool.load(activity.getLuaDir("voidce".."/"..ogg[i]),0)
+end
+soundPool.setOnLoadCompleteListener(SoundPool.OnLoadCompleteListener{
+  onLoadComplete=function(s,i,b)
+    object[i] = true
+  end})
+
+
+
+
+require "import"
+
+import "android.icu.text.SimpleDateFormat"
+import "android.animation.ValueAnimator"
+SunsetClock = {}
+local activity = activity or service
+local color = 0xffff0000
+local xcolor = 0xffffffff
+local drawcolor = 0xff000000
+local size = nil
+local width = nil --activity.getWidth()
+local height = nil --activity.getHeight()
+local poortime = 0
+local Clock_h,Clock_m,Clock_s = 0,0,0
+local invaliSelf = true
+local sd = SimpleDateFormat("yyyy-MM-dd")
+local sds = SimpleDateFormat("E")
+local function getSimp(data)
+  local eer = "周日"
+  if !pcall(function()
+      eer = sds.format(sd.parse(data))
+    end) then
+    eer = "周日"
+  end
+  switch(eer)
+   case "周一"
+    return 1,eer
+   case "周二"
+    return 2,eer
+   case "周三"
+    return 3,eer
+   case "周四"
+    return 4,eer
+   case "周五"
+    return 5,err
+   case "周六"
+    return 6,eer
+   case "周日"
+    return 7,eer
+  end
+  return 7,eer
+end
+
+local 月 = {"一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"}
+
+local 日 = {"1号", "2号", "3号", "4号", "5号", "6号", "7号", "8号", "9号", "10号", "11号", "12号", "13号", "14号", "15号", "16号", "17号", "18号", "19号", "20号", "21号", "22号", "23号", "24号", "25号", "26号", "27号", "28号", "29号", "30号", "31号"}
+
+local 周 = {"星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"}
+
+local 时 = {"00小时", "01小时", "02小时", "03小时", "04小时", "05小时", "06小时", "07小时", "08小时", "09小时", "10小时", "11小时", "12小时", "13小时", "14小时", "15小时", "16小时", "17小时", "18小时", "19小时", "20小时", "21小时", "22小时", "23小时"}
+
+local 分 = {"00分钟","01分钟", "02分钟", "03分钟", "04分钟", "05分钟", "06分钟", "07分钟", "08分钟", "09分钟", "10分钟",
+  "11分钟", "12分钟", "13分钟", "14分钟", "15分钟", "16分钟", "17分钟", "18分钟", "19分钟", "20分钟",
+  "21分钟", "22分钟", "23分钟", "24分钟", "25分钟", "26分钟", "27分钟", "28分钟", "29分钟", "30分钟",
+  "31分钟", "32分钟", "33分钟", "34分钟", "35分钟", "36分钟", "37分钟", "38分钟", "39分钟", "40分钟",
+  "41分钟", "42分钟", "43分钟", "44分钟", "45分钟", "46分钟", "47分钟", "48分钟", "49分钟", "50分钟",
+  "51分钟", "52分钟", "53分钟", "54分钟", "55分钟", "56分钟", "57分钟", "58分钟", "59分钟", "60分钟"}
+
+local 秒 = {"01秒", "02秒", "03秒", "04秒", "05秒", "06秒", "07秒", "08秒", "09秒", "10秒",
+  "11秒", "12秒", "13秒", "14秒", "15秒", "16秒", "17秒", "18秒", "19秒", "20秒",
+  "21秒", "22秒", "23秒", "24秒", "25秒", "26秒", "27秒", "28秒", "29秒", "30秒",
+  "31秒", "32秒", "33秒", "34秒", "35秒", "36秒", "37秒", "38秒", "39秒", "40秒",
+  "41秒", "42秒", "43秒", "44秒", "45秒", "46秒", "47秒", "48秒", "49秒", "50秒",
+  "51秒", "52秒", "53秒", "54秒", "55秒", "56秒", "57秒", "58秒", "59秒", "60秒"}
+
+local simp,_simpc = getSimp(os.date("%Y-%m-%d"))
+local h,m,s,e,d,r,y = tonumber(os.date("%H")),tonumber(os.date("%M")),tonumber(os.date("%S")),simp,tonumber(os.date("%d")),tonumber(os.date("%m")),tonumber(os.date("%Y"))
+local cs,cm,ch,ce,cd,cr,cy,simpc = (360/#秒)*s,(360/#分)*m,(360/#时)*h,(360/#周)*e,(360/#日)*d,(360/#月)*r,y,_simpc
+local cv1,cv2,cv3,cv4,cv5,cv6 = 0,0,0,0,0,0
+local ofInt0 = ValueAnimator.ofFloat({0,-90})--整个的动画
+.addUpdateListener{
+  onAnimationUpdate=function(e)
+    local nve = e.getAnimatedValue()
+    cv1,cv2,cv3,cv4,cv5,cv6 = nve,nve,nve,nve,nve,nve
+    if _view~=nil and invaliSelf then
+      _view.invalidate()
+    end
+  end
+}
+.setDuration(1000)
+
+local ofInt1 = ValueAnimator.ofFloat({0,360/#秒})
+.addUpdateListener{
+  onAnimationUpdate=function(e)
+    local nve = e.getAnimatedValue()
+    cv1 = nve+cs
+    if _view~=nil and invaliSelf then
+      _view.invalidate()
+    end
+  end
+}
+.setDuration(300)
+local ofInt2 = ValueAnimator.ofFloat({0,360/#分})
+.addUpdateListener{
+  onAnimationUpdate=function(e)
+    local nve = e.getAnimatedValue()
+    cv2 = nve+cm
+    if _view~=nil and invaliSelf then
+      _view.invalidate()
+    end
+  end
+}
+.setDuration(300)
+local ofInt3 = ValueAnimator.ofFloat({0,360/#时})
+.addUpdateListener{
+  onAnimationUpdate=function(e)
+    local nve = e.getAnimatedValue()
+    cv3 = nve+ch
+    if _view~=nil and invaliSelf then
+      _view.invalidate()
+    end
+  end
+}
+.setDuration(300)
+local ofInt4 = ValueAnimator.ofFloat({0,360/#周})
+.addUpdateListener{
+  onAnimationUpdate=function(ee)
+    local nve = ee.getAnimatedValue()
+    cv4 = nve+ce-360/#周
+    if _view~=nil and invaliSelf then
+      _view.invalidate()
+    end
+  end
+}
+.setDuration(300)
+local ofInt5 = ValueAnimator.ofFloat({0,360/#日})
+.addUpdateListener{
+  onAnimationUpdate=function(e)
+    local nve = e.getAnimatedValue()
+    cv5 = nve+cd-360/#日
+    if _view~=nil and invaliSelf then
+      _view.invalidate()
+    end
+  end
+}
+.setDuration(300)
+local ofInt6 = ValueAnimator.ofFloat({0,360/#月})
+.addUpdateListener{
+  onAnimationUpdate=function(e)
+    local nve = e.getAnimatedValue()
+    cv6 = nve+cr-360/#月
+    if _view~=nil and invaliSelf then
+      _view.invalidate()
+    end
+  end
+}
+.setDuration(300)
+function _updateAdd()
+  _cs,_cm,_ch,_ce,_cd,_cr,_cy = cs,cm,ch,ce,cd,cr,cy
+  local simp,_simpc = getSimp(os.date("%Y-%m-%d"))
+  local h,m,s,e,d,r,y = tonumber(os.date("%H")),tonumber(os.date("%M")),tonumber(os.date("%S")),simp,tonumber(os.date("%d")),tonumber(os.date("%m")),tonumber(os.date("%Y"))
+  cs,cm,ch,ce,cd,cr,cy,simpc = (360/#秒)*s,(360/#分)*m,(360/#时)*h,(360/#周)*e,(360/#日)*d,(360/#月)*r,y,_simpc
+  if ofInt1~=nil and cs~=_cs then
+    ofInt1.start()
+    if m==59 and ((s==(60-poortime) or s>(60-poortime)) and _function0~=nil) then
+      if _function0~=nil then
+        _function0(s)
+      end
+    end
+    if h==Clock_h and m==Clock_m and s==Clock_s-1 then
+      if _function2~=nil then
+        _function2(h,m,s)
+      end
+    end
+  end
+  if ofInt2~=nil and cm~=_cm then
+    ofInt2.start()
+  end
+  if ofInt3~=nil and ch~=_ch then
+    ofInt3.start()
+    if _function1~=nil then
+      _function1(h)
+    end
+  end
+  if ofInt4~=nil and ce~=_ce then
+    ofInt4.start()
+  end
+  if ofInt5~=nil and cd~=_cd then
+    ofInt5.start()
+  end
+  if ofInt6~=nil and cr~=_cr then
+    ofInt6.start()
+  end
+end
+
+local luaRunnable = function()
+  local pca1,pca2 = pcall(function()
+    _updateAdd()
+  end)
+  if !pca1 then
+    print("定时任务异常！"..pca2)
+  end
+end
+
+local scheduledExecutor10 = Ticker()
+scheduledExecutor10.Period=250
+scheduledExecutor10.onTick=luaRunnable
+local function updateAddOrSubtract(functio)
+  scheduledExecutor10.start()
+end
+local function pauseAddOrSubtract(boo)
+  scheduledExecutor10.setEnabled(boo)
+end
+local function stopAddOrSubtract()
+  if scheduledExecutor10~=nil then
+    scheduledExecutor10.stop()
+    scheduledExecutor10 = nil
+  end
+end
+
+function SunsetClock:getDrawable()
+  return LuaDrawable(function(c,p,d)
+    local b = d.bounds
+    local w1 = b.right
+    local h1 = b.bottom
+    local w = width or w1
+    local h = height or h1
+    if h<w then
+      w = h
+    end
+    p.setColor(color)
+    p.setTextSize(size or h/66)
+    c.drawColor(drawcolor)--背景
+    p.setAntiAlias(true)
+    p.setStrokeWidth(3)
+    p.setStyle(p.Style.FILL)
+
+    ---画秒钟
+    local a1,z1,x1,y1 = (w/8),p.measureText(秒[#秒-1]),view.getX(),-(p.ascent() + p.descent())
+    c.save()
+    c.translate(y1+10,10)
+    c.save()
+    c.rotate((cv1 or 0)%-360,0,h/2)
+    c.save()
+    for i=#秒,1,-1 do
+      c.drawText(秒[i],(h/2)-z1,h/2+(y1/2),p)
+      c.rotate(360/#秒,0,h/2)
+    end
+    c.restore()
+    c.restore()
+
+    ---画分钟
+    local z2 = p.measureText(分[#分-1])+a1
+    c.save()
+    c.rotate((cv2 or 0)%-360,0,h/2)
+    c.save()
+    for i=#分,1,-1 do
+      c.drawText(分[i],(h/2)-z2,h/2+(y1/2),p)
+      c.rotate(360/#分,0,h/2)
+    end
+    c.restore()
+    c.restore()
+
+    ---画小时
+    local z3 = p.measureText(时[#时-1])+a1*2
+    c.save()
+    c.rotate((cv3 or 0)%-360,0,h/2)
+    c.save()
+    for i=#时,1,-1 do
+      c.drawText(时[i],(h/2)-z3,h/2+(y1/2),p)
+      c.rotate(360/#时,0,h/2)
+    end
+    c.restore()
+    c.restore()
+
+    ---画星期
+    local z4 = p.measureText(周[#周-1])+a1*3
+    c.save()
+    c.rotate((cv4 or 0)%-360,0,h/2)
+    c.save()
+    for i=#周,1,-1 do
+      c.drawText(周[i],(h/2)-z4,h/2+(y1/2),p)
+      c.rotate(360/#周,0,h/2)
+    end
+    c.restore()
+    c.restore()
+
+    ---画日期
+    local z5 = p.measureText(日[#日-1])+a1*4
+    c.save()
+    c.rotate((cv5 or 0)%-360,0,h/2)
+    c.save()
+    for i=#日,1,-1 do
+      c.drawText(日[i],(h/2)-z5,h/2+(y1/2),p)
+      c.rotate(360/#日,0,h/2)
+    end
+    c.restore()
+    c.restore()
+
+    ---画月份
+    local z6 = p.measureText(月[#月-1])+a1*5
+    c.save()
+    c.rotate((cv6 or 0)%-360,0,h/2)
+    c.save()
+    for i=#月,1,-1 do
+      c.drawText(月[i],(h/2)-z6,h/2+(y1/2),p)
+      c.rotate(360/#月,0,h/2)
+    end
+    c.restore()
+    c.restore()
+
+
+    ---画年份
+    local yr = tostring(cy)
+    local z7 = p.measureText(yr)+a1*6.5
+    c.drawText(yr,(h/2)-z7,h/2+(y1/2),p)
+
+    p.setColor(xcolor)
+
+    ---画文字星期
+    p.setTextSize(size and size*2.08 or h/33)
+    local _yr = tostring(simpc)
+    local _z8 = p.measureText(yr)
+    local _c8 = -(p.ascent() + p.descent())
+    c.drawText(_yr,w-(_z8*2),_c8*3,p)
+
+    ---选中框
+    p.setStyle(p.Style.STROKE)
+    --星期
+    --c.drawRoundRect(w-(_z8*2)-10,_c8*1.5-10,w-(_z8),_c8*3+30,10,15,p)
+    --时间
+    c.drawRoundRect(-(y1-8)*2,(h/2)-y1-5,w-y1-15,(h/2)+y1+5,10,15,p)
+
+    c.restore()
+
+
+  end)
+end
+function SunsetClock:start()
+  if _view~=nil then
+    _cs,_cm,_ch,_ce,_cd,_cr,_cy = 0,0,0,0,0,0,0
+    ofInt0.start()--初始动画
+    task(1500,function()---等待启动动画结束
+      ofInt1.start()
+      ofInt2.start()
+      ofInt3.start()
+      ofInt4.start()
+      ofInt5.start()
+      ofInt6.start()
+    end)
+    updateAddOrSubtract()
+  end
+end
+function SunsetClock:setEnabled(boo)
+  pauseAddOrSubtract(boo)
+  _cs,_cm,_ch,_ce,_cd,_cr,_cy = 0,0,0,0,0,0,0
+  if boo then
+    ofInt1.start()
+    ofInt2.start()
+    ofInt3.start()
+    ofInt4.start()
+    ofInt5.start()
+    ofInt6.start()
+  end
+end
+function SunsetClock:stop()
+  stopAddOrSubtract()
+end
+function SunsetClock:new(view)
+  if view~=nil then
+    _view = view
+   else
+    error("\n\nview不能为空\n\n")
+  end
+  return self
+end
+function SunsetClock:setColor(cor,cor0)
+  if type(cor)=="number" then
+    color = cor
+   elseif type(cor)=="string" then
+    local cor = cor:match("#(.+)")
+    if cor~=nil then
+      color = tonumber("0x"..cor)
+    end
+  end
+  if type(cor0)=="number" then
+    xcolor = cor0
+   elseif type(cor0)=="string" then
+    local cor1 = cor0:match("#(.+)")
+    if cor1~=nil then
+      xcolor = tonumber("0x"..cor1)
+    end
+  end
+end
+function SunsetClock:setTextSize(t)
+  size = t
+end
+function SunsetClock:setHeight(t)
+  height = t
+end
+function SunsetClock:setWidth(t)
+  width = t
+end
+function SunsetClock:invalidateSelf(boolean)
+  invaliSelf = boolean
+end
+function SunsetClock:setBackgroundColor(cor)
+  if type(cor)=="number" then
+    drawcolor = cor
+   elseif type(cor)=="string" then
+    local cor = cor:match("#(.+)")
+    if cor~=nil then
+      drawcolor = tonumber("0x"..cor)
+    end
+  end
+end
+function SunsetClock:setPoortime(nn,fun)
+  if (type(nn)=="number" and nn<60 and nn>0) and type(fun)=="function" then
+    poortime,_function0 = nn,fun
+   else
+    poortime = 0
+  end
+end
+function SunsetClock:setOnthehour(fun)
+  if type(fun)=="function" then
+    _function1 = fun
+  end
+end
+function SunsetClock:setAlarmClock(h,m,s,fun)
+  if type(h)=="number" then
+    Clock_h = h
+   else
+    Clock_h = 0
+  end
+  if type(m)=="number" then
+    Clock_m = m
+   else
+    Clock_m = 0
+  end
+  if type(s)=="number" then
+    Clock_s = s
+   else
+    Clock_s = 0
+  end
+  if type(fun)=="function" then
+    _function2 = fun
+  end
+end
+
+
+
+
+
+
+--注意不要在使用过程中修改系统时间
+
+local sun = SunsetClock:new(view)--初始化，传入布局id
+
+sun:setColor("#FF00FFFF")--设置文字颜色和设置选中框颜色，两个参数，其中一个可以为空
+
+--sun:setBackgroundColor(0x0)--设置背景色，颜色0x和#都可以
+
+--sun:setTextSize(50)--文字大小,默认字体大小会跟随高度变化
+
+--sun:setWidth(100),sun:setHeight(100)--设置画布宽高，默认跟随view高度改变
+
+--sun:setEnabled(false)--false暂停定时器true恢复
+
+--sun:invalidateSelf(false)false暂停画布刷新true恢复
+
+--[[sun:setPoortime(3,function(e)
+  print(e)
+end)--整点前3秒,每秒回调]]
+
+sun:setOnthehour(function(e)
+  if object[e+1] then
+    soundPool.play(e+1,1,1,1,0,1)--播放报时音效:
+  end
+end)--整点回调
+
+--[[sun:setAlarmClock(7,26,5,function(h,m,s)
+  print(h,m,s)
+end)--设置闹钟回调，格式小时,分钟,秒钟,回调
+]]
+
+
+view.setBackground(sun:getDrawable())--获取drawable画布，给布局设置背景
+view.post(Runnable({--view加载成功的回调
+  run=function()
+    sun:start()--启动计时器
+  end}))
+
+
+
+
+
+function onResume()--返回程序
+  sun:invalidateSelf(true)
+end
+
+function onPause()--活动暂停
+  sun:invalidateSelf(false)
+end
+
+function onDestroy()--活动退出
+  sun:stop()--停止计时器
+  soundPool.release()--释放
+end》》
+《《Lua面向对象》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+activity.setTheme(R.style.Theme_Material3_Blue)--设置md主题
+dialog={h=100,w=100}
+dialog.show=function()
+  print("show")
+  end
+dialog.hide=function()
+  print("hide")
+  end
+dialog.__index=dialog
+
+function dialog.new(h,w)
+  local d={}
+  setmetatable(d,dialog)
+  d.h=h
+  d.w=w
+  return d
+  end
+
+d=dialog.new(3,7)
+d.show()
+print(d.h)
+
+》》
+《《创建快捷方式》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+import "android.content.*"
+import "android.provider.Settings"
+layout={
+  LinearLayout,
+  orientation="vertical",
+  layout_width="fill",
+  layout_height="fill",
+  {
+    Button,
+    onClick="but",
+    text="创建快捷",
+    layout_width="fill",
+  },
+}
+
+activity.setTheme(R.style.Theme_Material3_Blue)--设置md主题
+--activity.ActionBar.setTitle('AndroLua+')
+activity.setContentView(loadlayout(layout))
+
+function 打开系统设置()
+return Intent(Settings.ACTION_SETTINGS)
+end
+
+function 启动活动(pack)
+local shortIntent = Intent()
+shortIntent.setAction("android.intent.action.MAIN")
+shortIntent.addCategory("android.intent.category.LAUNCHER")
+shortIntent.setClassName(activity.getPackageName(), pack)
+return shortIntent
+end
+
+
+--android o不可用
+--name  创建快捷的名称
+--icon  创建快捷的图标(图标可以是R.drawable.icon,也可以是loadbitmap(图片路径))
+--pack  快捷启动的intent
+function addShortcut(name, icon, inte) 
+if Build.VERSION.SDK_INT < 26 then
+local intent = Intent()
+intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT")
+intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name)
+if type(icon) == "number" then
+local sr = Intent.ShortcutIconResource.fromContext(activity.getApplicationContext(), icon);
+intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, sr)
+else
+intent.putExtra(Intent.EXTRA_SHORTCUT_ICON,icon)
+end
+
+intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, inte)
+activity.sendBroadcast(intent)
+Toast.makeText(this,"已创建快捷方式",0).show()
+end
+end
+    
+    but=function()
+   addShortcut("快捷",loadbitmap("icon"),打开系统设置())--启动活动("com.androlua.Welcome")
+     end
+   
+   
+    
+    
+    》》
+
+
+《《数组分割》》
+《《--将某个数组分成两个数组，一个存放偶数，一个存放奇数
+local t = {4,2,3,4,1,6,5,8,7}
+function device(array)
+    local oushuArr = {}
+    local jishuArr = {}
+    for i = 1,#array do
+        if t[i] % 2 == 0 then
+            oushuArr[#oushuArr + 1] = array[i]
+        else
+            jishuArr[#jishuArr + 1] = array[i]
+        end
+    end
+    return oushuArr,jishuArr
+end
+
+local a,b = device(t)
+
+for k,v in pairs(a) do
+    print(v)
+end
+print("=========")
+for k,v in pairs(b) do
+    print(v)
+end》》
+《《数组排序删重复》》
+《《--将一个数组从小到大排序
+--然后将重复出现的数字全部删除(后续数字往前移)
+local t = {4,2,3,4,1,6,5,8,7}
+local newArray = {}
+table.sort(t)
+newArray[1] = t[1]
+for i = 2,#t do
+    if t[i] ~= t[i - 1] then
+        newArray[i] = t[i]
+    end
+end
+for k,v in pairs(newArray) do
+    print(v)
+end》》
+《《使用root申请无障碍权限》》
+《《function root申请无障碍(包名)
+  return io.popen([[
+su -c settings put secure enabled_accessibility_services ]]..(包名 or activity.getPackageName())..[[/com.androlua.LuaAccessibilityService
+su -c settings put secure accessibility_enabled 1
+]])
+end
+--root申请无障碍() 默认申请本应用
+--root申请无障碍(包名) 申请其他应用(仅支持AndroLua系列开发的软件)》》
+《《线程协程集合》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+activity.setTheme(R.style.Theme_Material3_Blue)--设置md主题
+
+--java线程
+Thread(Runnable({
+  run=function()
+    print(1)
+  end
+})).start()
+
+
+--LuaActivity线程
+activity.thread(function(arg1, arg2)
+  print(arg1, arg2)
+end, {1, 2}).excute()
+
+
+--Lua线程 (和第二个差不多)
+thread(function(arg1, arg2)
+  print(arg1, arg2)
+end, 1, 2)
+
+
+--真Lua线程 (和前面似乎都一样)
+LuaThread(activity, function(arg1, arg2)
+  print(arg1, arg2)
+end, {3, 4}).start()
+
+
+--LuaActivity协程
+activity.task(function(arg1, arg2)
+  print(arg1, arg2)
+  return 1
+end, {5, 6}, function(re)
+  print(re)
+end)
+--.execute()  有一个协程了，会报错
+
+
+--Lua线程 (和上面一样，不过这个有用)
+task(function(arg1, arg2)
+  print(arg1, arg2)
+  return 1
+end, 5, 6, function(re)
+  print(re)
+end)
+
+--真Lua线程
+local tasks=LuaAsyncTask(activity, function(arg1, arg2)
+  print(arg1, arg2)
+  return 00
+end, function(re)
+print(re)
+end)
+tasks.execute({11, 22})
+
+--还有LuaRunnable, LuaAsyncTask里的一些其他方法没有写，协程可以定义代码运行延迟，综上
+--大部分是重复，就是Thread和AsyncTask
+--我觉着task和java线程还ok》》
+《《自定义Toast位置》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+
+activity.setTitle('AndroLua+')
+activity.setTheme(R.style.Theme_Material3_Blue)--设置md主题
+
+function print(nr)
+    	context=activity.getApplicationContext();
+		duration=Toast.LENGTH_SHORT;
+		toast=Toast.makeText(context, nr,duration);
+        toast.setGravity(Gravity.TOP,0,100)--| Gravity.TOP, 1, 40);--设置位置
+		toast.show();    
+  end
+
+print("小菜鸟")--用法》》
+《《控件封装》》
+《《--封装代码部分
+import"android.animation.ObjectAnimator"
+function InputView(t)
+  local lay=loadlayout
+    {
+    FrameLayout,
+    {
+    TextView,
+      text=t.text or "Hint",
+      SingleLine=true,
+      textSize="18dp",
+      layout_height=-1,
+      gravity=80,
+      paddingBottom="10dp",
+      paddingLeft="5dp",
+      textColor=0xff797979},
+    {
+    EditText,
+      id=t.id,
+      textSize="18dp",
+      gravity=80,
+      layout_width=-1,
+      layout_height=-1,
+      SingleLine=true
+      }
+      }
+  lay.getChildAt(1).setOnFocusChangeListener{onFocusChange=function(v,Focus)
+      if v.Text=="" then
+        local id,h=lay.getChildAt(0),v.height//2
+        if Focus then
+          ObjectAnimator()
+          .ofFloat(id,"textSize",{18,12}).setDuration(200).start()
+          .ofFloat(id,"Y",{0,-h}).setDuration(200).start()
+          id.TextColor=0xff009688
+         else
+          ObjectAnimator()
+          .ofFloat(id,"textSize",{12,18}).setDuration(200).start()
+          .ofFloat(id,"Y",{-h,0}).setDuration(200).start()
+          id.TextColor=0xff797979
+        end
+      end
+    end
+    }
+  return function() return lay end
+end
+
+--结束
+require"import"
+import"android.widget.*"
+--import"InputView"正常使用应单独文件导入使用
+activity.setTheme(R.style.Theme_Material3_Blue)--设置md主题
+
+local layout=
+{
+  LinearLayout,
+  orientation=1,
+  layout_height=-1,
+  layout_width=-1,
+  {
+    TextView,
+    id="txt",
+    textSize="20dp"
+  },
+
+  {
+    InputView{
+      id="a",
+      text="控件封装"
+    },
+    layout_width=-1,
+    layout_height="50dp"},
+
+  {
+    InputView{
+      id="b",
+      text="自定义控件"
+    },
+    layout_width=-1,
+    layout_height="50dp"
+  },
+
+  {
+    InputView{
+      id="c",
+      text="第一次点击获取焦点，不触发点击事件"
+    },
+    layout_width=-1,
+    layout_height="50dp"
+  },
+}
+activity.setContentView(layout)
+
+local time=0
+local function click(v)
+  time=time+1
+  txt.Text="触发点击："..tostring(time)
+end
+a.onClick=click
+b.onClick=click
+c.onClick=click
+
+
+》》
+《《加载动画绘制》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+layout={
+  FrameLayout;
+  layout_height="fill";
+  layout_width="fill";
+  background="#ff000000";
+  {
+    LinearLayout;
+    layout_height="30dp";
+    layout_gravity="center";
+    layout_width="30dp";
+    id="ceshi";
+    background="#ff000000";
+  };
+};
+activity.setContentView(loadlayout(layout))
+
+function 绘制加载动画二(参数)
+  return LuaDrawable(function(c,p,d)
+    import "android.graphics.Paint"
+    import "android.graphics.Path"
+    import "android.graphics.RectF"
+    import "android.graphics.LinearGradient"
+    import "android.graphics.Shader"
+    local quYu=d.bounds
+    local width=quYu.right
+    local height=quYu.bottom
+    p.setAntiAlias(true);
+    p.setStrokeWidth(width*.2);
+    p.setStyle(Paint.Style.STROKE);
+    loadHeightNumOne=0
+    loadChangeNumOne=height/100
+    loadHeightNumTwo=height*.33
+    loadHeightNumThree=height*.66
+    return function(c)
+      if loadHeightNumOne<height then
+        loadHeightNumOne=loadHeightNumOne+loadChangeNumOne
+       else
+        loadHeightNumOne=0
+      end
+      if loadHeightNumTwo<height then
+        loadHeightNumTwo=loadHeightNumTwo+loadChangeNumOne
+       else
+        loadHeightNumTwo=0
+      end
+      if loadHeightNumThree<height then
+        loadHeightNumThree=loadHeightNumThree+loadChangeNumOne
+       else
+        loadHeightNumThree=0
+      end
+      p.setColor(参数.颜色一)
+      c.drawLine(.1*width,loadHeightNumOne,.1*width,height-loadHeightNumOne,p)
+      p.setColor(参数.颜色二)
+      c.drawLine(.5*width,loadHeightNumTwo,.5*width,height-loadHeightNumTwo,p)
+      p.setColor(参数.颜色三)
+      c.drawLine(.9*width,loadHeightNumThree,.9*width,height-loadHeightNumThree,p)
+      d.invalidateSelf()
+    end
+  end)
+end
+
+ceshi.background=绘制加载动画二({颜色一=0xFF327FFF,颜色二=0xFFF03B76,颜色三=0xFF795DFD})》》
+《《拉伸变化尺寸》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+function dp2px(dpValue)
+  local scale = activity.getResources().getDisplayMetrics().scaledDensity
+  return dpValue * scale + 0.5
+end
+paddingCenter=dp2px(16)
+layout={
+  LinearLayout,
+  layout_width="fill",
+  layout_height="fill",
+  {
+    AbsoluteLayout,
+    -- Gravity="center",
+    --  orientation="vertical",
+    x=50,
+    y=50,
+    layout_width="fill",
+      layout_height="fill",
+      {
+
+
+      CardView,
+      x=paddingCenter/2,
+      y=paddingCenter/2,
+      id="card",
+      Elevation=0,
+        backgroundColor=0xff2196F3,
+        layout_width="56dp",
+        layout_height="56dp",
+        {
+        ImageView,
+        layout_width="fill",
+        scaleType="centerCrop";
+      layout_height="fill",
+          },
+      } ,
+      {
+      LinearLayout,
+
+      id="kuang",
+    Gravity="center",
+  orientation="vertical",
+layout_width="66dp",
+layout_height="66dp",
+
+},
+}
+}
+
+import"android.animation.ValueAnimator"
+import "android.graphics.drawable.GradientDrawable"
+activity.setTheme(R.style.Theme_Material3_Blue)--设置md主题
+activity.setContentView(loadlayout(layout))
+import "android.content.Context"
+vibrator=activity.getSystemService(Context.VIBRATOR_SERVICE)
+
+colors= { 0xff363C4A,0xff1F8792 };
+bg = GradientDrawable(GradientDrawable.Orientation.TL_BR, colors);
+card.getChildAt(0).setBackgroundDrawable(bg)
+单位=activity.getWidth()/4
+times=500
+radiu=dp2px(6)
+
+
+--card.getChildAt(0).setImageBitmap(loadbitmap(imgs[math.random(1,#imgs)]))
+card.setRadius(radiu)
+import "android.graphics.drawable.*"
+gd=GradientDrawable()
+gd.setColor(0x00ffffff)
+gd.setStroke(5,0x10000000)
+
+gd.setCornerRadii({radiu,radiu,radiu,radiu,radiu,radiu,radiu,radiu});
+gd.setGradientType(1)
+kuang.setBackgroundDrawable(gd)
+w单位=1
+h单位=1
+function tointegers(num)
+  if num-tointeger(num)>1.5
+    return tointeger(num)+1
+   else
+    return tointeger(num)
+  end
+end
+function update_w(v)
+  w单位=tointegers(v.getLayoutParams().width/单位)
+  if w单位<=0
+    w单位=1
+  end
+  if h单位<=0
+    h单位=1
+  end
+  --vibrator.vibrate(20)
+  ValueAnimator.ofFloat({card.getLayoutParams().width,w单位*单位}).setDuration(times).addUpdateListener( {
+
+    onAnimationUpdate=function(valueAnimator)
+
+      currentValue = valueAnimator.getAnimatedValue();
+      card.getLayoutParams().width = currentValue;
+      card.requestLayout();
+    end
+  }).start();
+end
+function update_h(v)
+  h单位=tointegers(v.getLayoutParams().height/单位)
+  if w单位<=0
+    w单位=1
+  end
+  if h单位<=0
+    h单位=1
+  end
+
+  ValueAnimator.ofFloat({card.getLayoutParams().height,h单位*单位}).setDuration(times).addUpdateListener( {
+
+    onAnimationUpdate=function(valueAnimator)
+
+      currentValue = valueAnimator.getAnimatedValue();
+      card.getLayoutParams().height = currentValue;
+      card.requestLayout();
+    end
+  }).start();
+end
+function update_k(v)
+  ValueAnimator.ofFloat({v.getLayoutParams().width,w单位*单位+1*paddingCenter}).setDuration(times*.6).addUpdateListener( {
+
+    onAnimationUpdate=function(valueAnimator)
+
+      currentValue = valueAnimator.getAnimatedValue();
+      v.getLayoutParams().width = currentValue;
+      v.requestLayout();
+    end
+  }).start();
+  ValueAnimator.ofFloat({v.getLayoutParams().height,h单位*单位+1*paddingCenter}).setDuration(times).addUpdateListener( {
+
+    onAnimationUpdate=function(valueAnimator)
+
+      currentValue = valueAnimator.getAnimatedValue();
+      v.getLayoutParams().height = currentValue;
+      v.requestLayout();
+    end
+  }).start();
+end
+update_k(kuang)
+update_w(kuang)
+update_h(kuang)
+sys,sxs=0,0
+
+kuang.onTouch=function(v,e)
+  ti=Ticker()
+  ti.Period=500
+  ti.onTick=function()
+
+    if math.abs((e.getRawX()-sx)+(e.getRawY()-sy))<1
+      if tointegers(v.getLayoutParams().width/单位)~=w单位 and tointegers(v.getLayoutParams().width/单位)>0
+        update_w(v)
+        vibrator.vibrate(25)
+      end
+      if tointegers(v.getLayoutParams().height/单位)~=h单位 and tointegers(v.getLayoutParams().height/单位)>0
+        update_h(v)
+        vibrator.vibrate(25)
+      end
+
+    end
+
+
+
+  end
+  --启动Ticker定时器
+  if e.action==0--down
+    参数=tonumber(os.time())
+
+
+    sy=e.getRawY()
+    sx=e.getRawX()
+    ti.start()
+
+   elseif e.action==1--up
+
+    update_w(v)
+    update_h(v)
+    update_k(kuang)
+    ti.stop()
+   elseif e.action==2--move
+    v.getLayoutParams().width = v.getLayoutParams().width+(e.getRawX()-sx)
+    v.getLayoutParams().height = v.getLayoutParams().height+(e.getRawY()-sy)
+
+    v.requestLayout();
+    sy=e.getRawY()
+    sx=e.getRawX()
+  end
+  return true
+end》》
+《《折线统计图》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+import "android.content.pm.ActivityInfo"
+import "android.net.Uri"
+import "android.content.Intent"
+
+dip2px=function(dpValue)
+  scale = this.getResources().getDisplayMetrics().density;
+  return dpValue * scale + 0.5
+end
+
+getStatusBarHeight=function()
+  xpcall(function()
+    clazz=Class.forName("com.android.internal.R$dimen")
+    object = clazz.newInstance();
+    height = Integer.parseInt(tostring(clazz.getField("status_bar_height").get(object)))
+    statusBarHeight2 =this.getResources().getDimensionPixelSize(height);
+  end,
+  function(a)
+    xpcall(function()
+      resourceId = this.getResources().getIdentifier("status_bar_height", "dimen", "android");
+      if resourceId > 0
+        statusBarHeight1 =this.getResources().getDimensionPixelSize(resourceId);
+      end
+      end,function(e)
+      Utility_fun.toasts("发现错误：\n"..e)
+    end,nil)
+  end,nil)
+  if statusBarHeight2 ~= nil
+    return statusBarHeight2
+   elseif statusBarHeight1~=nil
+    return statusBarHeight1
+   else
+    return 0
+  end
+end
+
+layout={
+  LinearLayout;
+  orientation="vertical";
+  layout_height="fill";
+  gravity="center|top";
+  layout_width="fill";
+  {
+    ScrollView,
+    layout_width="fill";
+    layout_height="fill";
+    {
+      LinearLayout;
+      orientation="vertical";
+      gravity="center";
+      layout_width="fill";
+      layout_height="fill";
+      {
+        HorizontalScrollView;
+        layout_width="fill";
+            id="ssp",
+        {
+          LinearLayout;
+          layout_width="fill";
+          {
+            TextView;
+            layout_width="100%h";
+            layout_height=activity.getWidth()-getStatusBarHeight()-dip2px(45);
+            id="tv";
+            layout_marginTop=getStatusBarHeight();
+          };
+        };
+      };
+      {SeekBar,
+        id="Lux_S",
+        padding="40dp";
+        layout_width="fill";
+        max="40000",
+        layout_height="45dp";
+      },
+        {
+          Button;
+          id="bt_Ov";
+          text="横屏查看",
+          layout_width="fill";
+        };
+        {
+          Button;
+          id="bt_add";
+          text="添加样本",
+          layout_width="fill";
+        };
+      {
+        TextView;
+        id="Table_View";
+        text="n",
+        textColor="#000000",
+        textSize="10sp",
+        layout_weight="1",
+      };
+    },
+  };
+}
+activity.setTheme(R.style.Theme_Material3_Blue)--设置md主题
+activity.setContentView(loadlayout(layout))
+
+import "android.graphics.Paint"
+import "android.graphics.Path"
+import "android.graphics.Color"
+import "android.graphics.Paint$Style"
+import "android.provider.Settings"
+import "android.graphics.Rect"
+import "android.content.res.TypedArray"
+import "android.graphics.PorterDuffXfermode"
+import "android.graphics.PorterDuff"
+import "android.graphics.PixelFormat"
+import "java.math.BigDecimal"
+
+
+SET_BRIGHTNESS=function(is)
+  pcall(function()
+    Settings.System.putInt(this.getContentResolver()
+    ,Settings.System.SCREEN_BRIGHTNESS_MODE
+    ,is);
+  end,nil)
+end
+
+function onCreate()
+  array = activity.getTheme().obtainStyledAttributes({
+    android.R.attr.colorBackground,
+    android.R.attr.textColorPrimary,
+  });
+  backgroundColor = array.getColor(0, 0xFF00FF);
+  textColor = array.getColor(1, 0xFF00FF);
+  array.recycle();
+
+  this.setRequestedOrientation(1)
+end
+
+
+
+ap=256
+sp=40000
+ps={}
+import "cjson"
+
+adds=function()
+  for cm=1,10--随机添加十个点
+    apm=math.random (0,ap)
+    spm=math.random (0,sp)
+    --table.insert(ps,{aps=apm,sps=spm,bbs=cm,Top=true})
+    table.insert(ps,{aps=(ap/100)*14,sps=0,bbs=1,Top=true})
+    table.insert(ps,{aps=(ap/100)*17,sps=100,bbs=12,Top=true})
+    table.insert(ps,{aps=(ap/100)*20,sps=300,bbs=12,Top=true})
+    table.insert(ps,{aps=(ap/100)*26,sps=400,bbs=12,Top=true})
+    table.insert(ps,{aps=(ap/100)*50,sps=600,bbs=12,Top=true})
+    table.insert(ps,{aps=(ap/100)*75,sps=4000,bbs=12,Top=true})
+    table.insert(ps,{aps=(ap/100)*100,sps=30000,bbs=12,Top=true})
+
+    table.sort(ps,function(a,b)return a.sps<b.sps end)
+  end
+  --InTable=sorts_in(ps,4)
+  --Table_View.Text=#ps.."~"..#InTable..":"..json.encode(InTable):gsub("},{","},\n{")
+end
+
+SET=function(a)
+  xpcall(function(nu)
+    Settings.System.putInt(this.getContentResolver(),
+    Settings.System.SCREEN_BRIGHTNESS,nu)
+  end,function(e)print(e)end,a)
+end
+
+Bigs=function(str,scale)
+  return BigDecimal(str).setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+end
+
+sorts_in=function(kl,Ret)
+  if (kcd~=nil and (kcd==kl[1].sps and 0 or 1) or 1)==1--判断是否与上次执行table相同避免重复插值
+    Ins=function(kls)
+      jnps={}
+      for u_,m_ in ipairs(kls)
+        table.insert(jnps,{aps=m_.aps,sps=m_.sps,bbs=u_,Top=kls[u_].Top})
+        if dap~=nil and dsp~=nil and u_<=table.size(kls) and u_~=1
+          table.insert(jnps,{aps=(dap+m_.aps)/2,sps=(dsp+m_.sps)/2,bbs=u_,Top=false})--插入平分点。
+        end
+        dap,dsp=m_.aps,m_.sps
+      end
+      table.sort(jnps,function(a,b)return a.sps<b.sps end)
+      return jnps
+    end
+    table.sort(kl,function(a,b)return a.sps<b.sps end)
+    InTablm=Ins(kl)
+    while math.abs(InTablm[2].aps-InTablm[1].aps)>(ap>256 and ap^0.4 or ap^0.1)
+      InTablm=Ins(InTablm)
+    end
+    return InTablm
+   else
+    return Ret
+  end
+  kcd=kl[1].sps
+  return Ret
+end
+
+
+
+
+--[[mSurfaceHolder = tv.getHolder();
+mSurfaceHolder.addCallback({surfaceChanged=function(a)
+
+end})
+mSurfaceHolder.setFormat(PixelFormat.TRANSPARENT);
+]]
+
+insW=LuaDrawable(function(c,p,d)
+  dars=d
+  --tv.setLayerType(0,p)
+  cH=c.Height-dip2px(75)
+  cW=c.Width-dip2px(70)
+  le_ri=dip2px(15)--设置绘制边距
+  store=dip2px(1)
+  p.setStyle(Style.FILL);
+  p.setStrokeCap(Paint.Cap.ROUND)
+  p.setStrokeWidth(store);
+  p.setLetterSpacing(-0.02)
+  p.setAntiAlias(true)
+  p.setColor(0x00000000)
+  p.setFakeBoldText(true)
+  --p.setXfermode(PorterDuffXfermode(PorterDuff.Mode.SRC))
+
+  xpcall(function()
+    p.setColor(Back_C.background.Color)
+    rect=Rect(0,0,c.Width,c.Height);
+    c.drawRect(rect,p);
+    end,function(e)
+    p.setColor(backgroundColor)
+    rect=Rect(0,0,c.Width,c.Height);
+    c.drawRect(rect,p);
+  end)
+
+  p.setColor(0xff6bc36b);
+  pts = float[10];
+  pts[0] =(cW/sp)+dip2px(34)
+  pts[1]=dip2px(30)
+  pts[2]=(cW/sp)+dip2px(34)
+  pts[3]=cH+dip2px(46)
+
+  pts[4]=pts[2]
+  pts[5]=pts[3]
+  pts[6]=cW+dip2px(50)
+  pts[7]=pts[5]
+  c.drawLines(pts, p);
+  p.setColor(0xff468bff)
+  c.drawCircle(pts[0], pts[1], store*3, p);
+  p.setColor(0xffff5d5d)
+  c.drawCircle(pts[6], pts[7], store*3, p);
+  c.translate(dip2px(35),dip2px(45))
+  p.setColor(textColor);
+  p.setTextSize(dip2px(10))
+  p.setStrokeCap(Paint.Cap.ROUND)
+  c.drawText("亮度/F",-dip2px(15),-dip2px(25),p)
+  c.drawText("Lux/lx",cW+dip2px(3),cH-dip2px(8),p)
+  --绘制分割线与数字
+
+
+
+  lp=0
+  for e=1,sp
+    if e==lp+(sp/20)
+      p.setColor(0xff6bc36b)
+      c.drawCircle((cW/sp)*e,cH+dip2px(1),store*1.5, p);
+      p.setColor(0xffbcbcbc);
+      p.setStrokeWidth(1);
+      p.setStyle(Style.FILL);
+      ptsm={(cW/sp)*e,dip2px(0),(cW/sp)*e,cH-dip2px(0)}
+      c.drawLines(ptsm,p)
+
+      p.setColor(textColor);
+      p.setTextSize(dip2px(6))
+      c.drawText(""..e,(cW/sp)*e-dip2px(8),cH+dip2px(15),p)
+      lp=e
+    end
+  end
+
+  alp=0
+  for e=1,ap
+    if e==alp+(ap/8) or e==1
+      p.setColor(0xff6bc36b)
+      c.drawCircle(-dip2px(1),(cH/ap)*e,store*1.5, p);
+      p.setColor(0xffbcbcbc);
+      p.setStrokeWidth(1);
+      p.setStyle(Style.FILL);
+      ptsm={dip2px(0),(cH/ap)*e,cW-dip2px(0),(cH/ap)*e}
+      c.drawLines(ptsm,p)
+      p.setColor(textColor);
+      p.setTextSize(dip2px(6))
+      c.drawText(tointeger(Bigs(((ap-e)/ap)*100,0)).."%",-dip2px(25),(cH/ap)*e,p)
+      alp=e
+    end
+  end
+
+  c.drawText("0",-dip2px(15),cH+dip2px(15),p)
+  p.setColor(0xff6bc36b)
+  c.drawCircle(-dip2px(1),cH+dip2px(1),store*2, p);
+
+
+  p.setStrokeWidth(dip2px(1));
+  p.setStyle(Style.FILL);
+  p.setTextSize(dip2px(6))
+  H_=(cH/ap)
+  W_=(cW/sp)
+
+  mp,cs=0,0
+  for f_,c_ in pairs(ps)
+    if mp==0 and cs==0
+      mp,cs=c_.sps*W_,(ap-c_.aps)*H_
+      ms,mc=c_.sps,c_.aps
+    end
+    --[[    if c_.Top
+      p.setColor(textColor)
+      c.drawText(c_.aps.."F".."  "..c_.sps.."LX",c_.sps*W_,(ap-c_.aps)*H_-dip2px(4) , p)
+      p.setColor(0xffff5d5d)
+      c.drawCircle(c_.sps*W_,(ap-c_.aps)*H_, dip2px(3), p);
+     else
+      p.setColor(0xcf000000)
+      --c.drawCircle(c_.sps*W_,(ap-c_.aps)*H_, dip2px(1), p);
+    end]]
+    p.setColor(textColor)
+    c.drawText(tointeger(Bigs((c_.aps/ap)*100,0)).."%".."  "..c_.sps.."LX",(c_.sps*W_)+dip2px(4),(ap-c_.aps)*H_ , p)
+    p.setColor(0x8fcb2eff)
+    ptsm={c_.sps*W_,(ap-c_.aps)*H_,mp,cs}
+    c.drawLines(ptsm,p)
+    p.setColor(0xffcb2eff)
+    c.drawCircle((c_.sps*W_),(ap-c_.aps)*H_, dip2px(2), p);
+    p.setStyle(Style.FILL);
+    mp,cs=c_.sps*W_,(ap-c_.aps)*H_
+    ms,mc=c_.sps,c_.aps
+  end
+
+  X_YTouch=function(b1,b2)
+    p.setStrokeWidth(5);
+    p.setColor(0xffff1734)
+    ptsm={b2*W_,(ap-b1)*H_,b2*W_,cH,
+      0,(ap-b1)*H_,b2*W_,(ap-b1)*H_}
+    c.drawLines(ptsm,p)
+    p.setColor(0xffff1734)
+    c.drawCircle(b2*W_,(ap-b1)*H_, dip2px(3), p);
+    p.setTextSize(dip2px(10))
+    c.drawText(tointeger(Bigs((b1/ap)*100,0)).."% "..tointeger(b2).."lx",b2*W_,(ap-b1)*H_-dip2px(8),p)
+    if i~=0
+      ssp.smoothScrollTo((b2*W_)-dip2px(140),0)
+    end
+    --SET(b1)
+    bt_Ov.Text="Y: "..b1.." X: "..b2
+  end
+
+  if Bars~=nil and BarL~=nil
+    X_YTouch(Bars,BarL)
+   else
+    X_YTouch(ps[1].aps,ps[1].sps)
+  end
+
+end)
+
+
+ppnd=function(ps_,taab,LX,pm_)
+  Fii={{sps=taab[ps_-1].sps,aps=taab[ps_-1].aps,bbs=pi_,Top=false},{aps=pm_.aps,sps=pm_.sps,bbs=pi_,Top=false}}
+  apy=sorts_in(Fii,apy~=nil and apy or Fii)
+  if LX<apy[table.size(apy)-1].sps
+    for pi_,pis_ in ipairs(apy)
+      if pis_.sps >=LX
+        if pis_~=nil and pi_>=2
+          if LX>=apy[pi_-1].sps
+            --print(pis_.aps,pis_.sps,LX)
+            Table_View.Text=#apy..cjson.encode(apy):gsub("},{","},\n{")
+            ks,kl=pis_.aps,pis_.sps
+            return pis_.aps,pis_.sps
+          end
+        end
+      end
+    end
+  end
+  if ks~=nil and kl~=nil
+    return ks,kl
+  end
+end
+
+app_Light=function(LX,taab)--判断值
+  if LX>0 and LX<taab[table.size(taab)].sps
+    for ps_,pm_ in pairs(taab)
+      if pm_.sps >=LX
+        if ps_~=nil and ps_>=2
+          if LX>=taab[ps_-1].sps
+            return ppnd(ps_,taab,LX,pm_)
+          end
+        end
+      end
+    end
+   else
+    if LX~=0
+      return taab[table.size(taab)].aps,taab[table.size(taab)].sps
+     else
+      return taab[1].aps,taab[1].sps
+    end
+  end
+  return taab[1].aps,taab[1].sps
+end
+
+adds()
+--sorts_in(ps)
+tv.background=insW
+
+bt_add.onClick=function()
+  adds()
+  --mlp=sorts_in(ps)
+  dars.invalidateSelf()
+end
+function onDestroy()
+  if 传感器~=nil
+    传感器.unregisterListener(S_Linsen)
+    SET_BRIGHTNESS(automicBrightness and 1 or 0)
+  end
+end
+
+
+import "android.content.Context"
+import "android.hardware.Sensor"
+import "android.hardware.SensorEventListener"
+function onStart()
+  isCan=Settings.System.canWrite(this)
+  if isCan
+    automicBrightness = Settings.System.getInt(this.getContentResolver(),Settings.System.SCREEN_BRIGHTNESS_MODE) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+    if not automicBrightness
+      SET_BRIGHTNESS(0)
+    end
+    传感器 = activity.getSystemService(Context.SENSOR_SERVICE)
+    光线传感器 = 传感器.getDefaultSensor(Sensor.TYPE_LIGHT)
+    S_Linsen=SensorEventListener({
+      onSensorChanged=function(event)
+        if IsStar==nil or IsStar
+          Bars,BarL=app_Light(event.values[0],ps)
+          if dars~=nil and Bars~=nil
+            SET(Bars)
+            bt_Ov.Text=Bars.." "..event.values[0]
+            Lux_S.setProgress(event.values[0])
+            dars.invalidateSelf()
+          end
+        end
+    end,nil})
+
+    传感器.registerListener(S_Linsen, 光线传感器, 4)
+   else
+    if intent==nil
+      print("没有修改系统设置权限，请开启")
+      intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS,
+      Uri.parse("package:"..this.getPackageName()))intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+      this.startActivityForResult(intent, 200);
+     else
+      print("仍然未允许权限，程序将无法运行！")
+    end
+  end
+end
+
+Lux_S.setOnSeekBarChangeListener{
+  onProgressChanged=function(a,i)
+    if IsStar==false 
+      Bars,BarL=app_Light(i,ps)
+      ii=i
+      if isCan
+        SET(Bars)
+       else
+        print("无权限，设置亮度失败！")
+      end
+      if dars~=nil
+        dars.invalidateSelf()
+      end
+    end
+  end,
+  onStartTrackingTouch=function()
+    IsStar=false
+  end,
+  onStopTrackingTouch=function()
+    IsStar=true
+  end
+}
+
+bt_Ov.onClick=function()
+  Ov_R=this.getRequestedOrientation()
+  if Ov_R==1
+    this.setRequestedOrientation(0);
+   elseif Ov_R==0
+    this.setRequestedOrientation(1);
+  end
+end
+
+》》
+《《文件管理器》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "java.io.File"
+import "android.webkit.MimeTypeMap"
+import "android.content.Intent"
+import "android.net.Uri"
+import "android.graphics.Paint"
+import "android.text.format.Formatter"
+import "android.text.format.DateUtils"
+import "android.text.style.RelativeSizeSpan"
+import "android.text.SpannableString"
+import "android.text.Spanned"
+import "android.view.*"
+layout={
+  LinearLayout;
+  orientation="vertical";
+  layout_height="fill";
+  layout_width="fill";
+  {
+    PullingLayout;
+    id="pl";
+    layout_height=0;
+    PullDownEnabled=true;
+    layout_weight=1;
+    {
+      ListView;
+      id="lv";
+      layout_width="fill";
+      layout_height="fill";
+    };
+  };
+  {
+    LinearLayout;
+    layout_width="fill";
+    {
+      Button;
+      id="CopyBtn";
+      layout_width=0;
+      layout_weight=1;
+      Text="复制";
+      textColor="#ffff0000";
+      background="ann.png";
+    };
+    {
+      Button;
+      id="CutBtn";
+      layout_width=0;
+      layout_weight=1;
+      Text="剪切";
+      textColor="#ffff0000";
+      background="ann.png";
+    };
+    {
+      Button;
+      id="PasteBtn";
+      layout_width=0;
+      layout_weight=1;
+      Text="粘贴";
+      textColor="#ffff0000";
+      background="ann.png";
+    };
+    {
+      Button;
+      id="DeleteBtn";
+      layout_width=0;
+      layout_weight=1;
+      Text="删除";
+      textColor="#ffff0000";
+      background="ann.png";
+    };
+    {
+      Button;
+      id="NewBtn";
+      layout_width=0;
+      layout_weight=1;
+      Text="新建";
+      textColor="#ffff0000";
+      background="ann.png";
+    };
+  };
+};
+activity.setTheme(R.style.Theme_Material3_Blue)--设置md主题
+activity.setContentView(loadlayout(layout))
+
+onCreateOptionsMenu=function(menu)
+  menu.add(0,1,1,"排序").setShowAsActionFlags(2)
+  CB=CheckBox()
+  CB.Text="显示隐藏文件"
+  CB.onClick=function(v)
+    ShowHidden=v.isChecked()
+    ReOpen()
+  end
+  menu.add(0,2,0,"显示隐藏文件").setActionView(CB).setShowAsActionFlags(2)
+end
+onOptionsItemSelected=function(item)
+  if item.Title=="排序" then
+    SortMethodItem={"名称（升序）","名称（降序）","时间（升序）","时间（降序）"}
+    SortMethodDlg=AlertDialog.Builder(this)
+    .setSingleChoiceItems(SortMethodItem,SortMethod-1,{onClick=function(v,p)
+        SortMethod=p+1
+        print(SortMethodItem[SortMethod])
+        ReOpen()
+      end
+    })
+    SortMethodDlg.show()
+  end
+end
+
+datalist={}
+adapter=ArrayAdapter(this,android.R.layout.simple_list_item_multiple_choice,datalist)
+lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL)
+
+function getSelectedItem()
+  SelectedItem={}
+  CheckItemIds=luajava.astable(lv.getCheckItemIds())
+  for k,v in pairs(CheckItemIds) do
+    table.insert(SelectedItem,FileList[v+1])
+  end
+  CheckedItemCount=lv.getCheckedItemCount()
+end
+
+lv.setMultiChoiceModeListener(ListView.MultiChoiceModeListener{
+  onItemCheckedStateChanged=function(mode,position,id,checked)
+    getSelectedItem()
+  end,
+
+  onCreateActionMode=function(mode,menu)
+    mActionMode=mode
+    mode.setTitle("选择")
+    menu.add(0,1,0,"全选").setShowAsActionFlags(2)
+    menu.add(0,2,1,"反选").setShowAsActionFlags(2)
+    return true
+  end,
+
+  onPrepareActionMode=function(mode,menu)
+    return true
+  end,
+
+  onActionItemClicked=function(mode,item)
+    func[item.Title]()
+    return true
+  end,
+
+  onDestroyActionMode=function(mode)
+    SelectedItem={}
+  end
+})
+lv.setAdapter(adapter)
+lv.onItemClick=function(l,v,p,i)
+  if FileList[p+1].isDirectory() then
+    OpenDir(FileList[p+1].toString())
+   else
+    OpenFile(FileList[p+1].toString())
+  end
+end
+func={
+  ["全选"]=function()
+    for n=0,lv.getCount()-1 do
+      lv.setItemChecked(n,true)
+    end
+  end,
+  ["反选"]=function()
+    for n=0,lv.getCount()-1 do
+      lv.setItemChecked(n,not(lv.isItemChecked(n)))
+    end
+  end,
+}
+
+function SortFile(mFileList)
+  SortFunctions={
+    --名称（升序）
+    function(a,b)
+      return (a.isDirectory()~=b.isDirectory() and a.isDirectory()) or ((a.isDirectory()==b.isDirectory()) and a.Name<b.Name)
+    end,
+    --"名称（降序）
+    function(a,b)
+      return (a.isDirectory()~=b.isDirectory() and a.isDirectory()) or ((a.isDirectory()==b.isDirectory()) and a.Name>b.Name)
+    end,
+    --时间（升序）
+    function(a,b)
+      return (a.isDirectory()~=b.isDirectory() and a.isDirectory()) or ((a.isDirectory()==b.isDirectory()) and a.lastModified()<b.lastModified())
+    end,
+    --时间（降序）
+    function(a,b)
+      return (a.isDirectory()~=b.isDirectory() and a.isDirectory()) or ((a.isDirectory()==b.isDirectory()) and a.lastModified()>b.lastModified())
+    end,
+  }
+  table.sort(mFileList,SortFunctions[SortMethod])
+end
+SortMethod=1
+
+function OpenFile(path)
+  FileName=tostring(File(path).Name)
+  ExtensionName=FileName:match(".+%.(.+)")
+  Mime=MimeTypeMap.getSingleton().getMimeTypeFromExtension(ExtensionName) or "*/*"
+  print("打开",FileName.."\n".."文件类型="..Mime)
+  if Mime then
+    intent = Intent()
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    intent.setAction(Intent.ACTION_VIEW);
+    intent.setDataAndType(Uri.fromFile(File(path)), Mime);
+    activity.startActivity(intent)
+    return true
+   else
+    return false
+  end
+end
+
+function dp2px(dpValue)
+  local scale = this.getResources().getDisplayMetrics().density
+  return (dpValue * scale)
+end
+mPaint=Paint()
+mPaint.setTextSize(dp2px(18))
+
+function DealName(v)
+  local name=v.Name
+  local sizes=Formatter.formatFileSize(activity,v.length())
+  local time=v.lastModified()
+  time=DateUtils.getRelativeTimeSpanString(time,
+  System.currentTimeMillis(),
+  DateUtils.MINUTE_IN_MILLIS,
+  DateUtils.FORMAT_SHOW_TIME|DateUtils.FORMAT_SHOW_DATE|DateUtils.FORMAT_ABBREV_ALL)
+  local l=mPaint.breakText(name,0,utf8.len(name),true,0.75*activity.getWidth(),nil)
+  if utf8.len(name)>l then
+    name=utf8.sub(name,1,l//2).."..."..utf8.sub(name,-l//2,-1)
+  end
+  local s1=name.."\n"
+  local s2=time
+  if v.isFile() then
+    s2=s2.."  | "..sizes
+  end
+  s=s1..s2
+  local a,b=utf8.find(s,s2)
+  print(a,b,utf8.len(s))
+  spannableString=SpannableString(s)
+  sizeSpan=RelativeSizeSpan(0.8)
+  spannableString.setSpan(sizeSpan,a-1,b,Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+  return spannableString
+end
+
+function OpenDir(dir)
+  Dir=dir
+    adapter.clear()
+  FileList=luajava.astable(File(dir).listFiles())
+  SortFile(FileList)
+  mFileList={}
+  for k,v in pairs(FileList) do
+    if not(v.isHidden()) or ShowHidden then
+      table.insert(mFileList,v)
+    end
+  end
+  FileList=mFileList
+  if #FileList==0 then
+    print("空")
+    CheckedItemCount=0
+    SelectedItem={}
+  end
+  --print(CheckedItemCount)
+  for k,v in pairs(FileList) do
+    adapter.add(DealName(v))
+  end
+end
+
+function ReOpen()
+  if mActionMode then
+    mActionMode.finish()
+  end
+  OpenDir(Dir)
+end
+
+pl.onRefresh=function(v)
+  ReOpen()
+  v.refreshFinish(0)
+end
+
+function onKeyDown(code,event)
+  if code==4 then
+    if Dir~=SDPath then
+      OpenDir(File(Dir).getParent())
+     else
+      activity.finish()
+    end
+    return true
+  end
+end
+
+function CopyTable(table1)
+  local table2={}
+  for k,v in pairs(table1) do
+    table2[k]=v
+  end
+  return table2
+end
+
+TaskFileList={}
+function getTaskFileListContent()
+  local s=""
+  for k,v in pairs(TaskFileList) do
+    s=s.."\n"..v.toString()
+  end
+  return s
+end
+
+CopyBtn.onClick=function()
+  if #SelectedItem~=0 then
+    TaskFileList=CopyTable(SelectedItem)
+    mActionMode.finish()
+    TaskType="Copy"
+    print("选择了"..getTaskFileListContent())
+  end
+end
+
+CutBtn.onClick=function()
+  if #SelectedItem~=0 then
+    TaskFileList=CopyTable(SelectedItem)
+    mActionMode.finish()
+    TaskType="Cut"
+    print("选择了"..getTaskFileListContent())
+  end
+end
+
+PasteBtn.onClick=function()
+  if TaskFileList and TaskType then
+    if TaskType=="Copy" then
+      for k,v in pairs(TaskFileList) do
+        LuaUtil.copyDir(v,File(Dir,v.Name))
+      end
+      print("复制了"..getTaskFileListContent().."\n到"..Dir)
+     elseif TaskType=="Cut"
+      for k,v in pairs(TaskFileList) do
+        os.execute("mv "..v.toString().." "..Dir.."/"..v.Name)
+      end
+      print("移动了"..getTaskFileListContent().."\n到"..Dir)
+    end
+    ReOpen()
+    TaskFileList=nil
+    TaskType=nil
+  end
+end
+
+DeleteBtn.onClick=function()
+  if #SelectedItem~=0 then
+    TaskFileList=CopyTable(SelectedItem)
+    mActionMode.finish()
+    for k,v in pairs(TaskFileList) do
+      LuaUtil.rmDir(v)
+    end
+    print("删除了"..getTaskFileListContent())
+    TaskFileList=nil
+    ReOpen()
+  end
+end
+
+NewBtn.onClick=function()
+  NewET=EditText(this)
+  AlertDialog.Builder(this)
+  .setTitle("新建")
+  .setView(NewET)
+  .setPositiveButton("文件",{onClick=function(v)
+      if #(NewET.Text)~=0 then
+        File(Dir,NewET.Text).createNewFile()
+        print("新建文件",NewET.Text)
+        ReOpen()
+      end
+    end
+  })
+  .setNeutralButton("文件夹",{onClick=function(v)
+      if #(NewET.Text)~=0 then
+        File(Dir,NewET.Text).mkdir()
+        print("新建文件夹",NewET.Text)
+        ReOpen()
+      end
+    end
+  })
+  .setNegativeButton("取消",nil)
+  .show()
+end
+
+ShowHidden=false--true
+SDPath=Environment.getExternalStorageDirectory().toString()
+OpenDir(SDPath)》》
+《《Json互转Table》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+
+activity.setTheme(R.style.Theme_Material3_Blue)--设置md主题
+
+--json方法1-->
+cjson=require "cjson"
+
+local 手机号=10086;
+表={
+  ["姓名"]="三水一金",
+  ["手机"]=手机号
+}
+转json=cjson.encode(表)
+转table=cjson.decode(转json) 
+
+print(转json)
+print(dump(转table))
+
+--打印table表-->
+for m,y in pairs(转table) do
+  print(m,y)
+end
+
+
+
+print("---分割线---")
+
+
+
+--json方法2-->
+json=require "cjson"
+
+--将table类型转换成json类型的字符串
+
+tab1={
+  "a",
+  "b",
+  "c",
+  "d",
+  "e"
+}
+
+转json=json.encode(tab1)
+
+print(转json)
+
+--将json类型转换成table类型
+
+转table=json.decode(转json)
+
+for k,v in pairs(转table)
+  print(v)
+end
+
+
+
+print("---分割线---")
+
+
+
+--带索引table表
+table2={
+  ["姓名"]="三水一金",
+  ["性别"]="男",
+  ["年龄"]="17"
+}
+
+转json=json.encode(table2)
+
+print(转json)
+
+--将json类型转换成table类型
+
+转table=json.decode(转json)
+
+for k,v in pairs(转table)
+  print(k.." : "..v)
+end》》
+《《仿MT管理器相对布局加适配器》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+layout=
+{
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="fill",--布局高度
+
+  {
+    RelativeLayout,--相对布局
+    layout_width="fill",--布局宽度
+    layout_height="fill",--布局高度
+    {
+      ListView,--列表视图控件
+      layout_width="50%w",--布局宽度
+      layout_height="fill",--布局高度
+      dividerHeight="1",--分割线高度
+      verticalScrollBarEnabled=false,--隐藏滑条
+      id="liebiao1",--控件ID
+      layout_alignParentLeft=true,--重力居左
+      layout_centerVertical=true,--将控件置于垂直方向的中心位置
+    },
+    {
+      TextView,--垂直分割线
+      layout_width="1px",--布局宽度
+      layout_height="fill",--布局高度
+      backgroundColor="#bebebe",--背景色
+      layout_centerInParent=true,--将控件置于父控件的中心位置
+      layout_centerHorizontal=true,--将控件置于水平方向的中心位置
+    },
+    {
+      ListView,--列表视图控件
+      layout_width="50%w",--布局宽度
+      layout_height="fill",--布局高度
+      dividerHeight="1",--分割线高度
+      verticalScrollBarEnabled=false,--隐藏滑条
+      id="liebiao2",--控件ID
+      layout_alignParentRight=true,--重力居右
+      layout_centerVertical=true,--将控件置于垂直方向的中心位置
+    },
+  },--相对布局结束
+
+}--线性布局结束
+
+activity.setTheme(R.style.Theme_Material3_Blue)--设置md主题
+activity.setTitle("仿MT管理器相对布局加适配器")
+
+
+activity.setContentView(loadlayout(layout))
+适配布局={
+  LinearLayout,--线性布局
+  orientation="vertical",--布局方向
+  layout_width="fill",--布局宽度
+  layout_height="wrap",--布局高度
+  gravity="left|center",--重力居左｜置中
+  padding="10dp",--布局填充
+  {
+    TextView,--文本框控件
+    text="标题",--文本内容
+    textSize="15sp",--文本大小
+    textColor="#222222",--文本颜色
+    id="wenben1",--控件ID
+  },
+  {
+    TextView,--文本框控件
+    text="简介",--文本内容
+    textSize="12sp",--文本大小
+    id="wenben2",--控件ID
+  },
+}--线性布局结束
+
+--来自James
+-- -------第一个列表
+构建adp1=LuaAdapter(activity,适配布局)
+liebiao1.setAdapter(构建adp1)
+--远端或本地数据
+总列表a=[[
+《aaaa》
+【QQ744066461】
+
+《bbb》
+【James】
+
+《cccccc》
+【tencent】
+]]
+--开始取值
+读取列表a=总列表a:gmatch("《(.-)》\n【(.-)】")--截取格式
+for a,b in 读取列表a do--循环取值
+  构建adp1.add{--构建视图控件
+    wenben1=a,--标题
+    wenben2=b,--简介
+  }
+end
+--单击适配项目
+liebiao1.onItemClick=function(a,b)
+  print(b.Tag.wenben1.Text)--标题
+  print(b.Tag.wenben2.Text)--简介
+  return true--返回
+end
+
+
+-- -------第二个列表
+构建adp2=LuaAdapter(activity,适配布局)
+liebiao2.setAdapter(构建adp2)
+--远端或本地数据
+总列表b=[[
+《W》
+【QQ：1447017701】
+
+《LuaAppX》
+【nb】
+
+《可以多加几行测试》
+【tencent】
+
+《噜啦噜啦嘞》
+【tencent】
+]]
+--开始取值
+读取列表b=总列表b:gmatch("《(.-)》\n【(.-)】")--截取格式
+for a,b in 读取列表b do--循环取值
+  构建adp2.add{--构建视图控件
+    wenben1=a,--标题
+    wenben2=b,--简介
+  }
+end
+--单击适配项目
+liebiao2.onItemClick=function(a,b)
+  print(b.Tag.wenben1.Text)--标题
+  print(b.Tag.wenben2.Text)--简介
+  return true--返回
+end
+
+》》
+《《PullingLayout自定义下拉布局》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+layout={
+  LinearLayout;
+  layout_width="fill";
+  orientation="vertical";
+  layout_height="fill";
+  {
+    PullingLayout;
+    id="pl";
+    PullDownEnabled="true";
+    PullUpEnabled="true";
+    layout_height="fill";
+    layout_width="fill";
+    {
+      LinearLayout;
+       {
+        TextView;
+        textSize="14sp",
+        textColor=0xff000000,
+        gravity="center";
+        text="下拉刷新";
+      };
+    };
+  };
+};
+
+plly={
+  LinearLayout;
+  layout_width="match_parent";
+  gravity="center";
+  orientation="vertical";
+  {
+    ProgressBar;
+  };
+};
+
+activity.setTheme(R.style.Theme_Material3_Blue)--设置md主题
+
+activity.setContentView(loadlayout(layout))
+activity.setTitle("自定义下拉刷新")
+
+function PullingLayout自定义上拉布局(pl,lay)
+  pl.getChildAt(0).getChildAt(0).removeView(pl.getChildAt(0).getChildAt(0).getChildAt(0))
+  pl.getChildAt(0).getChildAt(0).addView(loadlayout(lay))
+end
+PullingLayout自定义上拉布局(pl,plly)
+function PullingLayout自定义下拉布局(pl,lay)
+  pl.getChildAt(2).getChildAt(0).removeView(pl.getChildAt(2).getChildAt(0).getChildAt(0))
+  pl.getChildAt(2).getChildAt(0).addView(loadlayout(lay))
+end
+PullingLayout自定义下拉布局(pl,plly)》》
+《《仿TabLayout》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+layout={
+  LinearLayout,
+  orientation="vertical",
+  layout_width="fill",
+  layout_height="fill",
+  backgroundColor=0xFFF5F5F5,
+  {
+    LinearLayout,
+    layout_height="56dp",
+    id="parent",
+    backgroundColor=0xFFF4A7B9,
+    layout_width="fill",
+    {
+      HorizontalScrollView,
+      layout_height="fill",
+      layout_width="fill",
+      layout_marginTop="12dp",
+      {
+        FrameLayout,
+        layout_height="fill",
+        layout_width="fill",
+        {
+          LinearLayout,
+          layout_height="fill",
+          layout_width="fill",
+          id="choose",
+        },
+        {
+          LinearLayout,
+          layout_height="fill",
+          layout_width="fill",
+          id="bar",
+        },
+
+      }
+    }
+  },
+  {
+    PageView,
+    id="pg",
+    layout_width="fill",
+    pages={},
+  }
+}
+--dingyi
+activity.setTheme(R.style.Theme_Material3_Blue)--设置md主题
+activity.setContentView(loadlayout(layout))
+
+local function addTab(t)
+  return {
+    CardView;
+    cardBackgroundColor=0x00000000,
+    elevation="0";
+    radius="38dp";
+    id="___",
+    layout_marginLeft="12dp",
+    onClick=function(v)
+      for i=0,v.parent.getChildCount()-1 do
+        if v.parent.getChildAt(i).id==v.id then
+          pg.setCurrentItem(i)
+          return
+        end
+      end
+    end,
+    {
+      LinearLayout;
+      layout_width="-2";
+      layout_height="-2";
+      padding="5dp",
+      paddingLeft="14dp",
+      paddingRight="14dp",
+      orientation="vertical";
+      {
+        TextView;
+        textSize="14sp",
+        textColor=0xFFFFD6E2,
+        gravity="center";
+        text=t;
+      };
+    };
+  };
+end
+
+local function setWidth(a,b)
+
+  local q=a.layoutParams
+  q.width=b
+  a.layoutParams=q
+end
+
+function dp2px(dpValue)
+  local scale = activity.getResources().getDisplayMetrics().scaledDensity
+  return dpValue * scale + 0.5
+end
+
+bar.addView(loadlayout(addTab("用户应用"),nil,bar.class))
+bar.addView(loadlayout(addTab("系统应用"),nil,bar.class))
+bar.addView(loadlayout(addTab("已冻结"),nil,bar.class))
+bar.addView(loadlayout(addTab("已冻结2222"),nil,bar.class))
+bar.addView(loadlayout(addTab("已冻结2222"),nil,bar.class))
+
+bar.getChildAt(0).getChildAt(0).getChildAt(0).textColor=0xffffffff
+
+choose.addView(loadlayout({
+  CardView;
+  cardBackgroundColor=0xFFF2BECA,
+  elevation="0";
+  radius="38dp";
+  layout_height="28dp",
+  layout_marginLeft="12dp",
+},nil,choose.class))
+
+bar.getChildAt(0).post {
+  run=function()
+    setWidth(choose.getChildAt(0),bar.getChildAt(0).width)
+  end
+}
+
+
+for i=1,4 do
+  pg.adapter.add(loadlayout{
+    LinearLayout,
+    layout_width="fill",
+    layout_height="fill",
+    {
+      TextView,
+      text=i..""
+    }
+  })
+end
+
+local data={
+  scrollData={},
+
+}
+
+
+
+pg.setOnPageChangeListener{
+  onPageSelected=function(t)
+
+    for i=0,bar.getChildCount()-1 do
+      bar.getChildAt(i).getChildAt(0).getChildAt(0).textColor=0xFFFFD6E2
+    end
+    bar.getChildAt(t).getChildAt(0).getChildAt(0).textColor=0xffffffff
+    setWidth(choose.getChildAt(0),bar.getChildAt(t).width)
+    choose.getChildAt(0).x=bar.getChildAt(t).x
+  end,
+  onPageScrollStateChanged=function(i)
+    data.scrollData.scroll=i>0
+  end,
+  onPageScrolled=function(a,b,c)
+    local nowView=bar.getChildAt(a)
+
+    local nextView=bar.getChildAt(a==bar.getChildCount() and bar.getChildCount() or a+1)
+
+    if data.scrollData.scroll and b~=0 then
+      if data.scrollData.last and data.scrollData.last<b then
+        if nextView.width<nowView.width then
+          setWidth(choose.getChildAt(0),nowView.width-((nowView.width-nextView.width)*b))
+         else
+          setWidth(choose.getChildAt(0),nowView.width+((nextView.width-nowView.width)*b))
+        end
+        choose.getChildAt(0).x=nextView.x-((nextView.x-nowView.x)*(1-b))
+       else
+
+        local lastView=bar.getChildAt(a)
+        local nowView=bar.getChildAt(a+1)
+
+        if lastView.width>nowView.width then
+          setWidth(choose.getChildAt(0),nowView.width+((lastView.width-nowView.width)*(1-b)))
+         else
+          setWidth(choose.getChildAt(0),nowView.width-((nowView.width-lastView.width)*(1-b)))
+        end
+
+        choose.getChildAt(0).x=lastView.x+((nowView.x-lastView.x)*b)
+      end
+
+    end
+
+    if b==0 or c==0 then
+      for i=0,bar.getChildCount()-1 do
+        bar.getChildAt(i).getChildAt(0).getChildAt(0).textColor=0xFFFFD6E2
+      end
+      bar.getChildAt(pg.getCurrentItem()).getChildAt(0).getChildAt(0).textColor=0xffffffff
+    end
+
+    data.scrollData.page=a
+    data.scrollData.last=b
+  end,
+}》》
+《《ExpandableListView的使用》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+layout={
+  LinearLayout,
+  orientation="vertical",
+  layout_width="fill",
+  layout_height="fill",
+  {
+    ExpandableListView,
+    id="Expandable",
+    layout_width="fill",
+  },
+}
+activity.setTheme(R.style.Theme_Material3_Blue)--设置md主题activity.setContentView(loadlayout(layout))
+activity.setContentView(loadlayout(layout))--显示
+
+headLinears={
+  LinearLayout;
+  layout_width="fill";
+  layout_height="50dp";
+  orientation="vertical";
+  gravity="center|left";
+  background="#00ffff",
+  {
+    TextView;
+    layout_marginLeft="40dp";
+    id="App_name";
+    gravity="center";
+  };
+};
+headLinears2={
+  LinearLayout;
+  layout_width="fill";
+  layout_height="50dp";
+  orientation="vertical";
+  gravity="center|left";
+  background="#ff00ff",
+  {
+    TextView;
+    layout_marginLeft="45dp";
+    id="App_name";
+    gravity="center";
+  };
+};
+
+fg={}
+fs={}
+ase={}
+
+ns={"Check view","Adapter view","Advanced Widget","Layout","Advanced Layout",
+}
+
+wds={
+  {"CheckBox","RadioButton","ToggleButton","Switch"},
+  {"ListView","ExpandableListView","Spinner"},
+  {"SeekBar","ProgressBar","RatingBar",
+    "DatePicker","TimePicker","NumberPicker"},
+  {"LinearLayout","AbsoluteLayout","FrameLayout"},
+  {"RadioGroup","GridLayout",
+    "ScrollView","HorizontalScrollView"},
+}
+
+
+mAdapter=LuaExpandableListAdapter(activity,fg,fs,headLinears,headLinears2)
+
+for k,v in ipairs(ns) do
+  table.insert(fg,{App_name={Text=v}})
+  for ks,kv in ipairs(wds[k]) do
+    ase[ks]={App_name={Text=wds[k][ks]}}
+  end
+  table.insert(fs,ase)
+  ase={}
+end
+
+
+mAdapter.notifyDataSetChanged()
+Expandable.setAdapter(mAdapter)
+
+Expandable.onChildClick=function(l,v,g,c)
+  print(":ChildClick")
+end
+
+Expandable.onGroupClick=function(l,v,p,s)
+  print(":GroupClick")
+end》》
+《《HSV配色版》》
+《《import "android.text.method.DigitsKeyListener"
+import "android.graphics.Color"
+import "android.graphics.Shader$TileMode"
+import "android.graphics.*"
+import "android.graphics.drawable.shapes.*"
+import "android.graphics.drawable.*"
+import "android.graphics.Paint$Cap"
+
+function rgb2hsv(color,hsv)
+  $hsv0=hsv
+  if not hsv
+    hsv=float[3]
+  end
+  if type(color)=="string"
+    color=Color.parseColor(color)
+  end
+  Color.colorToHSV(color, hsv)
+  if hsv0
+    return hsv
+   else
+    return luajava.astable(hsv)
+  end
+end
+function hsv2rgb(hsv1,hsv2)
+  local hsv,alpha
+  if hsv2
+    alpha=hsv1
+    hsv=hsv2
+   else
+    alpha=255
+    hsv=hsv1
+  end
+  hsv[1]=hsv[1]%360
+  if type(hsv)=="table"
+    hsv=float(hsv)
+  end
+  $color=Color.HSVToColor(alpha,hsv)
+  return color
+end
+
+function HSV配色盘(color0,fun)
+  if type(color0)=="number"
+    color0=string.format("%0x",color0)
+  end
+  HSV_dialog=AlertDialog.Builder(this)
+  .setTitle("HSV配色盘")
+  if fun
+    HSV_dialog.setPositiveButton("确定",{onClick=lambda s:fun("#"..HSV_input.text,s)})
+   else
+    HSV_dialog.setPositiveButton("复制",{onClick=function(v)
+        activity.getSystemService(Context.CLIPBOARD_SERVICE).setText("#"..HSV_input.text)
+        Toast.makeText(activity, "复制成功",Toast.LENGTH_SHORT).show()
+      end})
+  end
+  HSV_dialog.setNegativeButton("取消",nil)
+  .setCancelable(false)
+  .setView(loadlayout{
+    LinearLayout;
+    padding="10dp";
+    orientation="vertical";
+    gravity="center";
+    {
+      CardView;
+      CardElevation="5dp";
+      layout_width="80dp";
+      layout_height="80dp";
+      backgroundColor=4294967295;
+      layout_marginTop="8dp";
+      radius="40dp";
+      id="HSV_card";
+    };
+    {
+      LinearLayout;
+      gravity="center";
+      layout_width="fill";
+      padding="5dp";
+      {
+        TextView;
+        textSize="18dp";
+        text="#";
+        backgroundColor=0;
+        textColor=0xff000000;
+      };
+      {
+        EditText;
+        id="HSV_input";
+        singleLine=true;
+        padding=0;
+        backgroundColor=0;
+        hint="FFFFFF";
+        textSize="18dp";
+        keyListener=DigitsKeyListener.getInstance("1234567890abcdefABCDEF")
+      };
+    };
+    {
+      SeekBar;
+      id="拖动H";
+      layout_width="280dp";
+      Max=360*2;
+      layout_margin="5dp";
+    };
+    {
+      SeekBar;
+      id="拖动S";
+      layout_width="280dp";
+      layout_margin="5dp";
+      Max=255;
+    };
+    {
+      SeekBar;
+      id="拖动V";
+      layout_width="280dp";
+      layout_margin="5dp";
+      Max=255
+    };
+    {
+      TextView;
+      id="HSV_value";
+      gravity="center";
+      layout_width="fill";
+      padding="5dp";
+      text="H:360.0 S:255 V:255";
+    };
+  }
+
+  )
+  .show()
+
+  local H,S,V=0,0,1
+  HSV_input.addTextChangedListener{
+    onTextChanged=function(s)
+      $s=tostring(s)
+      if #s==6
+        $n=tonumber("0xff"..s)
+        if HSV_lock
+          HSV_lock=nil
+         else
+          HSV_lock1=1
+          $hsv=rgb2hsv(n)
+          拖动H.Progress=tointeger(hsv[1]*2)
+          拖动S.Progress=tointeger(hsv[2]*255)
+          拖动V.Progress=tointeger(hsv[3]*255)
+          H,S,V= hsv[1],hsv[2],hsv[3]
+          刷新S()
+          刷新V()
+        end
+        HSV_card.backgroundColor=n
+        HSV_value.text="H:"..(tointeger(H*10)/10).." S:"..tointeger(S*255).." V:"..tointeger(V*255)
+       elseif #s>6
+        HSV_lock1=1
+        HSV_lock=nil
+        HSV_input.text=s:sub(-6,-1)
+      end
+    end
+  }
+  拖动H.post(function()
+    local w,h,tab,hsv,hk,hkdx=拖动H.width,拖动H.height,{},{0,1,1},{},拖动H.Thumb
+    for i=0,360*2
+      hsv[1]=i/2
+      tab[i]=hsv2rgb(hsv)
+      hk[i]=PorterDuffColorFilter(tab[i],PorterDuff.Mode.SRC_ATOP)
+    end
+
+    $draw=LuaDrawable(function(c,p,s)
+      local w,h,pos=c.width,c.height,拖动H.Progress
+      c.drawLine(0,h/2,w-(h*2)+(h/6),h/2,p)
+      hkdx.setColorFilter(hk[pos])
+    end)
+    拖动H.setProgressDrawable(draw);
+
+    draw.paint
+    .setDither(true)
+    .setAntiAlias(true)
+    .setStrokeCap(Cap.ROUND)
+    .setStrokeWidth(拖动H.height/8)
+    .setShadowLayer(8,0,0,0xff000000)
+    .setShader(LinearGradient(0,h/2,w-(h*2)+(h/6),h/2,tab,nil,Shader.TileMode.MIRROR))
+
+    拖动H.setOnSeekBarChangeListener{
+      onProgressChanged=function()
+        H=拖动H.Progress/2
+        if HSV_lock1
+          HSV_lock1=nil
+         else
+          HSV_lock=1
+          HSV_input.text=string.format("%0x",hsv2rgb({H,S,V})):sub(-6,-1):upper()
+        end
+      end,
+      onStopTrackingTouch=function()
+        刷新S()
+        刷新V()
+      end,
+    }
+  end)
+
+
+  function 刷新S()
+    拖动S.post(function()
+      $hkdx=拖动S.Thumb
+      local w,h,tab,hsv,hk=拖动S.width,拖动S.height,{},{H,1,1},{}
+
+      for i=0,255
+        hsv[2]=i*(1/255)
+        tab[i]=hsv2rgb(hsv)
+        hk[i]=PorterDuffColorFilter(tab[i],PorterDuff.Mode.SRC_ATOP)
+      end
+
+      $draw=LuaDrawable(function(c,p,s)
+        local w,h,pos=c.width,c.height,拖动S.Progress
+        c.drawLine(0,h/2,w-(h*2)+(h/6),h/2,p)
+        hkdx.setColorFilter(hk[pos])
+      end)
+      拖动S.setProgressDrawable(draw);
+
+      draw.paint
+      .setDither(true)
+      .setAntiAlias(true)
+      .setStrokeCap(Cap.ROUND)
+      .setStrokeWidth(拖动S.height/8)
+      .setShadowLayer(8,0,0,0xff000000)
+      .setShader(LinearGradient(0,h/2,w-(h*2)+(h/6),h/2,tab,nil,Shader.TileMode.MIRROR))
+
+      拖动S.setOnSeekBarChangeListener{
+        onProgressChanged=function()
+          S=拖动S.Progress*(1/255)
+          if HSV_lock1
+            HSV_lock1=nil
+           else
+            HSV_lock=1
+            HSV_input.text=string.format("%0x",hsv2rgb({H,S,V})):sub(-6,-1):upper()
+          end
+        end}
+    end)
+  end
+ -- 刷新S()
+
+  function 刷新V()
+    拖动V.post(function()
+      $hkdx=拖动V.Thumb
+      local w,h,tab,hsv,hk=拖动V.width,拖动V.height,{},{H,1,1},{}
+
+      for i=0,255
+        hsv[3]=i*(1/255)
+        tab[i]=hsv2rgb(hsv)
+        hk[i]=PorterDuffColorFilter(tab[i],PorterDuff.Mode.SRC_ATOP)
+      end
+
+      $draw=LuaDrawable(function(c,p,s)
+        local w,h,pos=c.width,c.height,拖动V.Progress
+        c.drawLine(0,h/2,w-(h*2)+(h/6),h/2,p)
+        hkdx.setColorFilter(hk[pos])
+      end)
+      拖动V.setProgressDrawable(draw);
+
+      draw.paint
+      .setDither(true)
+      .setAntiAlias(true)
+      .setStrokeCap(Cap.ROUND)
+      .setStrokeWidth(拖动V.height/8)
+      .setShadowLayer(8,0,0,0xff000000)
+      .setShader(LinearGradient(0,h/2,w-(h*2)+(h/6),h/2,tab,nil,Shader.TileMode.MIRROR))
+
+      拖动V.setOnSeekBarChangeListener{
+        onProgressChanged=function()
+          V=拖动V.Progress*(1/255)
+          if HSV_lock1
+            HSV_lock1=nil
+           else
+            HSV_lock=1
+            HSV_input.text=string.format("%0x",hsv2rgb({H,S,V})):sub(-6,-1):upper()
+          end
+        end}
+    end)
+  end
+--  刷新V()
+
+  HSV_input.text=(color0 or "FFFFFF"):upper():sub(-6,-1)
+end
+
+
+
+
+
+activity.setTheme(android.R.style.Theme_Material_Light_DarkActionBar)
+
+--HSV配色盘()--弹出配色盘，默认白色，点击复制
+--HSV配色盘("#00ff00")--弹出对话框，颜色代码，默认点击复制
+HSV配色盘(0xFFA774FF,function(颜色,对话框)--弹出对话框，颜色代码，设置点击事件
+  print("你选择了",颜色,"颜色")
+end)》》
+《《计算公式》》
+《《--Lua-四舍五入(常用)
+function Round(num, i)
+    local mult = 10^(i or 0)
+    local mult10 = mult * 10
+    return math.floor((num * mult10 + 5)/10)/ mult
+end
+
+--Lua-四舍五入(奇进偶舍)
+function Round2(num, i)
+    local tmp = math.abs(num)*(10^(i+1))
+    local cal = math.abs(num)*(10^(i+1))/(10^(i+1))
+    local result = 0
+    if(math.floor(tmp)-math.floor(tmp/10)*10==5) then 
+        if(tmp-math.floor(tmp)==0) then
+            local numInt1,numInt2 = math.modf(math.floor(tmp/10))
+            if(numInt1 % 2 == 0) then
+                result = math.floor(tmp/10)/(10^i)
+            end
+        end
+    end
+	if(result==0) then
+        result = math.floor((cal * ((10^(i or 0)) * 10) + 5)/10)/ (10^(i or 0))
+	end
+    return ( num>0 and result ) or (0-result) 
+end
+ 
+ 
+--相乘，判断了是否有null值
+function Multiply(num1,num2)
+    if(num1==nil) then
+        return 0
+    end
+    if(num2==nil) then
+        return 0
+    end
+    
+    local temp=tostring(num1*num2)
+    temp=tonumber(temp)
+    return temp
+end
+ 
+--相除
+function Divide(denominator,numerator)
+    if(numerator==nil) then
+        return 0
+    end
+    if(denominator==nil) then
+        return 0
+    end
+    if(numerator==0) then
+        return 0
+    end
+    return denominator/numerator
+end
+ 
+--取整
+function Ceil(num)
+    if(num==nil) then
+        return 0
+    end
+ 
+    if (num <= 0) then
+        return math.ceil(num)
+    end
+ 
+    if (math.ceil(num) == num) then
+        return math.ceil(num)
+    else
+        return math.ceil(num) - 1
+    end
+end
+ 
+--取整
+function Ceil2(num)
+    if(num==nil) then
+        return 0
+    end
+    
+    local t1,t2 = math.modf(num)
+    return t1
+end
+ 》》
+《《绘制纸感标签》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+--分辨率转换函数
+function 转分辨率(sdp)
+  --导入所需类
+  import "android.util.TypedValue"
+
+  local dm=this.getResources().getDisplayMetrics()
+
+  local types={px=0,dp=1,sp=2,pt=3,["in"]=4,mm=5}
+
+  local n,ty=sdp:match("^(%-?[%.%d]+)(%a%a)$")
+
+  return TypedValue.applyDimension(types[ty],tonumber(n),dm)
+
+end
+
+
+function drawTag()
+
+  import "android.graphics.RectF"
+
+  import "android.graphics.Point"
+
+  import "android.graphics.Paint"
+
+  import "android.graphics.Path"
+
+  import "android.graphics.Color"
+
+  return LuaDrawable(function(c,p,d)
+
+    c.drawColor(0x00000000)
+
+    p.setAntiAlias(true);
+
+    p.setStrokeWidth(20);
+
+    p.setStyle(Paint.Style.FILL);
+
+    local quYu=d.bounds
+
+    local width=quYu.right
+
+    local height=quYu.bottom
+
+    local radius = 转分辨率("12dp")
+
+    p.setColor(0xffffffff)
+
+    p.setShadowLayer(25,0,0,0x22000000)
+
+    local path=Path();
+
+    path.moveTo(0,radius/2);
+
+    path.arcTo(RectF(0,0,radius,radius),180,90);
+
+    path.lineTo(width-radius,0);
+
+    path.arcTo(RectF(width-radius,0,width,radius),270,90);
+
+    path.lineTo(width,height-radius/2);
+
+    path.arcTo(RectF(width-radius,height-radius,width,height),0,90);
+
+    path.lineTo(width*.06,height);
+
+    path.lineTo(0,height-width*.06)
+
+    c.drawPath(path,p);
+
+    p.setShadowLayer(15,1,-1,0x22000000)
+
+    local path2 = Path()
+
+    path2.moveTo(0,height-width*.06)
+
+    path2.lineTo(width*.06-radius/2,height-width*.06);
+
+    path2.arcTo(RectF(width*.06-radius,height-width*.06,width*.06,height-width*.06+radius),270,90);
+
+    path2.lineTo(width*.06,height)
+
+    c.drawPath(path2,p)
+
+  end)
+
+end
+
+
+
+
+
+function setTxt(view,view2)
+  local txt={"不好意思，我把你弄丢了。",
+    "长风破浪会有时，直挂云帆济沧海。",
+    "你是无意穿堂风，偏偏孤倨引山洪。",
+    "愿你天黑有灯，下雨有伞，未来的路有良人相伴。",
+    "我有一个梦，也许有一天，灿烂的阳光能照进黑暗森林。",
+    "自古美人如名将，不许人间见白头。",
+    "什么都无法舍弃的人，什么都无法改变。",
+    "天不生我李淳罡，剑道万古长如夜。",
+    "斑竹枝，斑竹枝，点点泪痕寄相思。",
+    "一切都会变好,超级好,爆好,无敌好。",
+    "把喜欢的一切留在身边，这便是努力的意义。",
+    "悲喜自渡，他人难悟易误。",
+    "且以深情共白首，愿无岁月可回头"
+    }
+  import "java.io.File"
+  import "android.graphics.Typeface"
+ -- local bf=File(activity.getLuaDir().."/hkhbt.ttf");
+ -- local tf=Typeface.createFromFile(bf)
+  view.setTypeface(tf).setLineSpacing(1.6,1.6).setLetterSpacing(0.13);
+  view2.setTypeface(tf).setLineSpacing(1.6,1.6).setLetterSpacing(0.13);
+  Http.get("https://v1.hitokoto.cn/?encode=json","utf8",function(code,content,cookie,header)
+    if code==200 then
+      local cjson=import "cjson"
+      local json=cjson.decode(content)
+      view.setText(json.hitokoto)
+      view2.setText("——"..(json.from or "未知作者"))
+     else
+      view.setText(txt[math.random(0,12)])
+      view2.setText("——没有网络")
+    end
+  end)
+end
+
+
+
+
+
+layout={
+  FrameLayout;
+  layout_height="fill";
+  layout_width="fill";
+  clipChildren=false;
+  background="#ffffffff";
+  {
+    LinearLayout;
+    layout_height="30%w";
+    layout_width="90%w";
+    layout_gravity="center";
+    backgroundDrawable=drawTag();
+    orientation="vertical";
+    {
+      FrameLayout;
+      layout_height="fill";
+      layout_width="fill";
+      layout_weight="1";
+      {
+        TextView;
+        id="yiyan_txt";
+        textSize="13dp";
+        textColor="#ff333333";
+        layout_height="fill";
+        layout_width="fill";
+        layout_margin="15dp";
+      }
+    },
+    {
+      TextView;
+      id="yiyan_wri";
+      textSize="13dp";
+      textColor="#ff333333";
+      layout_height="wrap";
+      layout_width="fill";
+      layout_marginTop="0dp";
+      layout_marginRight="15dp";
+      layout_marginLeft="25dp";
+      layout_marginBottom="10dp";
+      gravity="center|right";
+    }
+  }
+}
+activity.setTheme(R.style.Theme_Material3_Blue)--设置md主题
+
+activity.setContentView(loadlayout(layout))
+
+setTxt(yiyan_txt,yiyan_wri)
+
+》》
+《《选色器》》
+《《require "import"
+import "android.widget.*"
+import "android.view.*"
+import "android.graphics.PorterDuffColorFilter"
+import "android.graphics.PorterDuff"
+activity.setTheme(R.style.Theme_Material3_Blue)--设置md主题
+取色器=
+{
+  LinearLayout;
+  orientation="vertical";
+  layout_width="fill";
+  layout_height="fill";
+  gravity="center";
+  {
+    CardView;
+    id="卡片图";
+    layout_margin="10dp";
+    radius="40dp",
+    elevation="0dp",
+    layout_width="20%w";
+    layout_height="20%w";
+  };
+  {
+    TextView;
+    layout_margin="0dp";
+    textSize="12sp";
+    id="颜色文本";
+    textColor=左侧栏项目色;
+  };
+  {
+    SeekBar;
+    id="拖动一";
+    layout_margin="15dp";
+    layout_width="match";
+    layout_height="wrap";
+  };
+  {
+    SeekBar;
+    id="拖动二";
+    layout_margin="15dp";
+    layout_width="match";
+    layout_height="wrap";
+  };
+  {
+    SeekBar;
+    id="拖动三";
+    layout_margin="15dp";
+    layout_width="match";
+    layout_height="wrap";
+  };
+  {
+    SeekBar;
+    id="拖动四";
+    layout_margin="15dp";
+    layout_width="match";
+    layout_height="wrap";
+  };
+};
+--对话框View
+local 取色器=loadlayout(取色器)
+拖动一.setMax(255)
+拖动二.setMax(255)
+拖动三.setMax(255)
+拖动四.setMax(255)
+拖动一.setProgress(0xff)
+拖动二.setProgress(0x1e)
+拖动三.setProgress(0x8a)
+拖动四.setProgress(0xe8)
+--监听
+拖动一.setOnSeekBarChangeListener{
+  onProgressChanged=function(view, i)
+    updateArgb()
+  end
+}
+
+拖动二.setOnSeekBarChangeListener{
+  onProgressChanged=function(view, i)
+    updateArgb()
+  end
+}
+
+拖动三.setOnSeekBarChangeListener{
+  onProgressChanged=function(view, i)
+    updateArgb()
+  end
+}
+
+拖动四.setOnSeekBarChangeListener{
+  onProgressChanged=function(view, i)
+    updateArgb()
+  end
+}
+--更新颜色
+function updateArgb()
+  local a=拖动一.getProgress()
+  local r=拖动二.getProgress()
+  local g=拖动三.getProgress()
+  local b=拖动四.getProgress()
+  local argb_hex=(a<<24|r<<16|g<<8|b)
+  颜色文本.Text=string.format("%#x", argb_hex)
+  卡片图.setCardBackgroundColor(argb_hex)
+end
+--翻译进度
+argbBuild=AlertDialog.Builder(activity)
+argbBuild.setView(取色器)
+argbBuild.setTitle("选色器")
+argbBuild.setPositiveButton("复制", {
+  onClick=function(view)
+    local a=拖动一.getProgress()
+    local r=拖动二.getProgress()
+    local g=拖动三.getProgress()
+    local b=拖动四.getProgress()
+    local argb_hex=(a<<24|r<<16|g<<8|b)
+    local argb_str=string.format("%#x", argb_hex)
+    activity.getSystemService(Context.CLIPBOARD_SERVICE).setText(argb_str)
+    print("已复制到剪贴板")
+  end
+})
+argbBuild.setNeutralButton("取消",{onClick=function()
+
+  end})--设置否认按钮
+--实例化对话框
+argbDialog=argbBuild.create()
+argbDialog.setCanceledOnTouchOutside(false)
+function showArgbDialog()
+  --展示对话框
+  argbDialog.show()
+  --更新颜色
+  updateArgb()
+end
+showArgbDialog()
+》》
+《《电视直播列表+适配器》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+layout={
+  LinearLayout;
+  orientation="horizontal";
+  layout_height="fill";
+  layout_width="fill";
+  {
+    ListView;
+    id="home_list";
+    layout_height="fill";
+    layout_width="34%w";
+  },
+  {
+    LinearLayout;
+    layout_height="fill";
+    layout_width="1";
+    background="#ff252525";
+  },
+  {
+    FrameLayout;
+    layout_height="fill";
+    layout_width="fill";
+    {
+      ListView;
+      id="cctv_list";
+      layout_height="fill";
+      layout_width="fill";
+    },
+    {
+      ListView;
+      id="wstv_list";
+      Visibility="gone";
+      layout_height="fill";
+      layout_width="fill";
+    },
+    {
+      ListView;
+      id="mhjy_list";
+      Visibility="gone";
+      layout_height="fill";
+      layout_width="fill";
+    },
+    {
+      ListView;
+      id="shpd_list";
+      Visibility="gone";
+      layout_height="fill";
+      layout_width="fill";
+    },
+    {
+      ListView;
+      id="zztj_list";
+      Visibility="gone";
+      layout_height="fill";
+      layout_width="fill";
+    },
+    {
+      ListView;
+      id="yksp_list";
+      Visibility="gone";
+      layout_height="fill";
+      layout_width="fill";
+    },
+    {
+      ListView;
+      id="mgsp_list";
+      Visibility="gone";
+      layout_height="fill";
+      layout_width="fill";
+    },
+    {
+      ListView;
+      id="hsys_list";
+      Visibility="gone";
+      layout_height="fill";
+      layout_width="fill";
+    },
+  }
+}
+activity.setContentView(loadlayout((layout)))
+
+item={
+  LinearLayout;
+  layout_height="50dp";
+  layout_width="fill";
+  {
+    TextView;
+    id="zhibo_txt";
+    layout_height="fill";
+    layout_width="fill";
+    gravity="center";
+  },
+  {
+    TextView;
+    id="zhibo_url";
+    layout_height="0";
+    layout_width="0";
+  }
+}
+adapter=LuaAdapter(activity,item)
+home_list.Adapter=adapter
+adapter2=LuaAdapter(activity,item)
+cctv_list.Adapter=adapter2
+adapter3=LuaAdapter(activity,item)
+wstv_list.Adapter=adapter3
+adapter4=LuaAdapter(activity,item)
+mhjy_list.Adapter=adapter4
+adapter5=LuaAdapter(activity,item)
+shpd_list.Adapter=adapter5
+adapter6=LuaAdapter(activity,item)
+zztj_list.Adapter=adapter6
+adapter7=LuaAdapter(activity,item)
+yksp_list.Adapter=adapter7
+adapter8=LuaAdapter(activity,item)
+mgsp_list.Adapter=adapter8
+adapter9=LuaAdapter(activity,item)
+hsys_list.Adapter=adapter9
+
+
+
+
+
+function 获取直播()
+  Http.get("http://jrys.wy2sf.com/yingshi/getAllTV","utf8",function(code,content,cookie,header)
+    if code==200 then
+      local cjson=import "cjson"
+      local json=cjson.decode(content)
+      print(json.msg)
+      if json.msg=="成功！" then
+        for k,v in ipairs(json.data) do
+          adapter.add{zhibo_txt=json.data[k].tvType.t_name}
+        end
+        for k,v in ipairs(json.data[1].tvBeans) do
+          adapter2.add{zhibo_txt=json.data[1].tvBeans[k].d_name,zhibo_url=json.data[1].tvBeans[k].d_url}
+        end
+        for k,v in ipairs(json.data[2].tvBeans) do
+          adapter3.add{zhibo_txt=json.data[2].tvBeans[k].d_name,zhibo_url=json.data[2].tvBeans[k].d_url}
+        end
+        for k,v in ipairs(json.data[3].tvBeans) do
+          adapter4.add{zhibo_txt=json.data[3].tvBeans[k].d_name,zhibo_url=json.data[3].tvBeans[k].d_url}
+        end
+        for k,v in ipairs(json.data[4].tvBeans) do
+          adapter5.add{zhibo_txt=json.data[4].tvBeans[k].d_name,zhibo_url=json.data[4].tvBeans[k].d_url}
+        end
+        for k,v in ipairs(json.data[5].tvBeans) do
+          adapter6.add{zhibo_txt=json.data[5].tvBeans[k].d_name,zhibo_url=json.data[5].tvBeans[k].d_url}
+        end
+        for k,v in ipairs(json.data[6].tvBeans) do
+          adapter7.add{zhibo_txt=json.data[6].tvBeans[k].d_name,zhibo_url=json.data[6].tvBeans[k].d_url}
+        end
+        for k,v in ipairs(json.data[7].tvBeans) do
+          adapter8.add{zhibo_txt=json.data[7].tvBeans[k].d_name,zhibo_url=json.data[7].tvBeans[k].d_url}
+        end
+        for k,v in ipairs(json.data[8].tvBeans) do
+          adapter9.add{zhibo_txt=json.data[8].tvBeans[k].d_name,zhibo_url=json.data[8].tvBeans[k].d_url}
+        end
+       else
+        print("获取数据失败")
+      end
+     else
+      print("链接服务器失败")
+    end
+  end)
+end
+
+
+获取直播()
+
+
+
+
+
+home_list.onItemClick=function(l,v,p,q)
+  if q==1 then
+    cctv_list.setVisibility(View.VISIBLE)
+    wstv_list.setVisibility(View.GONE)
+    mhjy_list.setVisibility(View.GONE)
+    shpd_list.setVisibility(View.GONE)
+    zztj_list.setVisibility(View.GONE)
+    yksp_list.setVisibility(View.GONE)
+    mgsp_list.setVisibility(View.GONE)
+    hsys_list.setVisibility(View.GONE)
+   elseif q==2 then
+    cctv_list.setVisibility(View.GONE)
+    wstv_list.setVisibility(View.VISIBLE)
+    mhjy_list.setVisibility(View.GONE)
+    shpd_list.setVisibility(View.GONE)
+    zztj_list.setVisibility(View.GONE)
+    yksp_list.setVisibility(View.GONE)
+    mgsp_list.setVisibility(View.GONE)
+    hsys_list.setVisibility(View.GONE)
+   elseif q==3 then
+    cctv_list.setVisibility(View.GONE)
+    wstv_list.setVisibility(View.GONE)
+    mhjy_list.setVisibility(View.VISIBLE)
+    shpd_list.setVisibility(View.GONE)
+    zztj_list.setVisibility(View.GONE)
+    yksp_list.setVisibility(View.GONE)
+    mgsp_list.setVisibility(View.GONE)
+    hsys_list.setVisibility(View.GONE)
+   elseif q==4 then
+    cctv_list.setVisibility(View.GONE)
+    wstv_list.setVisibility(View.GONE)
+    mhjy_list.setVisibility(View.GONE)
+    shpd_list.setVisibility(View.VISIBLE)
+    zztj_list.setVisibility(View.GONE)
+    yksp_list.setVisibility(View.GONE)
+    mgsp_list.setVisibility(View.GONE)
+    hsys_list.setVisibility(View.GONE)
+   elseif q==5 then
+    cctv_list.setVisibility(View.GONE)
+    wstv_list.setVisibility(View.GONE)
+    mhjy_list.setVisibility(View.GONE)
+    shpd_list.setVisibility(View.GONE)
+    zztj_list.setVisibility(View.VISIBLE)
+    yksp_list.setVisibility(View.GONE)
+    mgsp_list.setVisibility(View.GONE)
+    hsys_list.setVisibility(View.GONE)
+   elseif q==6 then
+    cctv_list.setVisibility(View.GONE)
+    wstv_list.setVisibility(View.GONE)
+    mhjy_list.setVisibility(View.GONE)
+    shpd_list.setVisibility(View.GONE)
+    zztj_list.setVisibility(View.GONE)
+    yksp_list.setVisibility(View.VISIBLE)
+    mgsp_list.setVisibility(View.GONE)
+    hsys_list.setVisibility(View.GONE)
+   elseif q==7 then
+    cctv_list.setVisibility(View.GONE)
+    wstv_list.setVisibility(View.GONE)
+    mhjy_list.setVisibility(View.GONE)
+    shpd_list.setVisibility(View.GONE)
+    zztj_list.setVisibility(View.GONE)
+    yksp_list.setVisibility(View.GONE)
+    mgsp_list.setVisibility(View.VISIBLE)
+    hsys_list.setVisibility(View.GONE)
+   else
+    cctv_list.setVisibility(View.GONE)
+    wstv_list.setVisibility(View.GONE)
+    mhjy_list.setVisibility(View.GONE)
+    shpd_list.setVisibility(View.GONE)
+    zztj_list.setVisibility(View.GONE)
+    yksp_list.setVisibility(View.GONE)
+    mgsp_list.setVisibility(View.GONE)
+    hsys_list.setVisibility(View.VISIBLE)
+  end
+end
+
+
+
+cctv_list.onItemClick=function(l,v,p,q)
+  print(v.tag.zhibo_url.text)
+end》》
+《《TextView使用HTML标签》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.text.method.*"
+import "android.text.Html"
+import "android.widget.*"
+import "android.view.*"
+layout={--主布局
+  LinearLayout;
+  gravity="center";
+  orientation="vertical";
+  {
+    TextView;
+    layout_width="wrap_content";
+    textSize="18sp";
+    text="hello AndroLua+";
+    id="t1";
+  };
+};
+
+activity.setTitle('AndroLua+')
+activity.setTheme(R.style.Theme_Material3_Blue)--设置md主题
+
+activity.setContentView(loadlayout(layout))
+
+
+nr1=[[<a href='http://www.baidu.com' target="_blank" >百度一下</a> ]]
+t1.setText(Html.fromHtml(nr1))
+t1.setMovementMethod(LinkMovementMethod.getInstance())
+
+》》
+
+《《手绘蝴蝶线动画》》
+《《require "import"
+import "android.os.*"
+import "android.app.*"
+import "android.view.*"
+import "android.widget.*"
+import "android.graphics.*"
+import "android.animation.*"
+--[[
+怎么学都学不会的何同学制作
+]]
+local layout =
+{
+  LinearLayout, --线性布局
+  orientation = 'vertical', --方向
+  layout_width = 'fill', --宽度
+  layout_height = 'fill', --高度
+  {
+    SurfaceView;
+    layout_width = 'fill', --宽度
+    layout_height = 'fill', --高度
+    id = "surface",
+  };
+};
+activity.setContentView(loadlayout(layout))
+--定义值动画
+local animation = ValueAnimator.ofFloat({ 0, 8*math.pi })
+animation.setDuration(10000)
+animation.setRepeatCount(-1)
+animation.setRepeatMode(2)
+animation.start()
+
+--suface是你的SurfaceView的id
+local holder = surface.getHolder()
+holder.addCallback(SurfaceHolder.Callback {
+  --视图改变
+  surfaceChanged = function(holder, format, width, height)
+  end,
+  --视图创建，一般绘制就在这
+  surfaceCreated = function(holder)
+    animation.addUpdateListener(ValueAnimator.AnimatorUpdateListener {
+      onAnimationUpdate = function(animate)
+        local k = animate.getAnimatedValue()
+
+        --拿到画布canvas
+        local canvas = holder.lockCanvas()
+        if canvas ~= nil then
+          --这里绘制
+          canvas.drawColor(0xffffffff) --绘制背景为白色
+          --定义画笔Paint
+          local paint = Paint()
+          paint.setColor(0xff6493c1) --画笔颜色
+          paint.setStyle(Paint.Style.STROKE) --画笔样式：描边
+          paint.setStrokeWidth(10) --画笔宽度
+          paint.setStrokeCap(Paint.Cap.ROUND) --画笔笔头：圆滑
+          --定义绘制变量
+          local cx = canvas.getWidth() / 2 --中心x点
+          local cy = canvas.getHeight() / 2 --中心y点
+          local zoom = 150
+          --这里进行详细绘制操作
+          local path = Path()
+          path.moveTo(cx,cy)
+          for angle = 0, k, 0.01 do
+            local r = (math.exp(math.cos(angle))-2*math.cos(4*angle)+(math.sin(angle/15))^2)*zoom
+            local x = r*math.cos(angle)+cx
+            local y = r*math.sin(angle)+cy
+            path.lineTo(x,y)
+          end
+          canvas.drawPath(path,paint)
+        end
+        --提交画布canvas
+        holder.unlockCanvasAndPost(canvas)
+      end
+    })
+  end,
+  --视图销毁，主要是动态绘制时的销毁线程
+  surfaceDestroyed = function(holder)
+    animation.removeAllUpdateListeners()
+    animation.cancel()
+  end
+})》》
+《《绘制三角函数图像》》
+《《import "android.graphics.RectF"
+import "android.graphics.Path"
+import "android.graphics.Paint"
+import "android.graphics.Color"
+
+
+layout={
+  LinearLayout;
+  layout_height="fill";
+  layout_width="fill";
+  orientation="vertical";
+  {
+    SurfaceView;
+    layout_width='fill',
+    layout_height='fill',
+    id="surface",
+  };
+};
+
+activity.setContentView(loadlayout(layout))
+--作者:帕帝天秀
+--QQ:3373587110
+surface.setBackground(
+LuaDrawable(function(canvas,paint)
+  canvas.drawColor(0xffffffff)
+  mPaintLine = Paint();
+  mPaintLine.setAntiAlias(true)
+  mPaintLine.setStrokeWidth(5);
+  mPaintLine.setStyle(Paint.Style.STROKE);
+  mPaintLine.setColor(Color.BLACK);
+  mPaintLine.setFlags(Paint.ANTI_ALIAS_FLAG);
+
+  mCirclePaint = Paint();
+  mCirclePaint.setColor(Color.RED);
+  mCirclePaint.setFlags(Paint.ANTI_ALIAS_FLAG);
+
+  drawXLine(canvas)
+  drawYLine(canvas)
+  drawXArrow(canvas)
+  drawYArrow(canvas)
+  drawCenterPoint(canvas);
+  drawPathRight(canvas)
+  drawPathLeft(canvas)
+
+end)
+)
+width=activity.width
+height=activity.height
+
+function drawCenterPoint(canvas)
+  canvas.drawCircle(width/2,height/2,10,mCirclePaint);
+end
+
+function ponitX(i)
+  return -math.sin(math.pi/180*i)
+end
+
+function drawPathLeft(canvas)
+  local path=Path();
+  path.moveTo(width/2,height/2);
+  for i=0,480 do
+    x = width/6/180*-i+width/2;
+    y = (ponitX(-i)*height/8)+height/2;
+    path.lineTo(x,y);
+  end
+  canvas.drawPath(path,mPaintLine);
+end
+
+function drawPathRight(canvas)
+  local path=Path();
+  path.moveTo(width/2,height/2);
+  i1=0
+  for i1=0,480 do
+    x = width/6/180*i1+width/2;
+    y = (ponitX(i1)*height/8)+height/2;
+    path.lineTo(x,y);
+  end
+  canvas.drawPath(path,mPaintLine);
+end
+
+
+function drawXArrow(canvas)
+  local path = Path();
+  path.moveTo(width-20,height/2-20);
+  path.lineTo(width,height/2);
+  path.lineTo(width-20,height/2+20);
+  canvas.drawPath(path,mPaintLine);
+end
+
+function drawYArrow(canvas)
+  local path = Path();
+  path.moveTo(width/2-20,20);
+  path.lineTo(width/2,0);
+  path.lineTo(width/2+20,20);
+  canvas.drawPath(path,mPaintLine);
+end
+
+function drawXLine(canvas)
+  local startX = 0;
+  local startY = height/2;
+  local stopX = width;
+  local stopY = startY;
+  canvas.drawLine(startX,startY,stopX,stopY,mPaintLine);
+end
+
+function drawYLine(canvas)
+  local startX = width/2;
+  local startY = 0;
+  local stopX = startX;
+  local stopY = height;
+  canvas.drawLine(startX,startY,stopX,stopY,mPaintLine);
+end
+》》
+
+《《二次函数绘制》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+
+local layout={
+  LinearLayout;
+  layout_height="fill";
+  layout_width="fill";
+  orientation="vertical";
+  BackgroundColor=0xffffffff;
+  {
+    LinearLayout;
+    layout_width="fill";
+    orientation="horizontal";
+    gravity="center";
+    {
+      EditText;
+      hint="a=";
+      id="aTiet";
+      layout_weight=1;
+      layout_width="fill";
+    };
+    {
+      EditText;
+      hint="b=";
+      layout_margin="8dp",
+      id="bTiet";
+      layout_width="fill";
+      layout_weight=1;
+    };
+    {
+      EditText;
+      hint="c=";
+      id="cTiet";
+      layout_marginTop="8dp",
+      layout_marginLeft="8dp",
+      layout_marginBottom="8dp",
+      layout_width="fill";
+      layout_weight=1;
+    };
+  };
+  {
+    LinearLayout;
+    layout_width="fill";
+    orientation="horizontal";
+    {
+      Button;
+      text="绘制函数";
+      layout_weight=1;
+      layout_marginLeft="8dp";
+      layout_marginRight="8dp";
+      id="Drawing";
+    };
+    {
+      Button;
+      text="还原";
+      layout_weight=1;
+      layout_marginLeft="8dp";
+      layout_marginRight="8dp";
+      id="Reduction";
+    };
+    {
+      Button;
+      text="画笔颜色";
+      layout_weight=1;
+      layout_marginLeft="8dp";
+      layout_marginRight="8dp";
+      id="selectColor";
+    };
+  };
+  {
+    TextView;
+    text="画笔大小:50";
+    id="paintSizes";
+    layout_marginLeft="8dp";
+    layout_marginRight="8dp";
+  };
+  {
+    SeekBar;
+    Min=20;
+    Max=100;
+    layout_width="fill";
+    id="paintSizeSeekBar";
+
+    --layout_margin="15dp";
+  };
+  {
+    ImageView;
+    id="surface";
+    layout_height="fill";
+    layout_width="fill";
+  };
+};
+
+
+activity.setTheme(R.style.Theme_Material3_Blue)--设置md主题
+activity.setTitle("二次函数绘制")
+activity.setContentView(loadlayout(layout))
+
+paintSizeSeekBar.setProgress(50)
+
+
+paintSizeSeekBar.setOnSeekBarChangeListener{
+  onStartTrackingTouch=function()
+
+  end,
+  onStopTrackingTouch=function()
+
+  end,
+  onProgressChanged=function(view,value)
+    paintSizes.setText("画笔大小:"..tostring(value))
+  end
+}
+
+function drawAPlaneRightAngleCoordinateSystem()
+  import "android.graphics.Bitmap"
+  import "android.graphics.Canvas"
+  baseBitmap=Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888);
+  width=baseBitmap.getWidth();
+  height=baseBitmap.getHeight();
+  canvas=Canvas(baseBitmap)
+  import "android.graphics.Paint"
+  spaint=Paint();
+  spaint.setStrokeWidth(1);
+  spaint.setColor(-16777216);
+  spaint.setAntiAlias(true);
+
+  paint=Paint();
+  paint.setStrokeWidth(1);
+  paint.setColor(-65536);
+  paint.setAntiAlias(true);
+
+  Textpaint=Paint();
+  Textpaint.setTextSize(40);
+  Textpaint.setColor(-16776961);
+  canvas.drawColor(-1);
+  canvas.drawLine(0,(width/2),width,(width/2),paint);
+  canvas.drawLine((width/2),0,(width/2),width,paint);
+  canvas.drawLine((width/2),0,((width/2)-(width/50)),(width/(width/20)),paint);
+  canvas.drawLine((width/2),0,((width/2)+(width/50)),(width/(width/20)),paint);
+  canvas.drawText("y",((width/2)+(width/50)),(width/20),Textpaint);
+  canvas.drawLine(width,(width/2),(width-(width/(width/20))),((width/2)-(width/50)),paint);
+  canvas.drawLine(width,(width/2),(width-(width/(width/20))),((width/2)+(width/50)),paint);
+  canvas.drawText("x",(width-(width/40)),((width/2)+(width/20)),Textpaint);
+  canvas.drawLine((((width/5)*4)+(width/10)),(width/2),(((width/5)*4)+(width/10)),((width/2)-(width/50)),spaint);
+  canvas.drawText("4",(((width/5)*4)+(width/10)),((width/2)+(width/20)),Textpaint);
+  canvas.drawLine(((width/5)*4),(width/2),((width/5)*4),((width/2)-(width/50)),spaint);
+  canvas.drawText("3",((width/5)*4),((width/2)+(width/20)),Textpaint);
+  canvas.drawLine((((width/5)*4)-(width/10)),(width/2),(((width/5)*4)-(width/10)),((width/2)-(width/50)),spaint);
+  canvas.drawText("2",(((width/5)*4)-(width/10)),((width/2)+(width/20)),Textpaint);
+  canvas.drawLine((((width/5)*4)-(width/5)),(width/2),(((width/5)*4)-(width/5)),((width/2)-(width/50)),spaint);
+  canvas.drawText("1",(((width/5)*4)-(width/5)),((width/2)+(width/20)),Textpaint);
+  canvas.drawLine((((width/2)/5)*4),(width/2),(((width/2)/5)*4),((width/2)-(width/50)),spaint);
+  canvas.drawText("-1",(((width/2)/5)*4),((width/2)+(width/20)),Textpaint);
+  canvas.drawLine(((((width/2)/5)*4)-(width/10)),(width/2),((((width/2)/5)*4)-(width/10)),((width/2)-(width/50)),spaint);
+  canvas.drawText("-2",((((width/2)/5)*4)-(width/10)),((width/2)+(width/20)),Textpaint);
+  canvas.drawLine(((((width/2)/5)*4)-(width/5)),(width/2),((((width/2)/5)*4)-(width/5)),((width/2)-(width/50)),spaint);
+  canvas.drawText("-3",((((width/2)/5)*4)-(width/5)),((width/2)+(width/20)),Textpaint);
+  canvas.drawLine(((((width/2)/5)*4)-((width/10)*3)),(width/2),((((width/2)/5)*4)-((width/10)*3)),((width/2)-(width/50)),spaint);
+  canvas.drawText("-4",((((width/2)/5)*4)-((width/10)*3)),((width/2)+(width/20)),Textpaint);
+  canvas.drawText("0",((width/2)+(width/50)),((width/2)+(width/20)),Textpaint);
+  canvas.drawLine((width/2),(((width/2)/5)*4),((width/2)+(width/50)),(((width/2)/5)*4),spaint);
+  canvas.drawText("1",((width/2)-(width/20)),(((width/2)/5)*4),Textpaint);
+  canvas.drawLine((width/2),((((width/2)/5)*4)-(width/10)),((width/2)+(width/50)),((((width/2)/5)*4)-(width/10)),spaint);
+  canvas.drawText("2",((width/2)-(width/20)),((((width/2)/5)*4)-(width/10)),Textpaint);
+  canvas.drawLine((width/2),((((width/2)/5)*4)-(width/5)),((width/2)+(width/50)),((((width/2)/5)*4)-(width/5)),spaint);
+  canvas.drawText("3",((width/2)-(width/20)),((((width/2)/5)*4)-(width/5)),Textpaint);
+  canvas.drawLine((width/2),((((width/2)/5)*4)-((width/10)*3)),((width/2)+(width/50)),((((width/2)/5)*4)-((width/10)*3)),spaint);
+  canvas.drawText("4",((width/2)-(width/20)),((((width/2)/5)*4)-((width/10)*3)),Textpaint);
+  canvas.drawLine((width/2),((width/5)*4),((width/2)+(width/50)),((width/5)*4),spaint);
+  canvas.drawText("-1",((width/2)-(width/20)),(((width/5)*4)-(width/5)),Textpaint);
+  canvas.drawLine((width/2),(((width/5)*4)-(width/10)),((width/2)+(width/50)),(((width/5)*4)-(width/10)),spaint);
+  canvas.drawText("-2",((width/2)-(width/20)),(((width/5)*4)-(width/10)),Textpaint);
+  canvas.drawLine((width/2),(((width/5)*4)-(width/5)),((width/2)+(width/50)),(((width/5)*4)-(width/5)),spaint);
+  canvas.drawText("-3",((width/2)-(width/20)),((width/5)*4),Textpaint);
+  canvas.drawLine((width/2),((((width/2)/5)*4)+(width/2)),((width/2)+(width/50)),((((width/2)/5)*4)+(width/2)),spaint);
+  canvas.drawText("-4",((width/2)-(width/20)),((((width/2)/5)*4)+(width/2)),Textpaint);
+  surface.setImageBitmap(baseBitmap)
+end
+
+drawAPlaneRightAngleCoordinateSystem()
+
+paintColor=0xff000000
+
+function Drawing.onClick()
+  import "android.graphics.Paint"
+  import "android.graphics.Color"
+  mPaintLine = Paint();
+  mPaintLine.setAntiAlias(true)
+  mPaintLine.setStrokeWidth(paintSizeSeekBar.getProgress()/10);
+  mPaintLine.setStyle(Paint.Style.STROKE);
+  mPaintLine.setColor(paintColor);
+  mPaintLine.setFlags(Paint.ANTI_ALIAS_FLAG);
+  import "android.graphics.Path"
+  local path=Path();
+  if aTiet.Text=="" then
+    a=0
+   else
+    a=aTiet.Text
+  end
+  if bTiet.Text=="" then
+    b=0
+   else
+    b=bTiet.Text
+  end
+  if cTiet.Text=="" then
+    c=0
+   else
+    c=cTiet.Text
+  end
+  for x=-1000,1000 do
+    y=tointeger((-a/100*(x^2))+(-b*x)+-c*100);
+    path.lineTo(width/2+x,height/2+y);
+  end
+  canvas.drawPath(path,mPaintLine);
+  surface.setImageBitmap(baseBitmap)
+end
+
+
+function Reduction.onClick()
+  drawAPlaneRightAngleCoordinateSystem()
+end
+
+function selectColor.onClick()
+  local colorTitle={"黑色","蓝色","青色","灰色","绿色","红色","黄色"}
+  local colorValue={
+    0xFF000000,
+    0xff0c0beb,
+    0xff02e4fc,
+    0xff7e9398,
+    0xff26e330,
+    0xffc92a18,
+    0xffeee226,
+  }
+
+  AlertDialog.Builder(this)
+  .setTitle("画笔颜色")
+  .setItems(colorTitle,{onClick=function(l,v)
+      paintColor=colorValue[v+1]
+    end
+  })
+  .show()
+end
+
+function onCreateOptionsMenu(menu)
+  menu.add("联系作者").onMenuItemClick=function(a)
+    import "android.net.Uri"
+    import "android.content.Intent"
+    url="mqqapi://card/show_pslcard?src_type=internal&source=sharecard&version=1&uin=3373587110"
+    activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+  end
+  menu.add("羚").onMenuItemClick=function(a)
+
+  end
+end
+
+
+》》
+《《QQ变音》》
+《《--未适配Android11
+function QQ变音(qq,FromPath)
+  import "java.io.File"
+  local SDC=Environment.getExternalStorageDirectory().toString()
+  local time=os.date("%Y%m")
+  local time2=tonumber(os.date("%d"))
+  local RootDirectory=SDC.."/Android/data/com.tencent.mobileqq/Tencent/MobileQQ/"..qq.."/ptt/"..time.."/"..time2.."/"
+  local FileTable=luajava.astable(File(RootDirectory).listFiles())
+  TimeTable={}
+  for i=1,#FileTable do
+    local path=FileTable[i]
+    local FileName=File(path.toString()).getName()
+    if FileName~=nil then
+      local FileNameTime=tonumber(FileName:match("_(.-).slk"))
+      table.insert(TimeTable,FileNameTime)
+    end
+  end
+  table.sort(TimeTable)
+  local FileNameTime=TimeTable[#TimeTable]
+  if FileNameTime~=nil then
+    local FilePath=RootDirectory.."stream_"..FileNameTime..".slk"
+    LuaUtil.copyDir(FromPath,FilePath)
+  end
+end
+
+QQ变音("3373587110","/storage/emulated/0/music/DJ Ubur Ubur x Paket Phoenix IndiHome_Seven Nation.mp3")》》
+
+《《遍历设置字体》》
+《《--遍历设置字体
+import "android.graphics.Typeface"
+font=Typeface.create("宋体",Typeface.BOLD)
+function setFont(view)
+if luajava.instanceof(view,TextView) then
+  view.setTypeface(font)
+  elseif luajava.instanceof(view,ViewGroup) then
+  for i=0,view.getChildCount()-1 do
+    setFont(view.getChildAt(i))
+    end
+  end
+--来源：柯南
+end
+setFont(activity.getDecorView())》》
+
+《《仿QQ顶部提示动画》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+--import "layout"
+
+layout={
+  LinearLayout,
+  orientation="vertical",
+  layout_width="fill",
+  layout_height="fill",
+  {
+    LinearLayout,
+    layout_width="fill",
+    layout_height="56dp";
+    background="#ffffff";
+    elevation="2dp";
+    Visibility="invisible";
+    id="linear";
+    {
+      TextView;
+      text="仿QQ提示";
+      textColor="#009688";
+      layout_gravity="center";
+      textSize="14dp";
+      layout_marginLeft="16dp";
+      };
+  },
+{
+  Button;
+  text="显示";
+  id="button";
+  layout_gravity="center";
+  layout_marginTop="100dp";
+  };
+};
+
+
+activity.setContentView(loadlayout(layout))
+
+button. onClick=function()
+  linear.setVisibility(View.VISIBLE)
+import "android.view.animation.*"
+linear.startAnimation(TranslateAnimation(0,0,-linear.height,0).setDuration(200))
+--来源：Androlua官方二群
+--作者：Paixs
+task(1000,function()
+  linear.setVisibility(View.INVISIBLE)
+--import "android.view.animation.*"
+linear.startAnimation(TranslateAnimation(0,0,0,-linear.height).setDuration(200))
+  end)
+
+end》》
+
+《《Page加列表显示实例》》
+《《require "import"
+import "android.widget.LinearLayout"
+import "android.widget.TextView"
+import "android.widget.PageView"
+import "android.widget.Button"
+import "android.webkit.WebSettings$TextSize"
+import "android.graphics.ColorFilter"
+import "android.widget.ImageView"
+import "android.widget.FrameLayout"
+import "android.widget.ListView"
+import "com.androlua.LuaAdapter"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+--import "layout"
+--import "nihao"
+--import "liebiao"
+--activity.setTitle('AndroLua+')
+--activity.setTheme(android.R.style.Theme_Holo_Light)
+
+
+
+layout={--第一个界面
+  LinearLayout;
+  orientation="vertical";
+{
+  LinearLayout;
+  layout_width="fill";
+  orientation="vertical";
+  layout_height="fill";
+  {
+    LinearLayout;
+    layout_width="fill";
+    orientation="horizontal";
+    layout_height="3dp";
+    layout_marginTop="1dp";
+    {
+      TextView;
+      layout_width="50%w";
+      background="#000000";
+      layout_height="fill";
+      id="hg1";
+    };
+  };
+  {
+    PageView;
+    layout_width="fill";
+    id="page";
+    --orientation="vertical";
+    layout_height="fill";
+    pages={
+      {
+        LinearLayout;
+        layout_width="fill";
+        orientation="vertical";
+        layout_height="fill";
+        --重点来了
+         {
+    ListView;
+    id="id";
+    layout_width="fill";
+  };
+  {
+    ListView;
+    id="id2";
+    layout_width="fill";
+  };
+  {
+    ListView;
+    id="id3";
+    layout_width="fill";
+  };
+       -- 重点结束
+        
+                
+      };
+      {
+        LinearLayout;
+        layout_width="fill";
+        orientation="vertical";
+        layout_height="fill";
+     
+        --右边的按钮
+        {
+          Button;
+          layout_width="fill";
+        };
+      --结束
+      };
+    };
+  };
+}
+};
+
+
+nihao={--第二个界面
+  FrameLayout;
+  id="fu";
+  layout_width="fill";
+   {
+    LinearLayout;
+    orientation="vertical";
+    layout_margin="6dp";
+    layout_width="fill";
+    {
+      TextView;
+      layout_margin="7";
+      layout_width="fill";
+      TextSize="5sp";
+      id="标题";
+      textColor="#FF2A2A2A";
+      text="hello AndroLua+";
+    };
+    {
+      TextView;
+      textColor="#FFA1A1A1";
+      layout_width="fill";
+      id="提示";
+    };
+  };
+  {
+    LinearLayout;
+    orientation="vertical";
+    layout_width="fill";
+    layout_gravity="center";
+    {
+      ImageView;
+      layout_marginRight="4dp";
+      layout_height="15dp";
+      layout_width="15dp";
+      id="icon";
+      ColorFilter="#FF000000";
+      layout_gravity="right";
+    };
+  };
+};
+
+
+
+
+activity.setContentView(loadlayout(layout))
+--下面这一窜是控制滑动的东西
+--我也不知道是控制是什么的
+page.addOnPageChangeListener{
+onPageScrolled=function(p,pO,pp)
+if pO~=0 then
+hg1.setX(activity.getWidth()/2*pO)
+end
+end,
+}
+--结束
+
+----来源：Androlua官方二群
+----作者：ywcz
+
+
+--配置列表参数__item布局表文件____开始
+图片="Right.png"    --1楼开始
+adp=LuaAdapter(activity,nihao)
+adp.add{标题="LCD密度",提示="界面清爽不臃肿",icon=图片}
+id.setAdapter(adp)--1楼结尾
+
+adp=LuaAdapter(activity,nihao)    --二楼开始
+adp.add{标题="Host优化",提示="优化Host提高访问网络效率"}
+adp.add{标题="WiFi密码查看",提示="查看您连接的WiFi的密码",icon=图片}
+adp.add{标题="本机信息修改",提示="厂家、型号、内核等",icon=图片}
+adp.add{标题="虚拟内存设置",提示="提高程序运行速度",icon=图片}
+adp.add{标题="设置多点触控",提示="十指切水果",icon=图片}
+adp.add{标题="触摸与滑动设置",提示="触摸灵敏度等",icon=图片}
+adp.add{标题="Build.prop编辑器",提示="编辑Build.prop配置文件",icon=图片}
+id2.setAdapter(adp)--2楼结尾
+
+--[[adp=LuaAdapter(activity,liebiao)   --3楼开始
+adp.add{标题="你好",提示="晚上来搞笑的",icon=图片}
+id3.setAdapter(adp)]]
+--3楼结束
+--配置列表参数__item布局表文件____结束
+id.onItemClick=function(l,v,p,i)
+  print("点击了"..v.Tag.标题.Text)
+end
+
+id2.onItemClick=function(l,v,p,i)
+  print("点击了"..v.Tag.标题.Text)
+end
+
+
+
+
+》》
+
+《《自绘制开关》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+import "android.graphics.drawable.GradientDrawable"
+
+--activity.setTitle('AndroLua+')
+--activity.setTheme(android.R.style.Theme_Holo_Light)
+
+activity.setContentView(loadlayout({
+  LinearLayout;
+  gravity="center";
+  layout_height="fill";
+  layout_width="fill";
+  orientation="vertical";
+  --BackgroundColor="#ffffff00",
+  id="fhhk";
+  {
+    Switch;
+    id="Grt";
+  };
+  {
+    Switch;
+    id="Grt1";
+  };
+  {
+    Switch;
+    id="Grt2";
+  };
+  {
+    Switch;
+    id="Grt3";
+  };
+  {
+    Switch;
+  };
+}))
+
+--转换像素单位
+dip={toPx=function(context, dpValue)
+    scale = context.getResources().getDisplayMetrics().density;
+    return dpValue * scale + 0.5
+  end}
+
+function CircleBack_SeekDra(InsideColor,Ad_Size,ble,Colorse3)
+  local colors = InsideColor
+  local Sizes=dip.toPx(this,Ad_Size)--设置开关大小
+  local Stroke=dip.toPx(this,7)--设置拖块边距
+  local Track_Stroke=dip.toPx(this,0)--设置背景边距
+  local drawable = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,{});
+  drawable.setCornerRadius(Sizes/2);
+  drawable.setColor(InsideColor)
+  if ble
+    drawable.setStroke(Stroke, 0x00ffffff)
+    drawable.setSize(Sizes,Sizes)
+   else
+    drawable.setAlpha(60)
+    drawable.setStroke(Track_Stroke, 0x00ffffff)
+  end
+  drawable.setGradientType(GradientDrawable.RECTANGLE);
+  return drawable
+end
+
+Switch_x=function(view,Colors,Colors2,Colors3,Ad_Size)
+  pcall(function()
+    if view.isChecked()
+      Colorse=Colors
+      Colorse2=Colors
+     else
+      Colorse=Colors2
+      Colorse2=Colors3
+    end
+    local padd_W=dip.toPx(this,Ad_Size/2.5)
+    view.setThumbDrawable(CircleBack_SeekDra(Colorse,Ad_Size,true))
+    .setTrackDrawable(CircleBack_SeekDra(Colorse2,Ad_Size,false))
+    .setPadding(padd_W,padd_W,padd_W,padd_W)
+  end)
+end
+
+Grt.setOnCheckedChangeListener({
+  onCheckedChanged=function(buttonView, isChecked)
+    Switch_x(Grt,Ad_Color,Ad_Color2,Ad_Color3,Ad_Size,Ad_Padding)--更新状态
+  end})
+Grt1.setOnCheckedChangeListener({
+  onCheckedChanged=function(buttonView, isChecked)
+    Switch_x(Grt1,0xffff6e17,0xFFECECEC,0xff000000,35,7)--预加载
+  end})
+Grt2.setOnCheckedChangeListener({
+  onCheckedChanged=function(buttonView, isChecked)
+    Switch_x(Grt2,0xff2ecbff,0xFFECECEC,0xff000000,45,7)--预加载
+  end})
+Grt3.setOnCheckedChangeListener({
+  onCheckedChanged=function(buttonView, isChecked)
+    Switch_x(Grt3,0xffae5dff,0xFFECECEC,0xff000000,55,7)--预加载
+  end})
+
+Ad_Color=0xffff0000--边框颜色与拖块选中颜色
+Ad_Color3=0xff000000--设置底部背景未选中颜色
+Ad_Color2=0xFFECECEC
+Ad_Size=25--按钮的大小dip
+Ad_Padding=7--设置拖块边距范围dip
+Switch_x(Grt,Ad_Color,Ad_Color2,Ad_Color3,Ad_Size,Ad_Padding)--预加载
+Switch_x(Grt1,0xffff6e17,0xFFECECEC,0xff000000,35,7)--预加载
+Switch_x(Grt2,0xff2ecbff,0xFFECECEC,0xff000000,45,7)--预加载
+Switch_x(Grt3,0xffae5dff,0xFFECECEC,0xff000000,55,7)--预加载
+》》
+
+《《绘制有行数的编辑框》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+
+
+activity.setTitle('AndroLua+')
+--by小菜鸟
+--需要配合ScrollView使用
+--2017/09/05/13:00
+--activity.setTheme(android.R.style.Theme_Holo_Light)
+activity.setContentView(loadlayout({
+  LinearLayout;
+  layout_height="fill";
+  orientation="vertical";
+  layout_width="fill";
+  {
+    ScrollView;
+    layout_height="fill";
+    DescendantFocusability=131072;
+    id="s";
+    layout_width="fill";
+    {
+      EditText;
+      id="v";
+      text=" ";
+      layout_height="fill";
+      layout_width="fill";
+    };
+  };
+}))
+function getTextWidth(paint,str)--计算文字宽度
+  local iRet = 0;
+  if str ~= nil and #str > 0 then
+    local len =#str;
+    local widths =float[len];
+    paint.getTextWidths(str, widths);
+    for j = 0,len-1 do
+      iRet=iRet+Math.ceil(widths[j]);
+    end
+  end
+  return iRet;
+end
+import "android.graphics.Color"
+import "android.graphics.Paint"
+v.setFocusable(true)
+v.background=LuaDrawable(function(canvas,paint,d)
+  paint.setColor(Color.GRAY);--颜色
+  paint.setAntiAlias(true);
+  paint.setStrokeWidth(2);--宽度
+  if(#v.Text~=0)then
+    paint.setTextSize(v.getTextSize()-5);--行号文字大小
+    paint.setStyle(Paint.Style.FILL);
+    for l=0,v.getLineCount() do
+      Y=((l+1)*v.getLineHeight())-(v.getLineHeight()/10);
+      canvas.drawText(tostring(l+1),0,Y,paint);--行号
+      canvas.save();
+      v.setPadding(getTextWidth(paint,tostring(l+1))+15,0,0,0)--设置左边距
+    end
+   else
+    Y=((1)*v.getLineHeight())-(v.getLineHeight()/10);
+    canvas.drawText("1",0,Y,paint);
+    canvas.save();
+    v.setPadding(getTextWidth(paint,"1")+15,0,0,0)--设置左边距
+  end
+  y=v.getLineCount()*v.getLineHeight();
+  canvas.drawLine(v.getCompoundPaddingLeft()-5,0,v.getCompoundPaddingLeft()-5,v.getHeight()+y,paint);--左边的线条
+  canvas.save();
+  canvas.restore();
+end)
+s.onTouch=function(v,event)
+  v.requestFocusFromTouch();
+  return false;
+end》》
+
+《《自绘制气泡拖动条》》
+《《require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+
+--activity.setTitle('AndroLua+')
+--activity.setTheme(android.R.style.Theme_Holo_Light)
+activity.setContentView(loadlayout({
+  ScrollView;
+  layout_height="fill";
+  layout_width="fill";
+  {
+    LinearLayout;
+    layout_width="fill";
+    gravity="top";
+    layout_height="fill";
+    orientation="vertical";
+    {
+      TextView;
+      layout_width="fill";
+      padding="15dp";
+      id="t1";
+    };
+    {
+      View;
+      layout_width="fill";
+      layout_height="35dp";
+      id="animseekBar";
+    };
+    {
+      TextView;
+      layout_width="fill";
+      padding="15dp";
+      id="t2";
+    };
+  };
+}
+))
+
+import "android.graphics.*"
+import "android.graphics.Paint$Style"
+import "android.view.animation.*"
+import "android.animation.ObjectAnimator"
+import "android.animation.PropertyValuesHolder"
+
+dip2px=function(dpValue)
+  local scale = activity.getResources().getDisplayMetrics().density;
+  return dpValue * scale + 0.5
+end
+
+sp2px=function(spValues)
+  local fontScale = activity.getResources().getDisplayMetrics().scaledDensity;
+  return spValues * fontScale+ 0.5
+end
+
+getStatusBarHeight=function()
+  _,statusBarHeight2=xpcall(function()
+    local clazz=Class.forName("com.android.internal.R$dimen")
+    local object = clazz.newInstance();
+    local height = Integer.parseInt(tostring(clazz.getField("status_bar_height").get(object)))
+    return this.getResources().getDimensionPixelSize(height);
+  end,
+
+  function(a)
+    _,statusBarHeight1=pcall(function()
+      local resourceId = this.getResources().getIdentifier("status_bar_height", "dimen", "android");
+      if resourceId > 0
+        return this.getResources().getDimensionPixelSize(resourceId);
+      end
+    end,
+    function(e)
+    end,nil)
+
+  end,
+  nil)
+  if type(statusBarHeight2):lower()=="number"
+    return statusBarHeight2
+   elseif type(statusBarHeight1):lower()=="number"
+    return statusBarHeight1
+   else
+    return 0
+  end
+end
+
+BgColor=0xFFBDBDBD--背景色
+TopColor=0xFF9C27B0--进度条颜色
+TopHandleColor=0xFF9C27B0--滑块颜色
+BubblesColor=0xffffffff--气泡字体颜色
+BgHeight=dip2px(3)--背景高度
+TopHeight=dip2px(4)--进度条高度
+TopHandle=dip2px(8)--滑块半径
+Max=100--最大值
+Dragprogress=0--当前进度
+CanvasMargin=dip2px(48)--边距
+bubblesTextSize=sp2px(12)--气泡内文字大小
+Seekbarids=animseekBar
+
+import "android.content.Context"
+mWindowManager = activity.getSystemService(Context.WINDOW_SERVICE);
+
+IndicatorWindow=function(getH,getW)
+  local mLayoutParams = WindowManager.LayoutParams();
+  mLayoutParams.gravity = Gravity.START | Gravity.BOTTOM;
+  mLayoutParams.width =getW;
+  mLayoutParams.height = getH;
+  mLayoutParams.format = PixelFormat.TRANSLUCENT;
+  mLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+  | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+  | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
+  --MIUI禁止了开发者使用TYPE_TOAST，Android 7.1.1 对TYPE_TOAST的使用更严格
+  if Build.MANUFACTURER:lower()~="xiaomi" or Build.VERSION.SDK_INT >= 25
+    mLayoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;
+   else
+    mLayoutParams.type = WindowManager.LayoutParams.TYPE_TOAST;
+  end
+  return mLayoutParams
+end
+
+
+ShowBubbles=function(ids)
+  local mBubbleView=
+  {
+    LinearLayout;
+    layout_width="fill";
+    layout_height="fill";
+    id="Mcft_Main",
+    {
+      View,
+      id=ids,
+      layout_width="54dp";
+      layout_height="55dp";
+      Visibility=View.GONE,
+    }
+  }
+  mWindowManager.addView(loadlayout(mBubbleView), IndicatorWindow(0,0) );
+end
+
+PaintBubbles=function(progess)
+  newPaint=Paint()
+  newPaint.setTextSize(bubblesTextSize)
+  TextMin=newPaint.measureText(tostring(progess))
+  Indicator=sp2px(24)
+  BubblesSize=bubblesTextSize+sp2px(3)
+  local Paintd=LuaDrawable(function(canvas,paint)
+    local cW=canvas.Width
+    local cH=canvas.Height
+    paint.setAntiAlias(true)
+    paint.setStyle(Style.FILL);
+
+    paint.setFakeBoldText(false)
+    paint.setTextSize(bubblesTextSize)
+
+    paint.setColor(TopHandleColor)
+    local path =Path()
+    path.moveTo(Indicator/2,(cH/1.75))
+    path.lineTo(cW-(Indicator/2),cH/1.75)
+    path.lineTo(cW/2,cH)
+    path.close()
+    canvas.drawPath(path, paint)
+
+    canvas.drawCircle(cW/2,cH/2,BubblesSize, paint);
+
+    paint.setColor(BubblesColor)
+    canvas.drawText(tostring(progess),(cW/2)-(TextMin/2),(cH/2)+(bubblesTextSize/2.5),paint)
+  end)
+  return {draw=Paintd,Circlesize=(BubblesSize*2)+Indicator}
+end
+
+
+
+
+
+
+locationUpdate=function(views,getX,getY,progess)
+  local outRect1 = Rect();
+  activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(outRect1);
+  local WidowHeight=outRect1.height()
+  -Seekbarids.getParent().getHeight()
+  local clazz=Class.forName("com.android.internal.R$dimen")
+  local object = clazz.newInstance();
+  local height = Integer.parseInt(tostring(clazz.getField("status_bar_height").get(object)))
+  local status_bar_height = this.getResources().getDimensionPixelSize(height);
+
+  local BuDraw=PaintBubbles(progess)
+  views.setBackground(BuDraw.draw)
+  views.setX(getX+((CanvasMargin/2)-(views.getWidth()/2)))
+  views.setY((getY+status_bar_height)-(views.getHeight()/2))
+  --views.setImageDrawable(BuDraw.draw)
+  local newParams=IndicatorWindow(outRect1.height(),Seekbarids.getParent().getWidth())
+  mWindowManager.updateViewLayout(views.getParent(), newParams);
+
+end
+
+LogoutBubble=function(view)
+  mWindowManager.removeViewImmediate(view.getParent());
+end
+
+
+PropertyS=function(a,b,view,isType)
+  local Attribute_definition = PropertyValuesHolder.ofFloat("method",{ a,b})
+  local mValueAnimator = ObjectAnimator.ofPropertyValuesHolder({Attribute_definition})
+  .setStartDelay(0)
+  .setInterpolator(AnticipateOvershootInterpolator())
+  .setDuration(500)
+  mValueAnimator.addUpdateListener({
+    onAnimationUpdate=function(animation)
+      local Animationaprogress=animation.getAnimatedValue()
+      if isType
+        view.setVisibility(View.VISIBLE)
+      end
+      view.setAlpha(Animationaprogress)
+      view.setPivotY(view.getHeight()*1.4)
+      .setPivotX(view.getWidth()/2)
+      .setScaleX(Animationaprogress)
+      .setScaleY(Animationaprogress)
+      --.setRotationX(-90+(Animationaprogress*90))
+      AnimFolatN=Animationaprogress
+      SeekbarAmin.invalidateSelf()
+    end,
+  });
+  mValueAnimator.addListener({
+    onAnimationEnd=function()
+      if not isType
+        view.setVisibility(View.GONE)
+        LogoutBubble(view)
+      end
+    end
+  }).start()
+end
+
+
+--mBubbleView.setVisibility(GONE); --防闪烁
+
+--mLayoutParams.x = (mBubbleCenterRawX + 0.5f);
+--mWindowManager.updateViewLayout(mBubbleView, mLayoutParams);
+
+
+getWidthPercentage=function(w,max,proges)
+  local WidthDivision=(w/max)*proges
+  return {TowX=WidthDivision,Proges=proges}
+end
+
+AnimFolatN=0
+SeekbarAmin=LuaDrawable(function(canvas,piant,d)
+  canvasWidth=canvas.getWidth()-CanvasMargin
+  canvasHeight=canvas.getHeight()
+
+  canvas.translate(CanvasMargin/2,0)
+
+  piant.setStrokeCap(Paint.Cap.ROUND)
+  piant.setAntiAlias(true)
+
+  --画背景进度条
+  piant.setColor(BgColor);
+  piant.setStrokeWidth(BgHeight);
+  canvas.drawLines({0,canvasHeight/2,canvasWidth,canvasHeight/2},piant)
+
+  --画顶部进度条
+  piant.setColor(TopColor);
+  piant.setStrokeWidth(TopHeight+((TopHeight/4)*AnimFolatN));
+  canvas.drawLines({0,canvasHeight/2,getWidthPercentage(canvasWidth,Max,Dragprogress).TowX,canvasHeight/2},piant)
+
+  --画滑块
+  piant.setColor(0x23000000);
+  canvas.drawCircle(getWidthPercentage(canvasWidth,Max,Dragprogress).TowX,canvasHeight/2,((TopHandle*1.7)*AnimFolatN), piant);
+  piant.setColor(TopHandleColor);
+  canvas.drawCircle(getWidthPercentage(canvasWidth,Max,Dragprogress).TowX,canvasHeight/2,TopHandle-((TopHandle)*AnimFolatN), piant);
+end)
+
+Seekbarids.background=SeekbarAmin
+
+getPView=function(a)
+  a=a.getParent()
+  while a~=nil and not tostring(a):find("ScrollView")
+    a=a.getParent()
+  end
+  return a==nil and 0 or a.getScrollY()
+end
+
+Seekbarids.onTouch=function(v,event)
+  local Maction=event.getAction()
+  if Maction==MotionEvent.ACTION_DOWN
+    if event.getX()>CanvasMargin/2 and event.getX()<v.getWidth()-CanvasMargin/2
+      and event.getY()>(v.getHeight()/2)-TopHandle and event.getY()<(v.getHeight()/2)+TopHandle
+      WithinRange=true
+      ShowBubbles("bubbles")
+      PropertyS(0,1,bubbles,true)
+      v.getParent().requestDisallowInterceptTouchEvent(true);
+     else
+      WithinRange=false
+    end
+   elseif Maction==MotionEvent.ACTION_MOVE
+    if WithinRange
+      v.getParent().requestDisallowInterceptTouchEvent(true);
+      local getXTo=event.getX()
+      local ranger=(event.getX()-CanvasMargin/2)/(v.getWidth()-CanvasMargin)
+      --计算百分比
+      Dragprogress=tointeger((ranger<=0 and 0 or (ranger>=1 and 1 or ranger))*Max)
+      locationUpdate(bubbles,getWidthPercentage(Seekbarids.getWidth()-CanvasMargin,Max,Dragprogress).TowX
+      ,Seekbarids.getY()-getPView(v),Dragprogress)
+      SeekbarAmin.invalidateSelf()
+    end
+   elseif Maction==MotionEvent.ACTION_UP
+    v.getParent().requestDisallowInterceptTouchEvent(false);
+    pcall(function()
+      if bubbles and WithinRange
+        PropertyS(1,0,bubbles,false)
+      end
+    end)
+  end
+  return true;
+end
+
+t1.text=[[
+Android一词的本义指“机器人”，同时也是Google于2007年11月5日宣布的基于Linux平台的开源手机操作系统的名称，该平台由操作系统、中间件、用户界面和应用软件组成。
+]]
+t2.text=[[
+2003年10月，Andy Rubin等人创建Android公司，并组建Android团队。
+2005年8月17日，Google低调收购了成立仅22个月的高科技企业Android及其团队。安迪鲁宾成为Google公司工程部副总裁，继续负责Android项目。
+2007年11月5日，谷歌公司正式向外界展示了这款名为Android的操作系统，并且在这天谷歌宣布建立一个全球性的联盟组织，该组织由34家手机制造商、软件开发商、电信运营商以及芯片制造商共同组成，并与84家硬件制造商、软件开发商及电信营运商组成开放手持设备联盟（Open Handset Alliance）来共同研发改良Android系统，这一联盟将支持谷歌发布的手机操作系统以及应用软件，Google以Apache免费开源许可证的授权方式，发布了Android的源代码。[3] [4]
+2008年，在GoogleI/O大会上，谷歌提出了AndroidHAL架构图，在同年8月18号，Android获得了美国联邦通信委员会（FCC）的批准，在2008年9月，谷歌正式发布了Android 1.0系统，这也是Android系统最早的版本。
+2009年4月，谷歌正式推出了Android 1.5这款手机，从Android 1.5版本开始，谷歌开始将Android的版本以甜品的名字命名，Android 1.5命名为Cupcake（纸杯蛋糕）。该系统与Android 1.0相比有了很大的改进。
+2009年9月，谷歌发布了Android 1.6的正式版，并且推出了搭载Android 1.6正式版的手机HTC Hero（G3），凭借着出色的外观设计以及全新的Android 1.6操作系统，HTC Hero（G3）成为当时全球最受欢迎的手机。Android 1.6也有一个有趣的甜品名称，它被称为Donut（甜甜圈）。
+2010年2月，Linux内核开发者Greg Kroah-Hartman将Android的驱动程序从Linux内核“状态树”（“staging tree”）上除去，从此，Android与Linux开发主流将分道扬镳。在同年5月份，谷歌正式发布了Android 2.2操作系统。谷歌将Android 2.2操作系统命名为Froyo，翻译完名为冻酸奶。
+2010年10月，谷歌宣布Android系统达到了第一个里程碑，即电子市场上获得官方数字认证的Android应用数量已经达到了10万个，Android系统的应用增长非常迅速。在2010年12月，谷歌正式发布了Android 2.3操作系统Gingerbread （姜饼）。
+2011年1月，谷歌称每日的Android设备新用户数量达到了30万部，到2011年7月，这个数字增长到55万部，而Android系统设备的用户总数达到了1.35亿，Android系统已经成为智能手机领域占有量最高的系统。
+2011年8月2日，Android手机已占据全球智能机市场48%的份额，并在亚太地区市场占据统治地位，终结了Symbian（塞班系统）的霸主地位，跃居全球第一。
+2011年9月，Android系统的应用数目已经达到了48万，而在智能手机市场，Android系统的占有率已经达到了43%。继续在排在移动操作系统首位。谷歌将会发布全新的Android 4.0操作系统，这款系统被谷歌命名为Ice Cream Sandwich（冰激凌三明治）。
+2012年1月6日，谷歌Android Market已有10万开发者推出超过40万活跃的应用，大多数的应用程序为免费。Android Market应用程序商店目录在新年首周周末突破40万基准，距离突破30万应用仅4个月。在2011年早些时候，Android Market从20万增加到30万应用也花了四个月。[5]
+2013年11月1日，Android4.4正式发布，从具体功能上讲，Android4.4提供了各种实用小功能，新的Android系统更智能，添加更多的Emoji表情图案，UI的改进也更现代，如全新的HelloiOS7半透明效果。
+2015年，网络安全公司Zimperium研究人员警告，安卓(Android)存在“致命”安全漏洞,黑客发送一封彩信便能在用户毫不知情的情况下完全控制手机。[6]
+2018年10月，谷歌表示，将于2018年12月6日停止Android系统中的Nearby Notifications（附近通知）服务，因为Android用户收到太多的附近商家推销信息的垃圾邮件。[7]
+2020年3月，谷歌的Android安全公告中提到，新更新已经提供了CVE-2020-0069补丁来解决针对联发科芯片的一个严重安全漏洞。[8]
+]]》》
+《《计算平均数,中位数,极差,标准差》》
+《《local numericalArray={10,12,18,20,22,23,23,27,31,32,34,34,38,42,43,48}
+local number=0
+local number2=0
+
+table.sort(numericalArray)
+for index=1,#numericalArray do
+  number=number+numericalArray[index]
+  if index==#numericalArray then
+    local average=number/#numericalArray
+    for index2=1,#numericalArray do
+      number2=number2+(numericalArray[index2]-average)^2
+      if index2==#numericalArray then
+        local variance=number2/#numericalArray
+        if #numericalArray%2==1then
+          mediumOrder=numericalArray[math.floor(#numericalArray/2)+1]
+         else
+          mediumOrder=(numericalArray[math.floor(#numericalArray/2)]+numericalArray[math.floor(#numericalArray/2)+1])/2
+        end
+        print("中位数->"..mediumOrder.."\n平均数->"..average.."\n方差->"..variance.."\n标准差->"..math.sqrt(variance))
+      end
+    end
+  end
+end
+
+》》
