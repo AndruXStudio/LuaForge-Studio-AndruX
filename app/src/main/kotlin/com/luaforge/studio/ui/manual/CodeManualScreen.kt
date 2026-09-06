@@ -43,17 +43,19 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+private data class ManualItem(val title: String, val asset: String)
+
 private val MANUAL_FILES = listOf(
-    "基础代码.txt",
-    "实用代码.txt",
-    "用户界面.txt",
-    "文件操作.txt",
-    "网络操作.txt",
-    "Intent类.txt",
-    "笔记.txt",
-    "Lua教程.txt",
-    "整合代码.txt",
-    "进阶代码.txt",
+    ManualItem("基础代码", "basic.txt"),
+    ManualItem("实用代码", "practical.txt"),
+    ManualItem("用户界面", "ui.txt"),
+    ManualItem("文件操作", "file.txt"),
+    ManualItem("网络操作", "network.txt"),
+    ManualItem("Intent类", "intent.txt"),
+    ManualItem("笔记", "notes.txt"),
+    ManualItem("Lua教程", "lua_tutorial.txt"),
+    ManualItem("整合代码", "integrated.txt"),
+    ManualItem("进阶代码", "advanced.txt"),
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,16 +64,16 @@ fun CodeManualScreen(
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     val context = LocalContext.current
-    var selected by remember { mutableStateOf<String?>(null) }
+    var selected by remember { mutableStateOf<ManualItem?>(null) }
     var body by remember { mutableStateOf("") }
     var loading by remember { mutableStateOf(false) }
 
     LaunchedEffect(selected) {
-        val name = selected ?: return@LaunchedEffect
+        val item = selected ?: return@LaunchedEffect
         loading = true
         body = withContext(Dispatchers.IO) {
             try {
-                context.assets.open("code_manual/$name").bufferedReader().use { it.readText() }
+                context.assets.open("code_manual/${item.asset}").bufferedReader().use { it.readText() }
             } catch (e: Exception) {
                 "加载失败: ${e.message}"
             }
@@ -108,18 +110,18 @@ fun CodeManualScreen(
                             modifier = Modifier.padding(bottom = 8.dp),
                         )
                     }
-                    items(MANUAL_FILES) { name ->
+                    items(MANUAL_FILES) { item ->
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable { selected = name },
+                                .clickable { selected = item },
                             colors = CardDefaults.cardColors(
                                 containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                             ),
                             shape = MaterialTheme.shapes.large,
                         ) {
                             Text(
-                                name.removeSuffix(".txt"),
+                                item.title,
                                 modifier = Modifier.padding(16.dp),
                                 style = MaterialTheme.typography.titleMedium,
                             )
@@ -129,7 +131,7 @@ fun CodeManualScreen(
             } else {
                 Column(Modifier.fillMaxSize()) {
                     TopAppBar(
-                        title = { Text(sel.removeSuffix(".txt")) },
+                        title = { Text(sel.title) },
                         navigationIcon = {
                             IconButton(onClick = { selected = null; body = "" }) {
                                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
