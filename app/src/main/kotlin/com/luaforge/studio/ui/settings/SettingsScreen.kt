@@ -1,5 +1,7 @@
 package com.luaforge.studio.ui.settings
 
+import com.luaforge.studio.ui.components.MorphSwitch
+
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Build
@@ -398,7 +400,7 @@ fun SettingsScreen(
                                 )
                             },
                             trailingContent = {
-                                Switch(
+                                MorphSwitch(
                                     checked = currentSettingsState.dynamicColor,
                                     onCheckedChange = {
                                         updateSettingsWithSave(
@@ -717,7 +719,7 @@ Column(
                             )
                         },
                         trailingContent = {
-                            Switch(
+                            MorphSwitch(
                                 checked = currentSettingsState.enableTabHistory,
                                 onCheckedChange = {
                                     updateSettingsWithSave(
@@ -748,7 +750,7 @@ Column(
                             )
                         },
                         trailingContent = {
-                            Switch(
+                            MorphSwitch(
                                 checked = currentSettingsState.indentGuideEnabled,
                                 onCheckedChange = {
                                     updateSettingsWithSave(
@@ -779,7 +781,7 @@ Column(
                             )
                         },
                         trailingContent = {
-                            Switch(
+                            MorphSwitch(
                                 checked = currentSettingsState.completionCaseSensitive,
                                 onCheckedChange = {
                                     updateSettingsWithSave(
@@ -810,7 +812,7 @@ Column(
                             )
                         },
                         trailingContent = {
-                            Switch(
+                            MorphSwitch(
                                 checked = currentSettingsState.hexColorHighlightEnabled,
                                 onCheckedChange = {
                                     updateSettingsWithSave(currentSettingsState.copy(hexColorHighlightEnabled = it))
@@ -839,7 +841,7 @@ Column(
                             )
                         },
                         trailingContent = {
-                            Switch(
+                            MorphSwitch(
                                 checked = currentSettingsState.smartSortingEnabled,
                                 onCheckedChange = {
                                     updateSettingsWithSave(
@@ -870,7 +872,7 @@ SettingsListItem(
         )
     },
     trailingContent = {
-        Switch(
+        MorphSwitch(
             checked = currentSettingsState.enableSwipeGesture,
             onCheckedChange = {
                 updateSettingsWithSave(
@@ -937,7 +939,7 @@ SettingsListItem(
                                 )
                             },
                             trailingContent = {
-                                Switch(
+                                MorphSwitch(
                                     checked = currentSettingsState.toastBorderEnabled,
                                     onCheckedChange = {
                                         updateSettingsWithSave(currentSettingsState.copy(toastBorderEnabled = it))
