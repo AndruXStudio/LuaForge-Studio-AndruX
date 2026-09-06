@@ -8,6 +8,8 @@ package com.luaforge.studio
 
 import com.luaforge.studio.auth.AuthService
 import com.luaforge.studio.auth.LoginScreen
+import com.luaforge.studio.ui.manual.CodeManualScreen
+import com.luaforge.studio.ui.profile.ProfileTabScreen
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -113,6 +115,8 @@ data class ProjectItem(
 // 主内容类型枚举
 enum class MainContentType {
     PROJECTS,
+    CODE_MANUAL,
+    PROFILE,
     SETTINGS,
     ABOUT
 }
@@ -270,7 +274,6 @@ fun MainScreen(
     val copyrightYear = BuildConfig.COPYRIGHT_YEAR
 
     var currentContentType by remember { mutableStateOf(MainContentType.PROJECTS) }
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val settingsManager = SettingsManager
@@ -323,11 +326,6 @@ fun MainScreen(
     // 监听返回标志，处理从设置/关于页返回时的异步操作
     LaunchedEffect(shouldReturnToProjects) {
         if (shouldReturnToProjects) {
-            // 先关闭抽屉（如果打开）
-            if (drawerState.isOpen) {
-                drawerState.close()
-            }
-            // 切换回项目页面
             currentContentType = MainContentType.PROJECTS
             shouldReturnToProjects = false
         }
@@ -391,7 +389,7 @@ fun MainScreen(
     }
 
     val pageOrder =
-        listOf(MainContentType.PROJECTS, MainContentType.SETTINGS, MainContentType.ABOUT)
+        listOf(MainContentType.PROJECTS, MainContentType.CODE_MANUAL, MainContentType.PROFILE, MainContentType.SETTINGS, MainContentType.ABOUT)
 
     fun showToast(message: String) {
         toast.showToast(message)
@@ -584,175 +582,13 @@ fun MainScreen(
     }
     // --------------------------
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet(
-                modifier = Modifier.widthIn(max = 280.dp),
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 32.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Icon(
-                            Icons.Filled.Code,
-                            contentDescription = stringResource(R.string.cd_logo),
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(36.dp)
-                        )
-                        Text(
-                            text = stringResource(R.string.app_name),
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-
-                HorizontalDivider(
-                    modifier = Modifier.padding(horizontal = 24.dp),
-                    thickness = 0.5.dp,
-                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Column(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    NavigationDrawerItem(
-                        label = {
-                            Text(stringResource(R.string.projects), fontWeight = FontWeight.Medium)
-                        },
-                        selected = currentContentType == MainContentType.PROJECTS,
-                        onClick = {
-                            currentContentType = MainContentType.PROJECTS
-                            scope.launch { drawerState.close() }
-                        },
-                        icon = {
-                            Icon(
-                                Icons.Filled.Folder,
-                                contentDescription = stringResource(R.string.cd_project_folder),
-                                tint = if (currentContentType == MainContentType.PROJECTS)
-                                    MaterialTheme.colorScheme.primary
-                                else
-                                    MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        },
-                        colors = NavigationDrawerItemDefaults.colors(
-                            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                            unselectedContainerColor = Color.Transparent,
-                            selectedTextColor = MaterialTheme.colorScheme.primary,
-                            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            selectedIconColor = MaterialTheme.colorScheme.primary,
-                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant
-                        ),
-                        shape = MaterialTheme.shapes.medium,
-                        modifier = Modifier.padding(vertical = 4.dp)
-                    )
-
-                    NavigationDrawerItem(
-                        label = {
-                            Text(stringResource(R.string.settings), fontWeight = FontWeight.Medium)
-                        },
-                        selected = currentContentType == MainContentType.SETTINGS,
-                        onClick = {
-                            currentContentType = MainContentType.SETTINGS
-                            scope.launch { drawerState.close() }
-                        },
-                        icon = {
-                            Icon(
-                                Icons.Filled.Settings,
-                                contentDescription = stringResource(R.string.settings),
-                                tint = if (currentContentType == MainContentType.SETTINGS)
-                                    MaterialTheme.colorScheme.primary
-                                else
-                                    MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        },
-                        colors = NavigationDrawerItemDefaults.colors(
-                            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                            unselectedContainerColor = Color.Transparent,
-                            selectedTextColor = MaterialTheme.colorScheme.primary,
-                            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            selectedIconColor = MaterialTheme.colorScheme.primary,
-                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant
-                        ),
-                        shape = MaterialTheme.shapes.medium,
-                        modifier = Modifier.padding(vertical = 4.dp)
-                    )
-
-                    NavigationDrawerItem(
-                        label = {
-                            Text(stringResource(R.string.about), fontWeight = FontWeight.Medium)
-                        },
-                        selected = currentContentType == MainContentType.ABOUT,
-                        onClick = {
-                            currentContentType = MainContentType.ABOUT
-                            scope.launch { drawerState.close() }
-                        },
-                        icon = {
-                            Icon(
-                                Icons.Filled.Info,
-                                contentDescription = stringResource(R.string.about),
-                                tint = if (currentContentType == MainContentType.ABOUT)
-                                    MaterialTheme.colorScheme.primary
-                                else
-                                    MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        },
-                        colors = NavigationDrawerItemDefaults.colors(
-                            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                            unselectedContainerColor = Color.Transparent,
-                            selectedTextColor = MaterialTheme.colorScheme.primary,
-                            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            selectedIconColor = MaterialTheme.colorScheme.primary,
-                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant
-                        ),
-                        shape = MaterialTheme.shapes.medium,
-                        modifier = Modifier.padding(vertical = 4.dp)
-                    )
-                }
-
-                Spacer(modifier = Modifier.weight(1f))
-                HorizontalDivider(
-                    modifier = Modifier.padding(horizontal = 24.dp),
-                    thickness = 0.5.dp,
-                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)
-                )
-                Column(
-                    modifier = Modifier.padding(24.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.copyright, copyrightYear),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Text(
-                        text = stringResource(R.string.version, appVersionName),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.outline
-                    )
-                }
-            }
-        }
-    ) {
         BackHandler(
-            enabled = currentContentType != MainContentType.PROJECTS || drawerState.isOpen,
+            enabled = currentContentType != MainContentType.PROJECTS,
             onBack = {
-                scope.launch {
-                    if (drawerState.isOpen) {
-                        drawerState.close()
-                    } else if (currentContentType != MainContentType.PROJECTS) {
-                        shouldReturnToProjects = true
-                    }
+                if (currentContentType == MainContentType.SETTINGS || currentContentType == MainContentType.ABOUT) {
+                    shouldReturnToProjects = true
+                } else {
+                    currentContentType = MainContentType.PROJECTS
                 }
             }
         )
@@ -809,14 +645,10 @@ fun MainScreen(
                         }
                     },
                     navigationIcon = {
-                        IconButton(
-                            onClick = {
-                                scope.launch {
-                                    if (drawerState.isClosed) drawerState.open() else drawerState.close()
-                                }
+                        if (currentContentType == MainContentType.SETTINGS || currentContentType == MainContentType.ABOUT) {
+                            IconButton(onClick = { shouldReturnToProjects = true }) {
+                                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.cancel))
                             }
-                        ) {
-                            Icon(Icons.Filled.Menu, contentDescription = stringResource(R.string.cd_menu))
                         }
                     },
                     actions = {
@@ -888,6 +720,20 @@ fun MainScreen(
                                             onClick = {
                                                 moreMenuExpanded = false
                                                 showFilePicker = true
+                                            }
+                                        )
+                                        DropdownMenuItem(
+                                            text = { Text(stringResource(R.string.sort)) },
+                                            onClick = {
+                                                moreMenuExpanded = false
+                                                sortMenuExpanded = true
+                                            }
+                                        )
+                                        DropdownMenuItem(
+                                            text = { Text(stringResource(R.string.settings)) },
+                                            onClick = {
+                                                moreMenuExpanded = false
+                                                currentContentType = MainContentType.SETTINGS
                                             }
                                         )
                                     }
@@ -1622,4 +1468,59 @@ class MainActivity : ComponentActivity() {
         com.luaforge.studio.ui.editor.viewmodel.CompletionDataManager.clear()
         System.gc()
     }
+
+            bottomBar = {
+                if (currentContentType == MainContentType.PROJECTS ||
+                    currentContentType == MainContentType.CODE_MANUAL ||
+                    currentContentType == MainContentType.PROFILE
+                ) {
+                    NavigationBar {
+                        NavigationBarItem(
+                            selected = currentContentType == MainContentType.PROJECTS,
+                            onClick = { currentContentType = MainContentType.PROJECTS },
+                            icon = {
+                                Icon(
+                                    if (currentContentType == MainContentType.PROJECTS)
+                                        Icons.Filled.Folder
+                                    else
+                                        Icons.Outlined.Folder,
+                                    contentDescription = "项目"
+                                )
+                            },
+                            label = { Text("项目") },
+                            alwaysShowLabel = true,
+                        )
+                        NavigationBarItem(
+                            selected = currentContentType == MainContentType.CODE_MANUAL,
+                            onClick = { currentContentType = MainContentType.CODE_MANUAL },
+                            icon = {
+                                Icon(
+                                    if (currentContentType == MainContentType.CODE_MANUAL)
+                                        Icons.Filled.MenuBook
+                                    else
+                                        Icons.Outlined.MenuBook,
+                                    contentDescription = "代码手册"
+                                )
+                            },
+                            label = { Text("代码手册") },
+                            alwaysShowLabel = true,
+                        )
+                        NavigationBarItem(
+                            selected = currentContentType == MainContentType.PROFILE,
+                            onClick = { currentContentType = MainContentType.PROFILE },
+                            icon = {
+                                Icon(
+                                    if (currentContentType == MainContentType.PROFILE)
+                                        Icons.Filled.Person
+                                    else
+                                        Icons.Outlined.Person,
+                                    contentDescription = "我的"
+                                )
+                            },
+                            label = { Text("我的") },
+                            alwaysShowLabel = true,
+                        )
+                    }
+                }
+            },
 }
