@@ -41,10 +41,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.FolderOpen
+import androidx.compose.material.icons.outlined.MenuBook
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -636,6 +639,8 @@ fun MainScreen(
                             Text(
                                 text = when (currentContentType) {
                                     MainContentType.PROJECTS -> stringResource(R.string.app_name)
+                                    MainContentType.CODE_MANUAL -> "代码手册"
+                                    MainContentType.PROFILE -> "我的"
                                     MainContentType.SETTINGS -> stringResource(R.string.settings)
                                     MainContentType.ABOUT -> stringResource(R.string.about)
                                 },
@@ -777,6 +782,61 @@ fun MainScreen(
                     }
                 }
             },
+            bottomBar = {
+                if (currentContentType == MainContentType.PROJECTS ||
+                    currentContentType == MainContentType.CODE_MANUAL ||
+                    currentContentType == MainContentType.PROFILE
+                ) {
+                    NavigationBar {
+                        NavigationBarItem(
+                            selected = currentContentType == MainContentType.PROJECTS,
+                            onClick = { currentContentType = MainContentType.PROJECTS },
+                            icon = {
+                                Icon(
+                                    if (currentContentType == MainContentType.PROJECTS)
+                                        Icons.Filled.Folder
+                                    else
+                                        Icons.Outlined.Folder,
+                                    contentDescription = "项目"
+                                )
+                            },
+                            label = { Text("项目") },
+                            alwaysShowLabel = true,
+                        )
+                        NavigationBarItem(
+                            selected = currentContentType == MainContentType.CODE_MANUAL,
+                            onClick = { currentContentType = MainContentType.CODE_MANUAL },
+                            icon = {
+                                Icon(
+                                    if (currentContentType == MainContentType.CODE_MANUAL)
+                                        Icons.Filled.MenuBook
+                                    else
+                                        Icons.Outlined.MenuBook,
+                                    contentDescription = "代码手册"
+                                )
+                            },
+                            label = { Text("代码手册") },
+                            alwaysShowLabel = true,
+                        )
+                        NavigationBarItem(
+                            selected = currentContentType == MainContentType.PROFILE,
+                            onClick = { currentContentType = MainContentType.PROFILE },
+                            icon = {
+                                Icon(
+                                    if (currentContentType == MainContentType.PROFILE)
+                                        Icons.Filled.Person
+                                    else
+                                        Icons.Outlined.Person,
+                                    contentDescription = "我的"
+                                )
+                            },
+                            label = { Text("我的") },
+                            alwaysShowLabel = true,
+                        )
+                    }
+                }
+            },
+
             floatingActionButtonPosition = FabPosition.End
         ) { paddingValues ->
             Box(
@@ -859,6 +919,23 @@ fun MainScreen(
                             }
                         }
 
+                        MainContentType.CODE_MANUAL -> {
+                            CodeManualScreen(contentPadding = paddingValues)
+                        }
+                        MainContentType.PROFILE -> {
+                            ProfileTabScreen(
+                                contentPadding = paddingValues,
+                                onOpenSettings = { currentContentType = MainContentType.SETTINGS },
+                                onOpenAbout = { currentContentType = MainContentType.ABOUT },
+                                onLogout = {
+                                    AuthService.logout(context)
+                                    (context as? android.app.Activity)?.let { act ->
+                                        act.finish()
+                                        act.startActivity(act.intent)
+                                    }
+                                },
+                            )
+                        }
                         MainContentType.SETTINGS -> {
                             SettingsScreen(
                                 onBack = {
@@ -1468,59 +1545,4 @@ class MainActivity : ComponentActivity() {
         com.luaforge.studio.ui.editor.viewmodel.CompletionDataManager.clear()
         System.gc()
     }
-
-            bottomBar = {
-                if (currentContentType == MainContentType.PROJECTS ||
-                    currentContentType == MainContentType.CODE_MANUAL ||
-                    currentContentType == MainContentType.PROFILE
-                ) {
-                    NavigationBar {
-                        NavigationBarItem(
-                            selected = currentContentType == MainContentType.PROJECTS,
-                            onClick = { currentContentType = MainContentType.PROJECTS },
-                            icon = {
-                                Icon(
-                                    if (currentContentType == MainContentType.PROJECTS)
-                                        Icons.Filled.Folder
-                                    else
-                                        Icons.Outlined.Folder,
-                                    contentDescription = "项目"
-                                )
-                            },
-                            label = { Text("项目") },
-                            alwaysShowLabel = true,
-                        )
-                        NavigationBarItem(
-                            selected = currentContentType == MainContentType.CODE_MANUAL,
-                            onClick = { currentContentType = MainContentType.CODE_MANUAL },
-                            icon = {
-                                Icon(
-                                    if (currentContentType == MainContentType.CODE_MANUAL)
-                                        Icons.Filled.MenuBook
-                                    else
-                                        Icons.Outlined.MenuBook,
-                                    contentDescription = "代码手册"
-                                )
-                            },
-                            label = { Text("代码手册") },
-                            alwaysShowLabel = true,
-                        )
-                        NavigationBarItem(
-                            selected = currentContentType == MainContentType.PROFILE,
-                            onClick = { currentContentType = MainContentType.PROFILE },
-                            icon = {
-                                Icon(
-                                    if (currentContentType == MainContentType.PROFILE)
-                                        Icons.Filled.Person
-                                    else
-                                        Icons.Outlined.Person,
-                                    contentDescription = "我的"
-                                )
-                            },
-                            label = { Text("我的") },
-                            alwaysShowLabel = true,
-                        )
-                    }
-                }
-            },
 }
