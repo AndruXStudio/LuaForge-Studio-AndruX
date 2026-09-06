@@ -1539,6 +1539,7 @@ class MainActivity : ComponentActivity() {
         window.decorView.requestLayout()
         window.decorView.invalidate()
     }
+    } // end onCreate
 
     override fun onDestroy() {
         super.onDestroy()
