@@ -6,6 +6,9 @@
 
 package com.luaforge.studio
 
+import com.luaforge.studio.auth.AuthService
+import com.luaforge.studio.auth.LoginScreen
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -1574,8 +1577,12 @@ class MainActivity : ComponentActivity() {
                 SettingsManager.ensureProjectDirectoryExists()
             }
 
+            var isLoggedIn by remember { mutableStateOf(AuthService.isLoggedIn(this@MainActivity)) }
             var shouldShowWelcome by remember { mutableStateOf(shouldShowWelcomeScreen(this@MainActivity)) }
 
+            if (!isLoggedIn) {
+                LoginScreen(onLoggedIn = { isLoggedIn = true })
+            } else {
             Crossfade(targetState = shouldShowWelcome, animationSpec = tween(500)) { showWelcome ->
                 if (showWelcome) {
                     WelcomeScreen(
@@ -1598,6 +1605,7 @@ class MainActivity : ComponentActivity() {
                         MainApp()
                     }
                 }
+            }
             }
         }
     }
